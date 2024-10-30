@@ -10,7 +10,6 @@ public class Usuario {
         this.nombreDeUsuario = nombreDeUsuario;
         this.contraseña = contraseña;
         this.activo = activo;
-        this.tipo = tipo; 
     }
 
   

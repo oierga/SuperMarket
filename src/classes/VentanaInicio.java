@@ -19,8 +19,9 @@ public class VentanaInicio {
     private JButton bIniciarSesion;
     private JButton bCrearCuenta;
     
-    private boolean isAuthenticated = false;
-    private Usuario usuarioAutenticado;
+    /*el resto esta comentado abajo*/
+    //private boolean isAuthenticated = false;
+    //private Usuario usuarioAutenticado;
 
     public VentanaInicio(ServicioPersistenciaBD servicioPersistencia) {
         lNombreDeUsuario = new JLabel("Nombre de usuario:");
@@ -82,11 +83,11 @@ public class VentanaInicio {
                     lErrores.setText("Contraseña incorrecta");
                 } else if (!usuario.getActivo()) {
                     lErrores.setText("Este usuario está bloqueado");
-                } else {
-                    isAuthenticated = true;
-                    usuarioAutenticado = usuario;
-                    fLogin.dispose();  
-                }
+                } //else {
+                  //  isAuthenticated = true;
+                  //  usuarioAutenticado = usuario;
+                  //  fLogin.dispose();  
+               // }
             }
         });
     }
