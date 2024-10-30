@@ -1,7 +1,10 @@
-package classes;
+package db;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import domain.TipoUsuario;
+import domain.Usuario;
 
 //temporal
 

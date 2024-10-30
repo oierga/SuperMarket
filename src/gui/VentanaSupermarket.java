@@ -1,4 +1,4 @@
-package classes;
+package gui;
 
 public class VentanaSupermarket {
 

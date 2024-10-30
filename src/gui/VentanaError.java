@@ -1,4 +1,4 @@
-package classes;
+package gui;
 
 import java.awt.Font;
 import java.awt.GridLayout;

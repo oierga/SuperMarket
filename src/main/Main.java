@@ -1,4 +1,7 @@
-package classes;
+package main;
+
+import db.ServicioPersistenciaBD;
+import gui.VentanaInicio;
 
 //la idea va un poco por aqui
 
