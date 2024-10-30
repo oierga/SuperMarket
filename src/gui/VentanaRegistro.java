@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 import db.ServicioPersistenciaBD;
 import domain.Usuario;
 
-public class VentanaRegistro {
+public class VentanaRegistro extends JFrame{
     private JFrame fCrearUsuario;
     private JLabel lNombreDeUsuario;
     private JTextField tfNombreDeUsuario;		
@@ -19,6 +19,7 @@ public class VentanaRegistro {
     private JButton bCrearCuenta;
     
     public VentanaRegistro(ServicioPersistenciaBD servicioPersistencia) {
+    	setSize(1920,1080);
         lNombreDeUsuario = new JLabel("Nombre de usuario:");
         lNombreDeUsuario.setBounds(10, 10, 160, 30);
         tfNombreDeUsuario = new JTextField();

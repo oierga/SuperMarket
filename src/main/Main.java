@@ -12,6 +12,7 @@ public class Main {
         ServicioPersistenciaBD servicioPersistencia = new ServicioPersistenciaBD();
         
         VentanaInicio ventanaInicio = new VentanaInicio(servicioPersistencia);
+        
     
         
         /*

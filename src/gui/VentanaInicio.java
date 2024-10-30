@@ -1,118 +1,105 @@
 package gui;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
+import javax.swing.*;
 import db.ServicioPersistenciaBD;
 import domain.Usuario;
 
-import java.awt.Color;
-
-public class VentanaInicio {
-    private JFrame fLogin;
-    private JLabel lNombreDeUsuario;
-    private JTextField tfNombreDeUsuario;		
-    private JLabel lContraseña;
-    private JTextField tfContraseña;
+public class VentanaInicio extends JFrame {
+    private JTextField tfNombreDeUsuario;
+    private JTextField tfContrasena;
     private JLabel lErrores;
-    private JButton bIniciarSesion;
-    private JButton bCrearCuenta;
-    
-    /*el resto esta comentado abajo*/
-    //private boolean isAuthenticated = false;
-    //private Usuario usuarioAutenticado;
 
     public VentanaInicio(ServicioPersistenciaBD servicioPersistencia) {
-        lNombreDeUsuario = new JLabel("Nombre de usuario:");
-        lNombreDeUsuario.setBounds(10, 10, 160, 30);
-        tfNombreDeUsuario = new JTextField();
-        tfNombreDeUsuario.setBounds(180, 11, 226, 30);
+        // Configuración del JFrame
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Iniciar Sesión");
+        setLocationRelativeTo(null); // Centra la ventana en la pantalla
 
-        lContraseña = new JLabel("Contraseña:");
-        lContraseña.setBounds(10, 50, 160, 30);
-        tfContraseña = new JTextField();
-        tfContraseña.setBounds(180, 51, 226, 30);
+        // Inicialización del panel y configuración del layout
+        JPanel panelLabel = new JPanel(new GridBagLayout());
 
+        // Inicializar componentes
+        tfNombreDeUsuario = new JTextField(20);
+        tfContrasena = new JTextField(20);
+        JButton bIniciarSesion = new JButton("Iniciar Sesión");
+        JButton bCrearCuenta = new JButton("Crear Cuenta");
+        
+        // Configurar GridBagConstraints
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        // Agregar componentes al panel
+        addComponent(panelLabel, gbc, 0, 0, new JLabel("Nombre de usuario:"), tfNombreDeUsuario);
+        addComponent(panelLabel, gbc, 1, 0, new JLabel("Contraseña:"), tfContrasena);
+        
         lErrores = new JLabel();
-        lErrores.setForeground(new Color(255, 0, 0));
-        lErrores.setBounds(10, 104, 366, 30);
+        lErrores.setForeground(Color.RED);
+        
+        gbc.gridwidth = 2; // Ocupa dos columnas
+        gbc.gridx = 0; 
+        gbc.gridy = 2;
+        
+        panelLabel.add(lErrores, gbc);
 
-        bIniciarSesion = new JButton("Iniciar Sesión");
-        bIniciarSesion.setBounds(125, 158, 180, 30);
-        bCrearCuenta = new JButton("Crear Cuenta");
-        bCrearCuenta.setBounds(125, 198, 180, 30);
+        gbc.gridwidth = 1; // Reiniciar gridwidth
+        
+        
+        bCrearCuenta.addActionListener(e -> new VentanaRegistro(servicioPersistencia));    
+        bIniciarSesion.addActionListener(e -> handleLogin(servicioPersistencia));
+        
+        gbc.gridx = 0; 
+        gbc.gridy = 3;
+        
+        panelLabel.add(bIniciarSesion, gbc);
+        
+        gbc.gridx = 1;
+        
+        panelLabel.add(bCrearCuenta, gbc);
 
-        fLogin = new JFrame("Login");
-        fLogin.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        fLogin.setSize(430, 275);
-        fLogin.setVisible(true);
-        fLogin.getContentPane().setLayout(null);
-        fLogin.getContentPane().add(lNombreDeUsuario);
-        fLogin.getContentPane().add(tfNombreDeUsuario);
-        fLogin.getContentPane().add(lContraseña);
-        fLogin.getContentPane().add(tfContraseña);
-        fLogin.getContentPane().add(lErrores);
-        fLogin.getContentPane().add(bIniciarSesion);
-        fLogin.getContentPane().add(bCrearCuenta);
+        
+       
+        setContentPane(panelLabel); 
 
-        // Listeners
-        bCrearCuenta.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new VentanaRegistro(servicioPersistencia);
-            }
-        });
-
-        bIniciarSesion.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Usuario usuario = null;
-                boolean isFound = false;
-                ArrayList<Usuario> usuarios = servicioPersistencia.cargarTodosUsuarios();
-                for (Usuario u : usuarios) {
-                    if (u.getNombreDeUsuario().equals(tfNombreDeUsuario.getText())) {
-                        isFound = true;
-                        usuario = u;
-                    }
-                }
-                
-                if (!isFound) {
-                    lErrores.setText("Nombre de usuario incorrecto");
-                } else if (!usuario.getContraseña().equals(tfContraseña.getText())) {
-                    lErrores.setText("Contraseña incorrecta");
-                } else if (!usuario.getActivo()) {
-                    lErrores.setText("Este usuario está bloqueado");
-                } //else {
-                  //  isAuthenticated = true;
-                  //  usuarioAutenticado = usuario;
-                  //  fLogin.dispose();  
-               // }
-            }
-        });
+        setVisible(true);
     }
-    /*
-    
-    public boolean isAuthenticated() {
-        return isAuthenticated;
+
+   
+
+    private void addComponent(JPanel panel, GridBagConstraints gbc, int row, int col, JLabel label, JTextField textField) {
+        gbc.gridx = col; gbc.gridy = row;
+        panel.add(label, gbc);
+        gbc.gridx = col + 1;
+        panel.add(textField, gbc);
     }
-    
-    public Usuario getUsuarioAutenticado() {
-        return usuarioAutenticado;
+
+    private void handleLogin(ServicioPersistenciaBD servicioPersistencia) {
+        String nombreUsuario = tfNombreDeUsuario.getText();
+        String contrasena = tfContrasena.getText();
+        Usuario usuario = servicioPersistencia.cargarTodosUsuarios()
+                .stream()
+                .filter(u -> u.getNombreDeUsuario().equals(nombreUsuario))
+                .findFirst()
+                .orElse(null);
+
+        // Comprobar las condiciones del inicio de sesión
+        if (usuario == null) {
+            lErrores.setText("Nombre de usuario incorrecto");
+        } else if (!usuario.getContraseña().equals(contrasena)) {
+            lErrores.setText("Contraseña incorrecta");
+        } else if (!usuario.getActivo()) {
+            lErrores.setText("Este usuario está bloqueado");
+        } else {
+            lErrores.setText("Inicio de sesión exitoso"); // Puedes agregar código para el inicio exitoso
+        }
     }
-}
 
     
-    public boolean isAuthenticated() {
-        return isAuthenticated;
+
+    public static void main(String[] args) {
+        new VentanaInicio(new ServicioPersistenciaBD()); // Instancia del servicio de persistencia
     }
-    
-    public Usuario getUsuarioAutenticado() {
-        return usuarioAutenticado;
-    }
-    */
 }
