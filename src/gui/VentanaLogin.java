@@ -6,12 +6,12 @@ import javax.swing.*;
 import db.ServicioPersistenciaBD;
 import domain.Usuario;
 
-public class VentanaInicio extends JFrame {
+public class VentanaLogin extends JFrame {
     private JTextField tfNombreDeUsuario;
     private JTextField tfContrasena;
     private JLabel lErrores;
 
-    public VentanaInicio(ServicioPersistenciaBD servicioPersistencia) {
+    public VentanaLogin(ServicioPersistenciaBD servicioPersistencia) {
         // Configuración del JFrame
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,6 +100,6 @@ public class VentanaInicio extends JFrame {
     
 
     public static void main(String[] args) {
-        new VentanaInicio(new ServicioPersistenciaBD()); // Instancia del servicio de persistencia
+        new VentanaLogin(new ServicioPersistenciaBD()); // Instancia del servicio de persistencia
     }
 }

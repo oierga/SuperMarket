@@ -1,7 +1,7 @@
 package main;
 
 import db.ServicioPersistenciaBD;
-import gui.VentanaInicio;
+import gui.VentanaLogin;
 
 //la idea va un poco por aqui
 
@@ -11,7 +11,7 @@ public class Main {
        
         ServicioPersistenciaBD servicioPersistencia = new ServicioPersistenciaBD();
         
-        VentanaInicio ventanaInicio = new VentanaInicio(servicioPersistencia);
+        VentanaLogin ventanaInicio = new VentanaLogin(servicioPersistencia);
         
     
         
