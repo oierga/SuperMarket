@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 import db.ServicioPersistenciaBD;
 import domain.Producto;
+import domain.TipoUsuario;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,8 +13,10 @@ import java.lang.reflect.Array;
 public class VentanaSupermarket extends JFrame {
     private int productosEnCarrito;
     private int[] idEnCarrito = new int[0];
+    private TipoUsuario tipoUsuario;
 
-    public VentanaSupermarket() {
+    public VentanaSupermarket(TipoUsuario tipoUsuario) {
+    	this.tipoUsuario = tipoUsuario;
         // Configuración de la ventana
         setTitle("Supermercado Online");
         setSize(800, 600);
@@ -22,19 +26,22 @@ public class VentanaSupermarket extends JFrame {
         // Crear el menú
         JMenuBar menuBar = new JMenuBar();
         JMenu menuArchivo = new JMenu("Mi cuenta");
-        JMenuItem itemSocio = new JMenuItem("Zona Socio");
         JMenu menuAyuda = new JMenu("Ayuda");
         JMenuItem itemSalir = new JMenuItem("Salir");
         JMenuItem itemCarrito = new JMenuItem("Ver Carrito");
         
-        itemSocio.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String codigoOferta = "ABC123"; // Código de oferta de ejemplo
-                VentanaSocio ventanaSocio = new VentanaSocio(codigoOferta);
-                ventanaSocio.setVisible(true);
-            }
-        });
+        if (tipoUsuario == TipoUsuario.SOCIO) {
+            JMenuItem itemSocio = new JMenuItem("Zona Socio");
+            itemSocio.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String codigoOferta = "ABC123"; 
+                    VentanaSocio ventanaSocio = new VentanaSocio(codigoOferta);
+                    ventanaSocio.setVisible(true);
+                }
+            });
+            menuArchivo.add(itemSocio);
+        }
         
         itemSalir.addActionListener(e -> System.exit(0)); // Cerrar la aplicación
 

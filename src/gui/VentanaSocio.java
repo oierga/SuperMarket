@@ -15,7 +15,7 @@ public class VentanaSocio extends JFrame{
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        // Título y código de la oferta
+        // Título y código de la ofertax
         JLabel tituloLabel = new JLabel("OfertaSocio:");
         tituloLabel.setAlignmentX(CENTER_ALIGNMENT);
         JLabel codigoLabel = new JLabel(codigo);
