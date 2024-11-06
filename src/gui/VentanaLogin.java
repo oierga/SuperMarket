@@ -95,6 +95,9 @@ public class VentanaLogin extends JFrame {
         } else {
             lErrores.setText("Inicio de sesión exitoso"); // Puedes agregar código para el inicio exitoso
         }
+        dispose();
+        VentanaSupermarket ventanaSupermarket = new VentanaSupermarket();
+        ventanaSupermarket.setVisible(true);
     }
 
     
