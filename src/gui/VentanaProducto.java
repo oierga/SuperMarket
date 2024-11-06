@@ -1,21 +1,24 @@
 package gui;
 
 import javax.swing.*;
+import domain.Producto;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class VentanaProducto extends JFrame {
     private String nombre;
-    private String descripcion;
     private double precio;
     private String rutaImagen;
+    private int[] idEnCarrito;
     
-    public VentanaProducto() {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.rutaImagen = rutaImagen;
+    public VentanaProducto(Producto producto, int[] idEnCarritoGeneral) {
+        // Asignación de datos del producto
+        this.nombre = producto.getNombre();
+        this.precio = producto.getPrecio();
+        this.rutaImagen = "ruta/a/la/imagen"; // Coloca aquí la ruta predeterminada de imagen o específica del producto
+        this.idEnCarrito = Arrays.copyOf(idEnCarritoGeneral, idEnCarritoGeneral.length + 1);
 
         // Configuración de la ventana
         setTitle("Detalles del Producto");
@@ -45,15 +48,7 @@ public class VentanaProducto extends JFrame {
         labelNombre.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelDetalles.add(labelNombre);
 
-        // Espacio entre el nombre y la descripción
-        panelDetalles.add(Box.createRigidArea(new Dimension(0, 10)));
-
-        // Descripción del producto
-        JLabel labelDescripcion = new JLabel("<html><p style='text-align:center;'>" + descripcion + "</p></html>");
-        labelDescripcion.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelDetalles.add(labelDescripcion);
-
-        // Espacio entre la descripción y el precio
+        // Espacio entre el nombre y el precio
         panelDetalles.add(Box.createRigidArea(new Dimension(0, 10)));
 
         // Precio del producto
@@ -79,6 +74,9 @@ public class VentanaProducto extends JFrame {
 
                 if (respuesta == JOptionPane.YES_OPTION) {
                     JOptionPane.showMessageDialog(null, nombre + " añadido al carrito.");
+                    idEnCarrito[idEnCarritoGeneral.length] = producto.getIdProducto();
+                    new VentanaSupermarket().setVisible(true);// Agregar producto al carrito
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "No se añadió el producto al carrito.");
                 }
@@ -92,7 +90,9 @@ public class VentanaProducto extends JFrame {
         btnCerrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	new VentanaSupermarket().setVisible(true);;
                 dispose(); // Cerrar la ventana actual
+                
             }
         });
         panelDetalles.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -107,13 +107,7 @@ public class VentanaProducto extends JFrame {
         setVisible(true); // Hacer visible la ventana
     }
 
-    public static void main(String[] args) {
-        // Ejemplo de uso de VentanaProducto
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new VentanaProducto();
-            }
-        });
+    public int[] getIdEnCarrito() {
+        return idEnCarrito;
     }
 }

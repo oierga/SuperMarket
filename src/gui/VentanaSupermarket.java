@@ -1,14 +1,18 @@
 package gui;
+
 import javax.swing.*;
+import db.ServicioPersistenciaBD;
+import domain.Producto;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 
 public class VentanaSupermarket extends JFrame {
-	private int productosEnCarrito;
-	private int i;
+    private int productosEnCarrito;
+    private int[] idEnCarrito = new int[0];
+
     public VentanaSupermarket() {
-    	
         // Configuración de la ventana
         setTitle("Supermercado Online");
         setSize(800, 600);
@@ -18,83 +22,71 @@ public class VentanaSupermarket extends JFrame {
         // Crear el menú
         JMenuBar menuBar = new JMenuBar();
         JMenu menuArchivo = new JMenu("Mi cuenta");
-        JMenu menuSocio = new JMenu("Zona Socio");
+        JMenuItem itemSocio = new JMenuItem("Zona Socio");
         JMenu menuAyuda = new JMenu("Ayuda");
         JMenuItem itemSalir = new JMenuItem("Salir");
         JMenuItem itemCarrito = new JMenuItem("Ver Carrito");
 
-        itemSalir.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0); // Cerrar la aplicación
-            }
-        });
+        itemSalir.addActionListener(e -> System.exit(0)); // Cerrar la aplicación
 
         menuArchivo.add(itemSalir);
         menuBar.add(menuArchivo);
         menuBar.add(menuAyuda);
-        menuBar.add(menuSocio);
+        menuBar.add(itemSocio);
         menuBar.add(itemCarrito);
-       
+
         setJMenuBar(menuBar);
 
         // Crear el panel de productos
         JPanel panelProductos = new JPanel();
         panelProductos.setLayout(new GridLayout(0, 3)); // 3 columnas
 
-        // Ejemplo de productos (puedes reemplazarlos con tus productos reales)
-        for (int i = 1; i <= 9; i++) {
-            // Crear un panel para el producto
-            JPanel productoPanel = new JPanel();
-            productoPanel.setLayout(new BorderLayout());
+        // Cargar productos desde la base de datos
+        Producto[] productos = ServicioPersistenciaBD.cargarProductos();
 
-            // Crear un botón para mostrar la imagen
-            JButton btnProducto = new JButton();
-            // Cargar y redimensionar la imagen
-            ImageIcon icono = new ImageIcon("ruta/a/la/imagen"); // Asegúrate de tener imágenes
-            Image imagenRedimensionada = icono.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-            btnProducto.setIcon(new ImageIcon(imagenRedimensionada));
-            btnProducto.setPreferredSize(new Dimension(100, 100));
-           
-            // Añadir acción al botón
-            btnProducto.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Mostrar mensaje de agregar al carrito
-                	new VentanaProducto();
-                   
-                }
+        // Mostrar los productos en el panel como botones
+        for (Producto producto : productos) {
+            final int idProducto = producto.getIdProducto(); // ID único para cada producto
+
+            // Crear el botón para el producto
+            JButton btnProducto = new JButton("<html><center>" + producto.getNombre() + "<br>Precio: $" + producto.getPrecio() + "</center></html>");
+            btnProducto.setPreferredSize(new Dimension(120, 100));
+            btnProducto.setVerticalAlignment(SwingConstants.CENTER);
+            btnProducto.setHorizontalAlignment(SwingConstants.CENTER);
+            btnProducto.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            // Acción para abrir detalles del producto
+            btnProducto.addActionListener(e -> {
+                // Abre la ventana de detalles del producto con el ID correspondiente
+                VentanaProducto ventanaProducto = new VentanaProducto(producto, idEnCarrito);
+                idEnCarrito = ventanaProducto.getIdEnCarrito();
+                dispose(); // Cierra la ventana de supermercado actual
             });
 
-            // Añadir el botón al panel del producto
-            productoPanel.add(btnProducto, BorderLayout.CENTER);
-           
-            // Crear un panel para el texto (nombre y precio)
-            JPanel panelTexto = new JPanel();
-            panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.Y_AXIS));
-            JLabel labelNombre = new JLabel("Producto ", SwingConstants.CENTER);
-            JLabel labelPrecio = new JLabel("Precio €" , SwingConstants.CENTER);
-            panelTexto.add(labelNombre);
-            panelTexto.add(labelPrecio);
-
-            // Añadir el panel de texto debajo del botón
-            productoPanel.add(panelTexto, BorderLayout.SOUTH);
-
-            // Añadir el panel del producto al panel de productos
-            panelProductos.add(productoPanel);
+            // Añadir el botón al panel de productos
+            panelProductos.add(btnProducto);
         }
+        itemCarrito.addActionListener(e -> {
+            VentanaCarrito ventanaCarrito = new VentanaCarrito(idEnCarrito);
+            ventanaCarrito.setVisible(true);
+        });
 
         // Añadir el panel de productos a la ventana
         add(panelProductos, BorderLayout.CENTER);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                VentanaSupermarket ventana = new VentanaSupermarket();
-                ventana.setVisible(true); // Hacer visible la ventana
-            }
+        SwingUtilities.invokeLater(() -> {
+            VentanaSupermarket ventana = new VentanaSupermarket();
+            ventana.setVisible(true); // Hacer visible la ventana
         });
+    }
+
+    public int[] getIdEnCarrito() {
+        return idEnCarrito;
+    }
+
+    public void setIdEnCarrito(int[] idEnCarrito) {
+        this.idEnCarrito = idEnCarrito;
     }
 }
