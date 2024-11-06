@@ -26,7 +26,16 @@ public class VentanaSupermarket extends JFrame {
         JMenu menuAyuda = new JMenu("Ayuda");
         JMenuItem itemSalir = new JMenuItem("Salir");
         JMenuItem itemCarrito = new JMenuItem("Ver Carrito");
-
+        
+        itemSocio.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String codigoOferta = "ABC123"; // Código de oferta de ejemplo
+                VentanaSocio ventanaSocio = new VentanaSocio(codigoOferta);
+                ventanaSocio.setVisible(true);
+            }
+        });
+        
         itemSalir.addActionListener(e -> System.exit(0)); // Cerrar la aplicación
 
         menuArchivo.add(itemSalir);
