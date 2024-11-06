@@ -6,13 +6,15 @@ import java.util.ArrayList;
 
 public class ServicioPersistenciaBD {
 
+}
+
     // Método para registrar el driver y obtener la conexión a la base de datos
-    private static Connection getConnection() {
+    /*private static Connection getConnection() {
         //EStablecer conexión con DB. No tenemos DB todavia.
-    }
+    }*/
 
     // Método para cargar los productos desde la base de datos
-    public static Producto[] cargarProductos() {
+   /* public static Producto[] cargarProductos() {
         String query = "SELECT idProducto, nombre, precio FROM PRODUCTO";
         ArrayList<Producto> listaProductos = new ArrayList<>();
 
@@ -142,4 +144,4 @@ public class ServicioPersistenciaBD {
         return null; // Retorna null si el producto no existe
     }
 
-}
+}*/

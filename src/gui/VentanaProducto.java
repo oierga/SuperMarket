@@ -15,8 +15,8 @@ public class VentanaProducto extends JFrame {
     
     public VentanaProducto(Producto producto, int[] idEnCarritoGeneral) {
         // Asignación de datos del producto
-        this.nombre = producto.getNombre();
-        this.precio = producto.getPrecio();
+        this.nombre = "Nombre prueba";
+        this.precio = 789.00;
         this.rutaImagen = "ruta/a/la/imagen"; // Coloca aquí la ruta predeterminada de imagen o específica del producto
         this.idEnCarrito = Arrays.copyOf(idEnCarritoGeneral, idEnCarritoGeneral.length + 1);
 
@@ -74,7 +74,7 @@ public class VentanaProducto extends JFrame {
 
                 if (respuesta == JOptionPane.YES_OPTION) {
                     JOptionPane.showMessageDialog(null, nombre + " añadido al carrito.");
-                    idEnCarrito[idEnCarritoGeneral.length] = producto.getIdProducto();
+                    idEnCarrito[idEnCarritoGeneral.length] = 1;
                     new VentanaSupermarket().setVisible(true);// Agregar producto al carrito
                     dispose();
                 } else {

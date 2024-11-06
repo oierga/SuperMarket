@@ -31,15 +31,15 @@ public class VentanaCarrito extends JFrame {
 
         // Cargar y mostrar cada producto basado en su ID en el carrito
         for (int idProducto : idEnCarrito) {
-            Producto producto = ServicioPersistenciaBD.obtenerProductoPorId(idProducto);
+            Producto producto = null;
 
-            if (producto != null) {
+            if (producto == null) {
                 productosEncontrados = true;
                 
                 // Crear un panel para cada producto en el carrito
                 JPanel productoPanel = new JPanel(new BorderLayout());
-                JLabel labelNombre = new JLabel("Nombre: " + producto.getNombre());
-                JLabel labelPrecio = new JLabel("Precio: $" + producto.getPrecio());
+                JLabel labelNombre = new JLabel("Nombre: Prueba");
+                JLabel labelPrecio = new JLabel("Precio: 789.00$" );
 
                 productoPanel.add(labelNombre, BorderLayout.NORTH);
                 productoPanel.add(labelPrecio, BorderLayout.SOUTH);

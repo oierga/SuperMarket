@@ -51,14 +51,13 @@ public class VentanaSupermarket extends JFrame {
         panelProductos.setLayout(new GridLayout(0, 3)); // 3 columnas
 
         // Cargar productos desde la base de datos
-        Producto[] productos = ServicioPersistenciaBD.cargarProductos();
-
+       
         // Mostrar los productos en el panel como botones
-        for (Producto producto : productos) {
-            final int idProducto = producto.getIdProducto(); // ID único para cada producto
+        for (int i = 0; i < 9; i++) {
+            //final int idProducto = producto.getIdProducto(); // ID único para cada producto
 
             // Crear el botón para el producto
-            JButton btnProducto = new JButton("<html><center>" + producto.getNombre() + "<br>Precio: $" + producto.getPrecio() + "</center></html>");
+            JButton btnProducto = new JButton("<html><center> + /*producto.getNombre()*/ + <br>Precio: $ </center></html>");
             btnProducto.setPreferredSize(new Dimension(120, 100));
             btnProducto.setVerticalAlignment(SwingConstants.CENTER);
             btnProducto.setHorizontalAlignment(SwingConstants.CENTER);
@@ -67,7 +66,7 @@ public class VentanaSupermarket extends JFrame {
             // Acción para abrir detalles del producto
             btnProducto.addActionListener(e -> {
                 // Abre la ventana de detalles del producto con el ID correspondiente
-                VentanaProducto ventanaProducto = new VentanaProducto(producto, idEnCarrito);
+                VentanaProducto ventanaProducto = new VentanaProducto(null, idEnCarrito);
                 idEnCarrito = ventanaProducto.getIdEnCarrito();
                 dispose(); // Cierra la ventana de supermercado actual
             });
@@ -76,7 +75,8 @@ public class VentanaSupermarket extends JFrame {
             panelProductos.add(btnProducto);
         }
         itemCarrito.addActionListener(e -> {
-            VentanaCarrito ventanaCarrito = new VentanaCarrito(idEnCarrito);
+        	int[] idPrueba = new int[1];
+            VentanaCarrito ventanaCarrito = new VentanaCarrito(idPrueba);
             ventanaCarrito.setVisible(true);
         });
 
