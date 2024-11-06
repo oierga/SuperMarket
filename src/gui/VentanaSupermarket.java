@@ -13,7 +13,7 @@ import java.lang.reflect.Array;
 public class VentanaSupermarket extends JFrame {
     private int productosEnCarrito;
     private int[] idEnCarrito = new int[0];
-    private TipoUsuario tipoUsuario;
+    private static TipoUsuario tipoUsuario;
 
     public VentanaSupermarket(TipoUsuario tipoUsuario) {
     	this.tipoUsuario = tipoUsuario;
@@ -48,7 +48,6 @@ public class VentanaSupermarket extends JFrame {
         menuArchivo.add(itemSalir);
         menuBar.add(menuArchivo);
         menuBar.add(menuAyuda);
-        menuBar.add(itemSocio);
         menuBar.add(itemCarrito);
 
         setJMenuBar(menuBar);
@@ -93,7 +92,7 @@ public class VentanaSupermarket extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            VentanaSupermarket ventana = new VentanaSupermarket();
+            VentanaSupermarket ventana = new VentanaSupermarket(tipoUsuario);
             ventana.setVisible(true); // Hacer visible la ventana
         });
     }
