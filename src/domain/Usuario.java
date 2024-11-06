@@ -35,4 +35,8 @@ public class Usuario {
     public TipoUsuario getTipo() {
         return tipo;
     }
+    public void setTipo(TipoUsuario tipo) {
+        this.tipo = tipo;
+    }
+    
 }

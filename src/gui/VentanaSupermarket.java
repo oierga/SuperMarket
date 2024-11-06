@@ -4,6 +4,7 @@ import javax.swing.*;
 import db.ServicioPersistenciaBD;
 import domain.Producto;
 import domain.TipoUsuario;
+import domain.Usuario;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,10 +14,14 @@ import java.lang.reflect.Array;
 public class VentanaSupermarket extends JFrame {
     private int productosEnCarrito;
     private int[] idEnCarrito = new int[0];
+    private Usuario usuario;
     private static TipoUsuario tipoUsuario;
 
-    public VentanaSupermarket(TipoUsuario tipoUsuario) {
-    	this.tipoUsuario = tipoUsuario;
+
+    public VentanaSupermarket(Usuario usuario) {
+        this.usuario = usuario;
+        this.tipoUsuario = usuario.getTipo();
+        
         // Configuración de la ventana
         setTitle("Supermercado Online");
         setSize(800, 600);
@@ -30,12 +35,28 @@ public class VentanaSupermarket extends JFrame {
         JMenuItem itemSalir = new JMenuItem("Salir");
         JMenuItem itemCarrito = new JMenuItem("Ver Carrito");
         
+        
+        if (tipoUsuario == TipoUsuario.USUARIO) {
+            JMenuItem itemHacerseSocio = new JMenuItem("Hacerse Socio");
+            itemHacerseSocio.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    usuario.setTipo(TipoUsuario.SOCIO); 
+                    JOptionPane.showMessageDialog(null, "¡Felicidades! Ahora eres socio.");
+                    String codigoOferta = "ABC123";
+                    VentanaSocio ventanaSocio = new VentanaSocio(codigoOferta);
+                    ventanaSocio.setVisible(true);
+                }
+            });
+            menuArchivo.add(itemHacerseSocio);
+        }
+        
         if (tipoUsuario == TipoUsuario.SOCIO) {
             JMenuItem itemSocio = new JMenuItem("Zona Socio");
             itemSocio.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String codigoOferta = "ABC123"; 
+                    String codigoOferta = "ABC123";
                     VentanaSocio ventanaSocio = new VentanaSocio(codigoOferta);
                     ventanaSocio.setVisible(true);
                 }
@@ -44,7 +65,6 @@ public class VentanaSupermarket extends JFrame {
         }
         
         itemSalir.addActionListener(e -> System.exit(0)); // Cerrar la aplicación
-
         menuArchivo.add(itemSalir);
         menuBar.add(menuArchivo);
         menuBar.add(menuAyuda);
@@ -91,8 +111,9 @@ public class VentanaSupermarket extends JFrame {
     }
 
     public static void main(String[] args) {
+    	Usuario usuario = new Usuario("usuarioDemo", "1234", true, TipoUsuario.USUARIO);
         SwingUtilities.invokeLater(() -> {
-            VentanaSupermarket ventana = new VentanaSupermarket(tipoUsuario);
+            VentanaSupermarket ventana = new VentanaSupermarket(usuario);
             ventana.setVisible(true); // Hacer visible la ventana
         });
     }
