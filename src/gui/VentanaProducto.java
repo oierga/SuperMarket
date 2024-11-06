@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 import domain.Producto;
+import domain.TipoUsuario;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -75,7 +77,7 @@ public class VentanaProducto extends JFrame {
                 if (respuesta == JOptionPane.YES_OPTION) {
                     JOptionPane.showMessageDialog(null, nombre + " añadido al carrito.");
                     idEnCarrito[idEnCarritoGeneral.length] = 1;
-                    new VentanaSupermarket().setVisible(true);// Agregar producto al carrito
+                    new VentanaSupermarket(TipoUsuario.USUARIO).setVisible(true);// Agregar producto al carrito
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "No se añadió el producto al carrito.");
@@ -90,7 +92,7 @@ public class VentanaProducto extends JFrame {
         btnCerrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	new VentanaSupermarket().setVisible(true);;
+            	new VentanaSupermarket(TipoUsuario.USUARIO).setVisible(true);;
                 dispose(); // Cerrar la ventana actual
                 
             }

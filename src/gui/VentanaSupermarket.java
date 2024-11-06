@@ -29,18 +29,19 @@ public class VentanaSupermarket extends JFrame {
         JMenu menuAyuda = new JMenu("Ayuda");
         JMenuItem itemSalir = new JMenuItem("Salir");
         JMenuItem itemCarrito = new JMenuItem("Ver Carrito");
-        
+        JMenuItem itemSocio = new JMenuItem ("Zona Socios");
         if (tipoUsuario == TipoUsuario.SOCIO) {
-            JMenuItem itemSocio = new JMenuItem("Zona Socio");
+        	 menuArchivo.add(itemSocio);
             itemSocio.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                	
                     String codigoOferta = "ABC123"; 
                     VentanaSocio ventanaSocio = new VentanaSocio(codigoOferta);
                     ventanaSocio.setVisible(true);
                 }
             });
-            menuArchivo.add(itemSocio);
+           
         }
         
         itemSalir.addActionListener(e -> System.exit(0)); // Cerrar la aplicación
@@ -93,7 +94,8 @@ public class VentanaSupermarket extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            VentanaSupermarket ventana = new VentanaSupermarket();
+        	
+            VentanaSupermarket ventana = new VentanaSupermarket(TipoUsuario.USUARIO);
             ventana.setVisible(true); // Hacer visible la ventana
         });
     }
@@ -106,3 +108,4 @@ public class VentanaSupermarket extends JFrame {
         this.idEnCarrito = idEnCarrito;
     }
 }
+
