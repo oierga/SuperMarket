@@ -1,38 +1,20 @@
 package domain;
 
-import java.util.Map;
-
 public class Producto {
 
     private int idProducto;   // Campo para el identificador único
     private String nombre;
-    private double precio;
-    private String rutaImagen;
-    private Categoria categoria;
-    
-    public Producto(int idProducto, String nombre, double precio, String rutaImagen, Categoria categoria) {
+    private int precio;
+
+    // Constructor actualizado con el idProducto
+    public Producto(int idProducto, String nombre, int precio) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.precio = precio;
-        this.rutaImagen = rutaImagen;
-        this.categoria = categoria;
     }
 
-    public Producto(String nombre2, String precio2) {
-    	this.nombre = nombre2;
-    	String precioAux = precio2.substring(0, precio2.length() - 1);
-    	double precioAux2 = Double.parseDouble(precioAux);
-    	this.precio = precioAux2;
-		// TODO Auto-generated constructor stub
-	}
-
-	public Producto(String nombre2, double precio2) {
-		// TODO Auto-generated constructor stub
-		this.nombre = nombre2;
-		this.precio = precio2;
-	}
-
-	public int getIdProducto() {
+    // Getters y Setters
+    public int getIdProducto() {
         return idProducto;
     }
 
@@ -48,50 +30,29 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public double getPrecio() {
+    public int getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(int precio) {
         this.precio = precio;
     }
-    
-    public String getRutaImagen() {
-        return rutaImagen;
-    }
 
-    public void setRutaImagen(String rutaImagen) {
-        this.rutaImagen = rutaImagen;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-
+    // Método toString para mostrar información del producto
     @Override
     public String toString() {
-        return "Producto [idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", categoria=" + categoria.getNombre() + "]";
+        return "Producto [idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + "]";
     }
 
-    //esto habra q borrar
-    public static Producto parseCSV(String line, Map<String, Categoria> categorias) {
+    // Método para parsear una línea CSV en un Producto
+    public static Producto parseCSV(String line) {
+        // Dividir la línea por comas y eliminar comillas innecesarias
         String[] parts = line.split(",");
-        
-        
         int idProducto = Integer.parseInt(parts[0].replaceAll("\"", ""));
         String nombre = parts[1].replaceAll("\"", "");
-        double precio = Double.parseDouble(parts[2].replaceAll("\"", ""));
-        String categoriaNombre = parts[3].replaceAll("\"", "");
-        String rutaImagen = parts[4].replaceAll("\"", ""); 
+        int precio = Integer.parseInt(parts[2].replaceAll("\"", "")); // Asumiendo que el precio está en la tercera columna
 
-        Categoria categoria = categorias.get(categoriaNombre);
-        
-        return new Producto(idProducto, nombre, precio, rutaImagen, categoria);
+        // Crear y retornar el objeto Producto con los datos obtenidos
+        return new Producto(idProducto, nombre, precio);
     }
-
 }

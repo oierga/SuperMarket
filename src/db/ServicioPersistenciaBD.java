@@ -1,7 +1,6 @@
 package db;
 
 import domain.Producto;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -9,10 +8,12 @@ public class ServicioPersistenciaBD {
 
 }
 
+    // Método para registrar el driver y obtener la conexión a la base de datos
     /*private static Connection getConnection() {
         //EStablecer conexión con DB. No tenemos DB todavia.
     }*/
 
+    // Método para cargar los productos desde la base de datos
    /* public static Producto[] cargarProductos() {
         String query = "SELECT idProducto, nombre, precio FROM PRODUCTO";
         ArrayList<Producto> listaProductos = new ArrayList<>();
@@ -40,6 +41,7 @@ public class ServicioPersistenciaBD {
         return listaProductos.toArray(new Producto[0]);
     }
 
+    // Método para cargar los usuarios desde la base de datos
     public static Usuario[] cargarUsuarios() {
         String query = "SELECT * FROM USUARIO";
         ArrayList<Usuario> listaUsuarios = new ArrayList<>();
@@ -67,6 +69,7 @@ public class ServicioPersistenciaBD {
         return listaUsuarios.toArray(new Usuario[0]);
     }
 
+    // Clase Usuario
     public static class Usuario {
         private int idUsuario;
         private String nombre;
@@ -78,6 +81,7 @@ public class ServicioPersistenciaBD {
             this.puntos = puntos;
         }
 
+        // Getters y Setters
         public int getIdUsuario() {
             return idUsuario;
         }
@@ -103,15 +107,18 @@ public class ServicioPersistenciaBD {
         }
     }
 
+    // Método principal para probar la carga de datos
     public static void main(String[] args) {
         Producto[] productos = cargarProductos();
         Usuario[] usuarios = cargarUsuarios();
 
+        // Imprimir productos
         System.out.println("Productos:");
         for (Producto producto : productos) {
             System.out.println("ID: " + producto.getIdProducto() + ", Nombre: " + producto.getNombre() + ", Precio: " + producto.getPrecio());
         }
 
+        // Imprimir usuarios
         System.out.println("\nUsuarios:");
         for (Usuario usuario : usuarios) {
             System.out.println("ID: " + usuario.getIdUsuario() + ", Nombre: " + usuario.getNombre() + ", Puntos: " + usuario.getPuntos());

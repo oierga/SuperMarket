@@ -1,13 +1,7 @@
 package main;
 
-import javax.swing.SwingUtilities;
-
 import db.ServicioPersistenciaBD;
-import domain.TipoUsuario;
-import domain.Usuario;
-import gui.VentanaBienvenida;
 import gui.VentanaLogin;
-import gui.VentanaSupermarket;
 
 //la idea va un poco por aqui
 
@@ -19,10 +13,6 @@ public class Main {
         
         VentanaLogin ventanaInicio = new VentanaLogin(servicioPersistencia);
         
-        Usuario usuario = new Usuario("admin", "123", true, TipoUsuario.ADMIN.USUARIO);
-        SwingUtilities.invokeLater(() -> {
-            new VentanaBienvenida();
-        });
     
         
         /*
