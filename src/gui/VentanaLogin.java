@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.*;
+
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import db.ServicioPersistenciaBD;
@@ -12,27 +13,22 @@ public class VentanaLogin extends JFrame {
     private JLabel lErrores;
 
     public VentanaLogin(ServicioPersistenciaBD servicioPersistencia) {
-        // Configuración del JFrame
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Iniciar Sesión");
-        setLocationRelativeTo(null); // Centra la ventana en la pantalla
+        setLocationRelativeTo(null);
 
-        // Inicialización del panel y configuración del layout
         JPanel panelLabel = new JPanel(new GridBagLayout());
 
-        // Inicializar componentes
         tfNombreDeUsuario = new JTextField(20);
         tfContrasena = new JTextField(20);
         JButton bIniciarSesion = new JButton("Iniciar Sesión");
         JButton bCrearCuenta = new JButton("Crear Cuenta");
         
-        // Configurar GridBagConstraints
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 10, 10);
-
-        // Agregar componentes al panel
+       
         addComponent(panelLabel, gbc, 0, 0, new JLabel("Nombre de usuario:"), tfNombreDeUsuario);
         addComponent(panelLabel, gbc, 1, 0, new JLabel("Contraseña:"), tfContrasena);
         
@@ -85,7 +81,7 @@ public class VentanaLogin extends JFrame {
                 .findFirst()
                 .orElse(null);
 
-        // Comprobar las condiciones del inicio de sesión
+        
         if (usuario == null) {
             lErrores.setText("Nombre de usuario incorrecto");
         } else if (!usuario.getContraseña().equals(contrasena)) {
@@ -93,16 +89,15 @@ public class VentanaLogin extends JFrame {
         } else if (!usuario.getActivo()) {
             lErrores.setText("Este usuario está bloqueado");
         } else {
-            lErrores.setText("Inicio de sesión exitoso"); // Puedes agregar código para el inicio exitoso
+            lErrores.setText("Inicio de sesión exitoso");
         }
         dispose();
-        VentanaSupermarket ventanaSupermarket = new VentanaSupermarket();
+        VentanaSupermarket ventanaSupermarket = new VentanaSupermarket(usuario);
         ventanaSupermarket.setVisible(true);
     }
 
     
 
-    public static void main(String[] args) {
-        new VentanaLogin(new ServicioPersistenciaBD()); // Instancia del servicio de persistencia
-    }
+    
 }
+
