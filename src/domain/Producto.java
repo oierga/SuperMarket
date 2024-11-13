@@ -1,19 +1,23 @@
 package domain;
 
+import java.util.Map;
+
 public class Producto {
 
     private int idProducto;   // Campo para el identificador único
     private String nombre;
-    private int precio;
+    private double precio;
+    private String rutaImagen;
+    private Categoria categoria;
 
-    // Constructor actualizado con el idProducto
-    public Producto(int idProducto, String nombre, int precio) {
+    public Producto(int idProducto, String nombre, double precio, String rutaImagen, Categoria categoria) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.precio = precio;
+        this.rutaImagen = rutaImagen;
+        this.categoria = categoria;
     }
 
-    // Getters y Setters
     public int getIdProducto() {
         return idProducto;
     }
@@ -30,29 +34,50 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public int getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(int precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
+    
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
 
-    // Método toString para mostrar información del producto
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+
     @Override
     public String toString() {
-        return "Producto [idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + "]";
+        return "Producto [idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", categoria=" + categoria.getNombre() + "]";
     }
 
-    // Método para parsear una línea CSV en un Producto
-    public static Producto parseCSV(String line) {
-        // Dividir la línea por comas y eliminar comillas innecesarias
+    //esto habra q borrar
+    public static Producto parseCSV(String line, Map<String, Categoria> categorias) {
         String[] parts = line.split(",");
+        
+        
         int idProducto = Integer.parseInt(parts[0].replaceAll("\"", ""));
         String nombre = parts[1].replaceAll("\"", "");
-        int precio = Integer.parseInt(parts[2].replaceAll("\"", "")); // Asumiendo que el precio está en la tercera columna
+        double precio = Double.parseDouble(parts[2].replaceAll("\"", ""));
+        String categoriaNombre = parts[3].replaceAll("\"", "");
+        String rutaImagen = parts[4].replaceAll("\"", ""); 
 
-        // Crear y retornar el objeto Producto con los datos obtenidos
-        return new Producto(idProducto, nombre, precio);
+        Categoria categoria = categorias.get(categoriaNombre);
+        
+        return new Producto(idProducto, nombre, precio, rutaImagen, categoria);
     }
+
 }
