@@ -1,77 +1,191 @@
 package gui;
 
 import db.ServicioPersistenciaBD;
+import domain.CarritoCompras;
 import domain.Producto;
+import domain.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
 
+import java.util.Map;
+
 public class VentanaCarrito extends JFrame {
-
-    public VentanaCarrito(int[] idEnCarrito) {
-        // Configuración de la ventana
+	
+	private CarritoCompras carrito;
+    private JPanel panelProductos;
+    private JLabel labelTotal;
+    private JTextField campoCupon;
+    private JLabel labelDescuento;
+    private double descuentoAplicado = 0;
+    private Usuario usuario; 
+    private  VentanaCategorias ventanaCategorias;
+    
+    public VentanaCarrito(VentanaCategorias ventanaCategorias) {
+        this.ventanaCategorias = ventanaCategorias;
+    	this.usuario = usuario;
+    	this.carrito = CarritoCompras.getInstance();
+    	
         setTitle("Carrito de Compras");
-        setSize(400, 300);
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null); // Centrar la ventana
+        setLocationRelativeTo(null); 
 
-        // Panel principal para los productos del carrito
-        JPanel panelCarrito = new JPanel();
-        panelCarrito.setLayout(new BoxLayout(panelCarrito, BoxLayout.Y_AXIS));
-        panelCarrito.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Margen alrededor
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Título
-        JLabel labelTitulo = new JLabel("Productos en el Carrito:");
-        labelTitulo.setFont(new Font("Arial", Font.BOLD, 16));
-        panelCarrito.add(labelTitulo);
-        panelCarrito.add(Box.createRigidArea(new Dimension(0, 10))); // Espacio entre el título y la lista
+        panelProductos = new JPanel();
+        panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
+        actualizarListaProductos();
 
-        // Variable de control para verificar si se encontraron productos
-        boolean productosEncontrados = false;
+        JPanel panelInferior = new JPanel(new BorderLayout());
+        
+        labelTotal = new JLabel("Total: €0.00");
+        labelTotal.setFont(new Font("Arial", Font.BOLD, 16));
+        labelTotal.setHorizontalAlignment(SwingConstants.CENTER);
+        panelInferior.add(labelTotal, BorderLayout.CENTER);
+        
+        JPanel panelCupon = new JPanel();
+        panelCupon.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JLabel labelCupon = new JLabel("Código de descuento: ");
+        campoCupon = new JTextField(10);
+        campoCupon.setFont(new Font("Arial", Font.PLAIN, 14));
+        
+        JButton btnAplicarCupon = new JButton("Aplicar");
+        btnAplicarCupon.addActionListener(e -> aplicarCupon());
+        
+        panelCupon.add(labelCupon);
+        panelCupon.add(campoCupon);
+        panelCupon.add(btnAplicarCupon);
+        
+        panelInferior.add(panelCupon, BorderLayout.NORTH);
+        
+        labelDescuento = new JLabel("Descuento: €0.00");
+        labelDescuento.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelInferior.add(labelDescuento, BorderLayout.SOUTH);
 
-        // Cargar y mostrar cada producto basado en su ID en el carrito
-        for (int idProducto : idEnCarrito) {
-            Producto producto = null;
+        JButton btnVaciar = new JButton("Vaciar Carrito");
+        btnVaciar.addActionListener(e -> {
+            carrito.vaciarCarrito();
+            actualizarListaProductos();
+            labelTotal.setText("Total: €0.00");
+        });
 
-            if (producto == null) {
-                productosEncontrados = true;
-                
-                // Crear un panel para cada producto en el carrito
-                JPanel productoPanel = new JPanel(new BorderLayout());
-                JLabel labelNombre = new JLabel("Nombre: Prueba");
-                JLabel labelPrecio = new JLabel("Precio: 789.00$" );
-
-                productoPanel.add(labelNombre, BorderLayout.NORTH);
-                productoPanel.add(labelPrecio, BorderLayout.SOUTH);
-                productoPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY)); // Línea separadora
-
-                panelCarrito.add(productoPanel);
-                panelCarrito.add(Box.createRigidArea(new Dimension(0, 10))); // Espacio entre productos
-            } else {
-                // Mensaje de depuración si no se encuentra el producto en la base de datos
-                System.out.println("Producto con ID " + idProducto + " no encontrado en la base de datos.");
+        JButton btnComprar = new JButton("Realizar Compra");
+        btnComprar.addActionListener(e -> {
+            if (carrito.getProductos().isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "El carrito está vacío", 
+                    "Error", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
             }
-        }
+            double totalConDescuento = carrito.getTotal() - descuentoAplicado;
+            int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Desea finalizar la compra?\nTotal: €" + String.format("%.2f", totalConDescuento),
+                "Confirmar Compra",
+                JOptionPane.YES_NO_OPTION);
+                
+            if (confirm == JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(this,
+                    "¡Compra realizada con éxito!",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+                carrito.vaciarCarrito();
+                actualizarListaProductos();
+                VentanaSupermarket ventanaSupermarket = new VentanaSupermarket(usuario);
+                ventanaSupermarket.setVisible(true);
+;
+                dispose();
+            }
+        });
+        
+        JButton btnAtras = new JButton("Atrás");
+        btnAtras.addActionListener(e -> {
+            if (ventanaCategorias != null) {
+                ventanaCategorias.setVisible(true);
+                dispose();  
+            }
+        });
 
-        // Mostrar mensaje si no hay productos en el carrito
-        if (!productosEncontrados) {
-            JLabel labelVacio = new JLabel("No hay productos en el carrito.");
-            labelVacio.setHorizontalAlignment(SwingConstants.CENTER);
-            panelCarrito.add(labelVacio);
-        }
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotones.add(btnVaciar);
+        panelBotones.add(btnComprar);
+        panelBotones.add(btnAtras, FlowLayout.LEFT);
+        panelInferior.add(panelBotones, BorderLayout.EAST);
 
-        // Añadir el panel principal a la ventana
-        add(new JScrollPane(panelCarrito), BorderLayout.CENTER);
+        mainPanel.add(new JScrollPane(panelProductos), BorderLayout.CENTER);
+        mainPanel.add(panelInferior, BorderLayout.SOUTH);
+
+        add(mainPanel);
+    }
+    
+    private void aplicarCupon() {
+        String cuponIngresado = campoCupon.getText().trim();
+        
+        if (cuponIngresado.equals("ABC123")) {
+            descuentoAplicado = carrito.getTotal() * 0.06;  
+            labelDescuento.setText("Descuento: €" + String.format("%.2f", descuentoAplicado));
+            recalcularDescuento();        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Código de descuento inválido", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void agregarProductoAlCarrito(Producto producto, int cantidad) {
+        carrito.agregarProducto(producto, cantidad);
+        actualizarListaProductos();
+        labelTotal.setText("Total: " + carrito.getTotalFormateado());
     }
 
-    // Método principal para abrir la ventana de carrito en un ejemplo
-    public static void main(String[] args) {
-        // Ejemplo de IDs de productos en el carrito
-        int[] idEnCarrito = {1, 2, 3}; // Ejemplo de IDs en el carrito
+    private void actualizarListaProductos() {
+        panelProductos.removeAll();
+        
+        for (Map.Entry<Producto, Integer> entry : carrito.getProductos().entrySet()) {
+            Producto producto = entry.getKey();
+            int cantidad = entry.getValue();
+            
+            JPanel itemPanel = new JPanel(new BorderLayout());
+            itemPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+            ));
 
-        SwingUtilities.invokeLater(() -> {
-            VentanaCarrito ventanaCarrito = new VentanaCarrito(idEnCarrito);
-            ventanaCarrito.setVisible(true); // Hacer visible la ventana del carrito
-        });
+            JLabel labelNombre = new JLabel(producto.getNombre());
+            JLabel labelPrecio = new JLabel(String.format("€%.2f x %d = €%.2f", 
+                    producto.getPrecio(), cantidad, producto.getPrecio() * cantidad));
+
+            JButton btnEliminar = new JButton("Eliminar");
+            btnEliminar.addActionListener(e -> {
+                carrito.removerProducto(producto);
+                actualizarListaProductos();
+                recalcularDescuento();
+            });
+
+            itemPanel.add(labelNombre, BorderLayout.WEST);
+            itemPanel.add(labelPrecio, BorderLayout.CENTER);
+            itemPanel.add(btnEliminar, BorderLayout.EAST);
+
+            panelProductos.add(itemPanel);
+        }
+
+        panelProductos.revalidate();
+        panelProductos.repaint();
+        
+    }
+    private void recalcularDescuento() {
+        double totalSinDescuento = carrito.getTotal();
+        
+        if (descuentoAplicado > 0) {
+            descuentoAplicado = totalSinDescuento * 0.06; 
+        }
+
+        double totalConDescuento = totalSinDescuento - descuentoAplicado;
+        
+        labelTotal.setText("Total: €" + String.format("%.2f", totalConDescuento));
+        labelDescuento.setText("Descuento: €" + String.format("%.2f", descuentoAplicado));
     }
 }
