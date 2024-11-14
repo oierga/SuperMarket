@@ -309,4 +309,3 @@ public class VentanaSupermarket extends JFrame {
     	new VentanaSupermarket(usuario);
     }
 }
-

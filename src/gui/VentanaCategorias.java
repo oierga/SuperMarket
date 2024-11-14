@@ -16,8 +16,10 @@ public class VentanaCategorias extends JFrame {
     private JLabel totalCarritoLabel;
     private double totalCarrito;
     private VentanaCarrito ventanaCarrito;
+    private Usuario usuario;
 	
     public VentanaCategorias(Usuario usuario) {
+    	this.usuario = usuario;
         setTitle("Categorías");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -95,7 +97,7 @@ public class VentanaCategorias extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Aquí tenemos que cargar los productos de esa categoría
-                    VentanaProductosDeCategoria ventanaProductos = new VentanaProductosDeCategoria(categoria, VentanaCategorias.this, totalCarrito);
+                    VentanaProductosDeCategoria ventanaProductos = new VentanaProductosDeCategoria(usuario);
                     ventanaProductos.setVisible(true);
                 }
             });
