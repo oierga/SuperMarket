@@ -37,6 +37,7 @@ public class VentanaSupermarket extends JFrame {
         mainPanel.add(crearPanelContacto(), BorderLayout.SOUTH);
         
         add(new JScrollPane(mainPanel));
+        setVisible(true);
     }
     
     private void configurarVentana() {
@@ -139,6 +140,7 @@ public class VentanaSupermarket extends JFrame {
         btnComprar.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btnComprar.setForeground(Color.WHITE);
         btnComprar.setBackground(colorPrimario);
+        btnComprar.setOpaque(true);
         btnComprar.setPreferredSize(new Dimension(300, 60));
         btnComprar.setBorder(new LineBorder(colorPrimario.darker(), 2));
         btnComprar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -296,6 +298,11 @@ public class VentanaSupermarket extends JFrame {
         if (ventanaCategorias != null) {
             ventanaCategorias.actualizarTotalCarrito(nuevoTotal);
         }
+    }
+    //Este main es para probar la ventana mientras trabajo con ella
+    public static void main(String[] args) {
+    	Usuario usuario = new Usuario("admin", "123", true, TipoUsuario.USUARIO);
+    	new VentanaSupermarket(usuario);
     }
 }
 
