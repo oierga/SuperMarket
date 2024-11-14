@@ -1,6 +1,9 @@
 package gui;
 
 import javax.swing.*;
+
+import domain.Usuario;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +17,7 @@ public class VentanaCategorias extends JFrame {
     private double totalCarrito;
     private VentanaCarrito ventanaCarrito;
 	
-    public VentanaCategorias() {
+    public VentanaCategorias(Usuario usuario) {
         setTitle("Categorías");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -36,7 +39,7 @@ public class VentanaCategorias extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Mostrar la ventana del carrito
                 if (ventanaCarrito == null) {
-                    ventanaCarrito = new VentanaCarrito(VentanaCategorias.this);
+                    ventanaCarrito = new VentanaCarrito(VentanaCategorias.this, usuario);
                 }
                 ventanaCarrito.setVisible(true);
             }
@@ -103,7 +106,7 @@ public class VentanaCategorias extends JFrame {
         totalCarrito = nuevoTotal;
         totalCarritoLabel.setText(String.format("Total: €%.2f", totalCarrito));
     }
-    private ImageIcon cargarImagen(String nombreImagen, int ancho, int alto) {
+    ImageIcon cargarImagen(String nombreImagen, int ancho, int alto) {
         java.net.URL imageUrl = getClass().getResource("/images/" + nombreImagen);        
         if (imageUrl != null) {
             ImageIcon iconoOriginal = new ImageIcon(imageUrl);

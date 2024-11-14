@@ -3,10 +3,13 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
+
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import domain.Producto;
 import domain.TipoUsuario;
 import domain.Usuario;
 
@@ -35,6 +38,7 @@ public class VentanaSupermarket extends JFrame {
         mainPanel.add(crearPanelBienvenida(), BorderLayout.NORTH);
         mainPanel.add(crearPanelCentral(), BorderLayout.CENTER);
         mainPanel.add(crearPanelContacto(), BorderLayout.SOUTH);
+       // mainPanel.add(crearPanelProductos());
         
         add(new JScrollPane(mainPanel));
         setVisible(true);
@@ -80,7 +84,7 @@ public class VentanaSupermarket extends JFrame {
         
         return panel;
     }
-    
+   
     private JPanel crearPanelCentral() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         panel.setBackground(colorSecundario);
@@ -261,7 +265,7 @@ public class VentanaSupermarket extends JFrame {
     
     private void abrirVentanaCarrito() {
         if (ventanaCarrito == null) {
-            ventanaCarrito = new VentanaCarrito(ventanaCategorias);
+            ventanaCarrito = new VentanaCarrito(ventanaCategorias,usuario);
         }
         ventanaCarrito.setVisible(true);
     }
@@ -288,7 +292,7 @@ public class VentanaSupermarket extends JFrame {
     
     private void abrirVentanaCategorias() {
         if (ventanaCategorias == null) {
-            ventanaCategorias = new VentanaCategorias();
+            ventanaCategorias = new VentanaCategorias(usuario);
         }
         ventanaCategorias.setVisible(true);
     }

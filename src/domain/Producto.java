@@ -18,7 +18,13 @@ public class Producto {
         this.categoria = categoria;
     }
 
-    public int getIdProducto() {
+    public Producto(String productName, double precio2) {
+    	this.nombre=productName;
+    	this.precio = precio2;
+		// TODO Auto-generated constructor stub
+	}
+
+	public int getIdProducto() {
         return idProducto;
     }
 
@@ -61,7 +67,7 @@ public class Producto {
 
     @Override
     public String toString() {
-        return "Producto [idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", categoria=" + categoria.getNombre() + "]";
+        return "Producto [idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", categoria= ]";
     }
 
     //esto habra q borrar

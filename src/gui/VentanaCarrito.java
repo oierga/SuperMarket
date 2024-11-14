@@ -7,7 +7,8 @@ import domain.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class VentanaCarrito extends JFrame {
@@ -21,7 +22,8 @@ public class VentanaCarrito extends JFrame {
     private Usuario usuario; 
     private  VentanaCategorias ventanaCategorias;
     
-    public VentanaCarrito(VentanaCategorias ventanaCategorias) {
+    public VentanaCarrito(VentanaCategorias ventanaCategorias, Usuario usuario2) {
+    	
         this.ventanaCategorias = ventanaCategorias;
     	this.usuario = usuario;
     	this.carrito = CarritoCompras.getInstance();
@@ -137,17 +139,17 @@ public class VentanaCarrito extends JFrame {
     
     public void agregarProductoAlCarrito(Producto producto, int cantidad) {
         carrito.agregarProducto(producto, cantidad);
-        actualizarListaProductos();
+        //actualizarListaProductos(productosCarritoUnidad,productosCarrito2);
         labelTotal.setText("Total: " + carrito.getTotalFormateado());
     }
 
-    private void actualizarListaProductos() {
+    void actualizarListaProductos() {
         panelProductos.removeAll();
         
         for (Map.Entry<Producto, Integer> entry : carrito.getProductos().entrySet()) {
             Producto producto = entry.getKey();
             int cantidad = entry.getValue();
-            
+            System.out.print(entry);
             JPanel itemPanel = new JPanel(new BorderLayout());
             itemPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY),
@@ -161,8 +163,13 @@ public class VentanaCarrito extends JFrame {
             JButton btnEliminar = new JButton("Eliminar");
             btnEliminar.addActionListener(e -> {
                 carrito.removerProducto(producto);
-                actualizarListaProductos();
+                //actualizarListaProductos();
                 recalcularDescuento();
+                itemPanel.remove(labelPrecio);
+                itemPanel.remove(labelNombre);
+                panelProductos.repaint();
+                btnEliminar.setVisible(false);
+                repaint();
             });
 
             itemPanel.add(labelNombre, BorderLayout.WEST);
@@ -188,4 +195,12 @@ public class VentanaCarrito extends JFrame {
         labelTotal.setText("Total: €" + String.format("%.2f", totalConDescuento));
         labelDescuento.setText("Descuento: €" + String.format("%.2f", descuentoAplicado));
     }
+
+	public CarritoCompras getCarrito() {
+		return carrito;
+	}
+
+	public void setCarrito(CarritoCompras carrito) {
+		this.carrito = carrito;
+	}
 }
