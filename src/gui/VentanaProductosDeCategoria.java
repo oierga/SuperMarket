@@ -43,7 +43,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         //Top panel, panel del banner
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.setBackground(new Color(242, 243, 244));
-        ImageIcon bannerIcon = cargarImagen("banner.png",1200,500);
+        ImageIcon bannerIcon = cargarImagen("/images/banner.png",1200,500);
         Image bannerImage = bannerIcon.getImage().getScaledInstance(1200, 130, Image.SCALE_SMOOTH);; // Obtener la imagen de la imagen cargada
         JLabel bannerLabel = new JLabel(new ImageIcon(bannerImage));
         bannerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -139,17 +139,17 @@ public class VentanaProductosDeCategoria extends JFrame {
         // Panel de productos con ScrollPane
         JPanel productGridPanel = new JPanel(new GridLayout(0, 5, 10, 10));
         productGridPanel.setBackground(Color.WHITE);
-        String[] imagenes = { "agua.png", "bacon.png", "bagel.png", "baguette.png", "banana.png", "bebidas.png", "cafe.png", 
-                "carnes.png", "cebolla.png", "cerveza.png", "cordero.png", "crema.png", "croissant.png", 
-                "deustowallpaper.jpg", "donut.png", "empanada.png", "espinaca.png", "fresa.png", "frutas.png", 
+        String[] imagenes = { "agua.png", "bacon.png", "bagel.png", "baguette.png", "banana.png","cafe.png", 
+                "carnes.png", "cebolla.png", "cerveza.png", "cordero.png", "crema.png", "croissant.png", "donut.png", 
+                "empanada.png", "espinaca.png", "fresa.png", "frutas.png", 
                 "helado.png", "kefir.png", "kiwi.png", "lacteos.png", "leche.png", "lechuga.png", "lomo.png", 
                 "magdalenas.png", "mango.png", "mantequilla.png", "manzana.png", "naranja.png", "pan.png", 
-                "panaderia.png", "pavo.png", "pepino.png", "pera.png", "pimiento.png", "pollo.png", "queso.png", 
+               "pavo.png", "pepino.png", "pera.png", "pimiento.png", "pollo.png", "queso.png", 
                 "refresco.png", "salchicha.png", "te.png", "ternera.png", "tomate.png", "verduras.png", "vino.png", 
                 "yogur.png", "zanahoria.png", "zumo_naranja.png" };
         
         for (String imagen: imagenes) {  
-            String imagePath = "/images/"+imagen;
+            String imagePath = "/images/"+imagen;	
             productGridPanel.add(createProductPanel(
                 imagePath,  
                 imagen.substring(0,imagen.length()-4),
@@ -185,27 +185,19 @@ public class VentanaProductosDeCategoria extends JFrame {
 
         // Imagen del producto
         JLabel productImage = new JLabel();
-        String[] imagenes = { "agua.png", "bacon.png", "bagel.png", "baguette.png", "banana.png", "bebidas.png", "cafe.png", 
-                "carnes.png", "cebolla.png", "cerveza.png", "cordero.png", "crema.png", "croissant.png", 
-                "deustowallpaper.jpg", "donut.png", "empanada.png", "espinaca.png", "fresa.png", "frutas.png", 
-                "helado.png", "kefir.png", "kiwi.png", "lacteos.png", "leche.png", "lechuga.png", "lomo.png", 
-                "magdalenas.png", "mango.png", "mantequilla.png", "manzana.png", "naranja.png", "pan.png", 
-                "panaderia.png", "pavo.png", "pepino.png", "pera.png", "pimiento.png", "pollo.png", "queso.png", 
-                "refresco.png", "salchicha.png", "te.png", "ternera.png", "tomate.png", "verduras.png", "vino.png", 
-                "yogur.png", "zanahoria.png", "zumo_naranja.png" };
-
-        for (String imagen : imagenes) {
+        
+       
             try {
-                ImageIcon originalIcon = cargarImagen(imagen,100,100);
+                ImageIcon originalIcon = cargarImagen(imagePath,100,100);
                 Image scaledImage = originalIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
                 productImage.setIcon(new ImageIcon(scaledImage));
             } catch (Exception e) {
                 // Manejo de errores si la imagen no se puede cargar
-                System.out.println("Error al cargar la imagen: " + imagen);
+                System.out.println("Error al cargar la imagen: " + imagePath);
                 productImage.setText("Imagen no disponible");
             }
             productImage.setAlignmentX(Component.CENTER_ALIGNMENT);
-        }
+        
 
         // Nombre del producto
         JLabel nameLabel = new JLabel(productName);
@@ -482,10 +474,15 @@ public class VentanaProductosDeCategoria extends JFrame {
 	   new VentanaSupermarket(usuario);
    }
    private ImageIcon cargarImagen(String nombreImagen, int ancho, int alto) {
-       java.net.URL imageUrl = getClass().getResource("/images/" + nombreImagen);        
+       java.net.URL imageUrl = getClass().getResource(nombreImagen);        
        if (imageUrl != null) {
+           
+           imageUrl = getClass().getResource(nombreImagen);
            ImageIcon iconoOriginal = new ImageIcon(imageUrl);
            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+
+           System.out.println("Ruta cargada: " + imageUrl);
+
            return new ImageIcon(imagenEscalada);
        } else {
            System.err.println("No se pudo encontrar la imagen: " + nombreImagen);
