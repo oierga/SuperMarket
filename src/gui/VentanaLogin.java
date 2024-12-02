@@ -75,13 +75,14 @@ public class VentanaLogin extends JFrame {
     private void handleLogin(ServicioPersistenciaBD servicioPersistencia) {
         String nombreUsuario = tfNombreDeUsuario.getText();
         String contrasena = tfContrasena.getText();
-        Usuario usuario = servicioPersistencia.cargarTodosUsuarios()
+        Usuario usuario = new Usuario(nombreUsuario, contrasena, rootPaneCheckingEnabled);
+       /* Usuario usuario = servicioPersistencia.cargarTodosUsuarios()
                 .stream()
                 .filter(u -> u.getNombreDeUsuario().equals(nombreUsuario))
                 .findFirst()
                 .orElse(null);
 
-        
+        */
         if (usuario == null) {
             lErrores.setText("Nombre de usuario incorrecto");
         } else if (!usuario.getContraseña().equals(contrasena)) {
