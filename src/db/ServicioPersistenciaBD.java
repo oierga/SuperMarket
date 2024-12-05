@@ -37,27 +37,24 @@ public class ServicioPersistenciaBD {
                     "nombre STRING, " +
                     "nombreDeUsuario STRING UNIQUE, " +
                     "contraseña STRING, " +
-                    "tipoUsuario STRING)");
+                    "activo BOOLEAN)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS producto (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "nombre STRING, " +
                     "precio DOUBLE, " +
-                    "categoria STRING)");
+                    "categoriaNombre STRING, " +
+                    "rutaImagen STRING)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS categoria (" +
+                    "nombre STRING PRIMARY KEY, " +
+                    "imagen STRING)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS carrito (" +
                     "idUsuario INTEGER, " +
                     "idProducto INTEGER, " +
-                    "cantidad INTEGER, " +
                     "FOREIGN KEY(idUsuario) REFERENCES usuario(id), " +
                     "FOREIGN KEY(idProducto) REFERENCES producto(id))");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS compra (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "idUsuario INTEGER, " +
-                    "fecha STRING, " +
-                    "total DOUBLE, " +
-                    "FOREIGN KEY(idUsuario) REFERENCES usuario(id))");
 
             log(Level.INFO, "Tablas creadas correctamente", null);
             return true;
@@ -75,14 +72,19 @@ public class ServicioPersistenciaBD {
             return false;
         }
         try {
-            statement.executeUpdate("INSERT OR IGNORE INTO usuario (nombre, nombreDeUsuario, contraseña, tipoUsuario) VALUES " +
-                    "('Admin', 'admin', '1234', 'ADMIN'), " +
-                    "('Cliente', 'cliente', '5678', 'USUARIO')");
+        	statement.executeUpdate("INSERT OR IGNORE INTO usuario (nombre, nombreDeUsuario, contraseña, activo) VALUES " +
+                    "('Admin', 'admin', '1234', 1), " +
+                    "('Cliente', 'cliente', '5678', 1)");
 
-            statement.executeUpdate("INSERT OR IGNORE INTO producto (nombre, precio, categoria) VALUES " +
-                    "('Manzana', 0.5, 'Frutas'), " +
-                    "('Pan', 1.0, 'Panadería'), " +
-                    "('Leche', 1.2, 'Lácteos')");
+            statement.executeUpdate("INSERT OR IGNORE INTO categoria (nombre, imagen) VALUES " +
+                    "('Frutas', 'ruta/frutas.png'), " +
+                    "('Panadería', 'ruta/panaderia.png'), " +
+                    "('Lácteos', 'ruta/lacteos.png')");
+
+            statement.executeUpdate("INSERT OR IGNORE INTO producto (nombre, precio, categoriaNombre, rutaImagen) VALUES " +
+                    "('Manzana', 0.5, 'Frutas', 'ruta/manzana.png'), " +
+                    "('Pan', 1.0, 'Panadería', 'ruta/pan.png'), " +
+                    "('Leche', 1.2, 'Lácteos', 'ruta/leche.png')");
 
             log(Level.INFO, "Datos de prueba inicializados correctamente", null);
             return true;
@@ -93,14 +95,35 @@ public class ServicioPersistenciaBD {
             return false;
         }
     }
+    /*
+    public void guardarUsuario(Usuario usuario) {
+        try {
+            String sql = "INSERT INTO usuario (nombre, nombreDeUsuario, contraseña, activo) VALUES (?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, usuario.getNombreDeUsuario());
+            stmt.setString(2, usuario.getNombreDeUsuario());
+            stmt.setString(3, usuario.getContraseña());
+            stmt.setBoolean(4, usuario.isActivo());
+            stmt.executeUpdate();
+            stmt.close();
+            log(Level.INFO, "Usuario guardado correctamente: " + usuario.getNombreDeUsuario(), null);
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al guardar usuario: " + usuario.getNombreDeUsuario(), e);
+        }
+    }
+    */
 
     public ArrayList<Usuario> cargarTodosUsuarios() {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         try {
             ResultSet rs = statement.executeQuery("SELECT * FROM usuario");
             while (rs.next()) {
-                TipoUsuario tipo = TipoUsuario.valueOf(rs.getString("tipoUsuario").toUpperCase());
-                Usuario usuario = new Usuario(rs.getString("nombreDeUsuario"), rs.getString("contraseña"), true, tipo);
+                Usuario usuario = new Usuario(
+                        rs.getString("nombreDeUsuario"),
+                        rs.getString("contraseña"),
+                        rs.getBoolean("activo")
+                );
                 usuarios.add(usuario);
             }
             rs.close();
@@ -116,19 +139,14 @@ public class ServicioPersistenciaBD {
         try {
             ResultSet rs = statement.executeQuery("SELECT * FROM producto");
             while (rs.next()) {
-                String categoriaNombre = rs.getString("categoria").toUpperCase();
-
-                TipoCategoria tipoCategoria = TipoCategoria.valueOf(categoriaNombre);
-                
-                Categoria categoria = new Categoria(tipoCategoria, categoriaNombre, "ruta/por/defecto.png");
+            	Categoria categoria = cargarCategoria(rs.getString("categoriaNombre"));
 
                 Producto producto = new Producto(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getDouble("precio"),
-                    rs.getString("rutaImagen"),
-                    categoria,
-                    tipoCategoria
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getDouble("precio"),
+                        rs.getString("rutaImagen"),
+                        categoria
                 );
 
                 productos.add(producto);
@@ -141,15 +159,33 @@ public class ServicioPersistenciaBD {
         return productos;
     }
     
+    public Categoria cargarCategoria(String nombreCategoria) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM categoria WHERE nombre = ?");
+            stmt.setString(1, nombreCategoria);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Categoria(
+                        rs.getString("nombre"),
+                        rs.getString("imagen")
+                );
+            }
+            rs.close();
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al cargar la categoría " + nombreCategoria, e);
+        }
+        return null;
+    }
+    
     public void guardarProducto(Producto producto) {
         try {
-            String sql = "INSERT INTO producto (id, nombre, precio, rutaImagen, categoria) VALUES (?, ?, ?, ?, ?)";
+        	String sql = "INSERT INTO producto (nombre, precio, categoriaNombre, rutaImagen) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, producto.getIdProducto());
-            stmt.setString(2, producto.getNombre());
-            stmt.setDouble(3, producto.getPrecio());
-            stmt.setString(4, producto.getRutaImagen());
-            stmt.setString(5, producto.getTipoCategoria().name()); 
+            stmt.setString(1, producto.getNombre());
+            stmt.setDouble(2, producto.getPrecio());
+            stmt.setString(3, producto.getCategoria().getNombre());
+            stmt.setString(4, producto.getRutaImagen()); 
             stmt.executeUpdate();
             stmt.close();
         } catch (SQLException e) {
@@ -158,57 +194,6 @@ public class ServicioPersistenciaBD {
         }
     }
 
-    public boolean añadirProductoACarrito(Producto producto, Usuario usuario, int cantidad) {
-        try {
-            String query = "INSERT INTO carrito (idUsuario, idProducto, cantidad) VALUES " +
-                    "((SELECT id FROM usuario WHERE nombreDeUsuario = ?), ?, ?)";
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, usuario.getNombreDeUsuario());
-            ps.setInt(2, producto.getIdProducto());
-            ps.setInt(3, cantidad);
-            ps.executeUpdate();
-            ps.close();
-            log(Level.INFO, "Producto añadido al carrito", null);
-            return true;
-        } catch (SQLException e) {
-            lastError = e;
-            log(Level.SEVERE, "Error al añadir producto al carrito", e);
-            return false;
-        }
-    }
-
-    public boolean generarCompra(Usuario usuario) {
-        try {
-            connection.setAutoCommit(false);
-            String insertCompra = "INSERT INTO compra (idUsuario, fecha, total) VALUES " +
-                    "((SELECT id FROM usuario WHERE nombreDeUsuario = ?), datetime('now'), (SELECT SUM(p.precio * c.cantidad) FROM carrito c " +
-                    "JOIN producto p ON c.idProducto = p.id WHERE c.idUsuario = (SELECT id FROM usuario WHERE nombreDeUsuario = ?)))";
-            PreparedStatement ps = connection.prepareStatement(insertCompra);
-            ps.setString(1, usuario.getNombreDeUsuario());
-            ps.setString(2, usuario.getNombreDeUsuario());
-            ps.executeUpdate();
-
-            String vaciarCarrito = "DELETE FROM carrito WHERE idUsuario = (SELECT id FROM usuario WHERE nombreDeUsuario = ?)";
-            ps = connection.prepareStatement(vaciarCarrito);
-            ps.setString(1, usuario.getNombreDeUsuario());
-            ps.executeUpdate();
-
-            connection.commit();
-            ps.close();
-            log(Level.INFO, "Compra generada con éxito", null);
-            return true;
-
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                log(Level.SEVERE, "Error al hacer rollback", rollbackEx);
-            }
-            lastError = e;
-            log(Level.SEVERE, "Error al generar compra", e);
-            return false;
-        }
-    }
 
     public void close() {
         try {
