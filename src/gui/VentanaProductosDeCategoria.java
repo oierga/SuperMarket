@@ -234,7 +234,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         
 
         // Nombre del producto
-        JLabel nameLabel = new JLabel(productName);
+        JLabel nameLabel = new JLabel(productName.substring(0,1).toUpperCase()+productName.substring(1,productName.length()));
         nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
