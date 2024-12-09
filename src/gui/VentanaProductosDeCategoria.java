@@ -19,19 +19,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VentanaProductosDeCategoria extends JFrame {
-	 private static final long serialVersionUID = 1L;
-	    private Usuario usuario;
-	    private static TipoUsuario tipoUsuario;
-	    private double totalCarrito;
-	    protected ArrayList<Producto> productosCarrito = new ArrayList<>();
-	    protected HashMap<Producto, Integer> productosCarritoUnidad = new HashMap<>();
-	    private VentanaCarrito ventanaCarrito;
-	    private VentanaCategorias ventanaCategorias;
-	    private Color colorPrimario = new Color(76, 175, 80);
-	    private Color colorSecundario = new Color(245, 245, 245);
-	    private Color colorAccent = new Color(33, 33, 33);
+	private static final long serialVersionUID = 1L;
+    private Usuario usuario;
+    private static TipoUsuario tipoUsuario;
+    private double totalCarrito;
+    protected ArrayList<Producto> productosCarrito = new ArrayList<>();
+    protected HashMap<Producto, Integer> productosCarritoUnidad = new HashMap<>();
+    private VentanaCarrito ventanaCarrito;
+    private VentanaCategorias ventanaCategorias;
+    private Color colorPrimario = new Color(76, 175, 80);
+    private Color colorSecundario = new Color(245, 245, 245);
+    private Color colorAccent = new Color(33, 33, 33);
 	    
-    public VentanaProductosDeCategoria(Usuario usuario) {
+    public VentanaProductosDeCategoria(Usuario usuario, String categoriaSeleccionada) {
+        this.usuario = usuario;
     	//Configuracion ventana
     	ventanaCarrito = new VentanaCarrito(ventanaCategorias,usuario);
         setTitle("Supermercado - Página Inicial");
@@ -141,16 +142,24 @@ public class VentanaProductosDeCategoria extends JFrame {
         // Panel de productos con ScrollPane
         JPanel productGridPanel = new JPanel(new GridLayout(0, 5, 10, 10));
         productGridPanel.setBackground(Color.WHITE);
-        String[] imagenes = { "agua.png", "bacon.png", "bagel.png", "baguette.png", "banana.png","cafe.png", 
-                "carnes.png", "cebolla.png", "cerveza.png", "cordero.png", "crema.png", "croissant.png", "donut.png", 
-                "empanada.png", "espinaca.png", "fresa.png", "frutas.png", 
-                "helado.png", "kefir.png", "kiwi.png", "lacteos.png", "leche.png", "lechuga.png", "lomo.png", 
-                "magdalenas.png", "mango.png", "mantequilla.png", "manzana.png", "naranja.png", "pan.png", 
-               "pavo.png", "pepino.png", "pera.png", "pimiento.png", "pollo.png", "queso.png", 
-                "refresco.png", "salchicha.png", "te.png", "ternera.png", "tomate.png", "verduras.png", "vino.png", 
-                "yogur.png", "zanahoria.png", "zumo_naranja.png" };
+        String[] frutas = { "banana.png", "fresa.png", "kiwi.png", "mango.png", "manzana.png", "naranja.png", "pera.png" };
+        String[] verduras = { "cebolla.png", "espinaca.png", "lechuga.png", "pepino.png", "pimiento.png", "tomate.png", "zanahoria.png" };
+        String[] lacteos = { "kefir.png", "leche.png", "queso.png", "yogur.png" };
+        String[] carnes = { "bacon.png", "cordero.png", "lomo.png", "pavo.png", "pollo.png", "salchicha.png", "ternera.png" };
+        String[] bebidas = { "agua.png", "cafe.png", "cerveza.png", "refresco.png", "te.png", "vino.png", "zumo_naranja.png" };
+        String[] panaderia = { "bagel.png", "baguette.png", "croissant.png", "donut.png", "empanada.png", "magdalenas.png", "pan.png" };
         
-        for (String imagen: imagenes) {  
+        Map<String, String[]> productosPorCategoria = new HashMap<>();
+        productosPorCategoria.put("Frutas", frutas);
+        productosPorCategoria.put("Verduras", verduras);
+        productosPorCategoria.put("Lácteos", lacteos);
+        productosPorCategoria.put("Carnes", carnes);
+        productosPorCategoria.put("Bebidas", bebidas);
+        productosPorCategoria.put("Panadería", panaderia);
+        
+        String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
+
+        for (String imagen : productosCategoriaSeleccionada) {
             String imagePath = "/images/"+imagen;	
             productGridPanel.add(createProductPanel(
                 imagePath,  

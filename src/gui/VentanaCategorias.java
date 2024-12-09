@@ -97,7 +97,7 @@ public class VentanaCategorias extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Aquí tenemos que cargar los productos de esa categoría
-                    VentanaProductosDeCategoria ventanaProductos = new VentanaProductosDeCategoria(usuario);
+                    VentanaProductosDeCategoria ventanaProductos = new VentanaProductosDeCategoria(usuario, categoria);
                     ventanaProductos.setVisible(true);
                 }
             });
