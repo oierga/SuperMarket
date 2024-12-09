@@ -169,8 +169,8 @@ public class VentanaProductosDeCategoria extends JFrame {
             String imagePath = "/images/"+imagen;	
             productGridPanel.add(createProductPanel(
                 imagePath,  
-                imagen.substring(0,imagen.length()-4),
-                "Descripción breve del producto.",
+                ((imagen.substring(0,imagen.length()-4)).substring(0,1).toUpperCase()+(imagen.substring(0,imagen.length()-4)).substring(1)).replace("_", " "),
+                "Categoria: "+categoriaSeleccionada+" Producto: "+imagen.substring(0,imagen.length()-4),
                 String.format("%.2f €", (Math.random() * 10) + 1)
             ));
             
@@ -228,7 +228,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         
 
         // Nombre del producto
-        JLabel nameLabel = new JLabel(productName);
+        JLabel nameLabel = new JLabel(((productName.substring(0,1).toUpperCase()+productName.substring(1)).replace("_", " ")).replace("_"," "));
         nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -400,11 +400,11 @@ public class VentanaProductosDeCategoria extends JFrame {
         for (String imagen : productosCategoriaSeleccionada) {
             String imagePath = "/images/" + imagen;    
             productGridPanel.add(createProductPanel(
-                imagePath,
-                imagen.substring(0, imagen.length() - 4),
-                "Descripción breve del producto.",
-                String.format("%.2f €", (Math.random() * 10) + 1)
-            ));
+                    imagePath,  
+                    (imagen.substring(0,imagen.length()-4)).substring(0,1).toUpperCase()+(imagen.substring(0,imagen.length()-4)).substring(1),
+                    "Categoria: "+categoriaSeleccionada+"\n Producto: "+(imagen.substring(0,1).toUpperCase()+imagen.substring(1,imagen.length()-4)).replace("_", " "),
+                    String.format("%.2f €", (Math.random() * 10) + 1)
+                ));
         }
 
         productGridPanel.revalidate();
