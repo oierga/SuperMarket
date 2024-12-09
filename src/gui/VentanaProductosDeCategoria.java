@@ -257,7 +257,6 @@ public class VentanaProductosDeCategoria extends JFrame {
         addButton.setForeground(Color.BLACK);
         addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         addButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -265,13 +264,12 @@ public class VentanaProductosDeCategoria extends JFrame {
 				if (opcion==0) {
 					String seleccion = (String) comboUnidades.getSelectedItem();
 			        int  unidadesSeleccionadas = Integer.parseInt(seleccion); 
-			        String precioAux = price.substring(0,price.length()-1);
+			        String precioAux = price.substring(0, price.length() - 1).replace(",", ".");
 			        double precio = Double.parseDouble(precioAux);
 					Producto producto = new Producto (productName, precio);
-					System.out.print(precio);
-					ventanaCarrito.agregarProductoAlCarrito(producto, unidadesSeleccionadas);
-					productosCarritoUnidad.put(producto, unidadesSeleccionadas);
-					productosCarrito.add(producto);
+		            ventanaCarrito.agregarProductoAlCarrito(producto, unidadesSeleccionadas);
+		            ventanaCarrito.actualizarListaProductos();
+		            JOptionPane.showMessageDialog(null, "Producto añadido al carrito.");
 					
 				}
 				

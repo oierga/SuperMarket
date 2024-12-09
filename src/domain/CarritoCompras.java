@@ -7,11 +7,9 @@ import java.util.Map;
 
 public class CarritoCompras {
     private static CarritoCompras instance;
-    private Map<Producto, Integer> productos;
+    private Map<Producto, Integer> productos = new HashMap<>();
 
-    private CarritoCompras() {
-        productos = new HashMap<>();
-    }
+    private CarritoCompras() {}
 
     public static CarritoCompras getInstance() {
         if (instance == null) {
@@ -21,7 +19,7 @@ public class CarritoCompras {
     }
 
     public void agregarProducto(Producto producto, int cantidad) {
-        productos.merge(producto, cantidad, Integer::sum);
+        productos.put(producto, productos.getOrDefault(producto, 0) + cantidad);
     }
 
     public void removerProducto(Producto producto) {
@@ -38,8 +36,8 @@ public class CarritoCompras {
 
     public double getTotal() {
         return productos.entrySet().stream()
-                .mapToDouble(entry -> entry.getKey().getPrecio() * entry.getValue())
-                .sum();
+            .mapToDouble(e -> e.getKey().getPrecio() * e.getValue())
+            .sum();
     }
     public String getTotalFormateado() {
         return String.format("€%.2f", getTotal());
