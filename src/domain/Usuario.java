@@ -1,6 +1,7 @@
 package domain;
 
 public class Usuario {
+	private int idUsuario;
     private String nombreDeUsuario;
     private String contraseña;
     private boolean activo;
@@ -38,5 +39,30 @@ public class Usuario {
     public void setTipo(TipoUsuario tipo) {
         this.tipo = tipo;
     }
+
+
+	public int getIdUsuario() {
+		return idUsuario;
+	}
+
+
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+
+	public void setNombreDeUsuario(String nombreDeUsuario) {
+		this.nombreDeUsuario = nombreDeUsuario;
+	}
+
+
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
+	}
+
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
     
 }
