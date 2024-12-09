@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2024-12-09T23:34:57.131836Z</date>
+  <millis>1733787297131</millis>
+  <nanos>836000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2024-12-09T23:34:57.148039Z</date>
+  <millis>1733787297148</millis>
+  <nanos>39000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+<record>
+  <date>2024-12-09T23:34:57.148697Z</date>
+  <millis>1733787297148</millis>
+  <nanos>697000</nanos>
+  <sequence>2</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Cargando datos de prueba...</message>
+</record>
+<record>
+  <date>2024-12-09T23:34:57.156024Z</date>
+  <millis>1733787297156</millis>
+  <nanos>24000</nanos>
+  <sequence>3</sequence>
+  <logger>BD-log</logger>
+  <level>SEVERE</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Error al inicializar datos de prueba</message>
+  <exception>
+    <message>java.sql.SQLException: [SQLITE_ERROR] SQL error or missing database ()</message>
+    <frame>
+      <class>org.sqlite.DB</class>
+      <method>newSQLException</method>
+      <line>383</line>
+    </frame>
+    <frame>
+      <class>org.sqlite.DB</class>
+      <method>throwex</method>
+      <line>378</line>
+    </frame>
+    <frame>
+      <class>org.sqlite.NestedDB</class>
+      <method>_exec</method>
+      <line>167</line>
+    </frame>
+    <frame>
+      <class>org.sqlite.Stmt</class>
+      <method>executeUpdate</method>
+      <line>152</line>
+    </frame>
+    <frame>
+      <class>db.ServicioPersistenciaBD</class>
+      <method>initDatosTest</method>
+      <line>119</line>
+    </frame>
+    <frame>
+      <class>main.Main</class>
+      <method>main</method>
+      <line>59</line>
+    </frame>
+  </exception>
+</record>
