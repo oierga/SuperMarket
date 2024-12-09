@@ -4,8 +4,10 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import db.ServicioPersistenciaBD;
 import domain.CarritoCompras;
 import domain.Producto;
+import domain.TipoCategoria;
 import domain.TipoUsuario;
 import domain.Usuario;
 
@@ -164,16 +166,20 @@ public class VentanaProductosDeCategoria extends JFrame {
         productosPorCategoria.put("Panadería", panaderia);
         
         String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
-
+        ServicioPersistenciaBD servicioPersistenciaBD = new ServicioPersistenciaBD();
+        servicioPersistenciaBD.init("supermarket.db", "data");
+        servicioPersistenciaBD.initDatosTest("supermarket.db", "/data");
+        ArrayList<Producto> productos = servicioPersistenciaBD.cargarTodosProductos();
         for (String imagen : productosCategoriaSeleccionada) {
-            String imagePath = "/images/"+imagen;	
-            productGridPanel.add(createProductPanel(
-                imagePath,  
-                ((imagen.substring(0,imagen.length()-4)).substring(0,1).toUpperCase()+(imagen.substring(0,imagen.length()-4)).substring(1)).replace("_", " "),
-                "Categoria: "+categoriaSeleccionada+" Producto: "+imagen.substring(0,imagen.length()-4),
-                String.format("%.2f €", (Math.random() * 10) + 1)
-            ));
-            
+        	for (Producto producto: productos) {
+        		if (producto.getRutaImagen().contains(imagen)) {
+        			 productGridPanel.add(createProductPanel(
+                             producto.getRutaImagen(), producto.getNombre(),
+                             "Categoria: "+categoriaSeleccionada+" Producto: "+producto.getNombre(),
+                             String.format("%.2f €", producto.getPrecio())
+                         ));
+        		}   
+        	}
         }
         JScrollPane scrollPane = new JScrollPane(productGridPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -228,7 +234,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         
 
         // Nombre del producto
-        JLabel nameLabel = new JLabel(((productName.substring(0,1).toUpperCase()+productName.substring(1)).replace("_", " ")).replace("_"," "));
+        JLabel nameLabel = new JLabel(productName);
         nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -396,15 +402,18 @@ public class VentanaProductosDeCategoria extends JFrame {
         productGridPanel.removeAll();
 
         String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
-
+        ServicioPersistenciaBD servicioPersistenciaBD = new ServicioPersistenciaBD();
+        ArrayList<Producto> productos = servicioPersistenciaBD.cargarTodosProductos();
         for (String imagen : productosCategoriaSeleccionada) {
-            String imagePath = "/images/" + imagen;    
-            productGridPanel.add(createProductPanel(
-                    imagePath,  
-                    (imagen.substring(0,imagen.length()-4)).substring(0,1).toUpperCase()+(imagen.substring(0,imagen.length()-4)).substring(1),
-                    "Categoria: "+categoriaSeleccionada+"\n Producto: "+(imagen.substring(0,1).toUpperCase()+imagen.substring(1,imagen.length()-4)).replace("_", " "),
-                    String.format("%.2f €", (Math.random() * 10) + 1)
-                ));
+        	for (Producto producto: productos) {
+        		if (producto.getRutaImagen().contains(imagen)) {
+        			 productGridPanel.add(createProductPanel(
+                             producto.getRutaImagen(), producto.getNombre(),
+                             "Categoria: "+categoriaSeleccionada+" Producto: "+producto.getNombre(),
+                             String.format("%.2f €", producto.getPrecio())
+                         ));
+        		}   
+        	}
         }
 
         productGridPanel.revalidate();

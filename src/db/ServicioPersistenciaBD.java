@@ -34,7 +34,6 @@ public class ServicioPersistenciaBD {
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS usuario (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "nombre STRING, " +
                     "nombreDeUsuario STRING UNIQUE, " +
                     "contraseña STRING, " +
                     "activo BOOLEAN)");
@@ -72,9 +71,9 @@ public class ServicioPersistenciaBD {
             return false;
         }
         try {
-        	statement.executeUpdate("INSERT OR IGNORE INTO usuario (nombre, nombreDeUsuario, contraseña, activo) VALUES " +
-                    "('Admin', 'admin', '1234', 1), " +
-                    "('Cliente', 'cliente', '5678', 1)");
+        	statement.executeUpdate("INSERT OR IGNORE INTO usuario (nombreDeUsuario, contraseña, activo) VALUES " +
+                    "('admin', '1234', 1), " +
+                    "('cliente', '5678', 1)");
 
             statement.executeUpdate("INSERT OR IGNORE INTO categoria (nombre, imagen) VALUES " +
                     "('Frutas', 'ruta/frutas.png'), " +
@@ -82,9 +81,9 @@ public class ServicioPersistenciaBD {
                     "('Lácteos', 'ruta/lacteos.png')");
 
             statement.executeUpdate("INSERT OR IGNORE INTO producto (nombre, precio, categoriaNombre, rutaImagen) VALUES " +
-                    "('Manzana', 0.5, 'Frutas', 'ruta/manzana.png'), " +
-                    "('Pan', 1.0, 'Panadería', 'ruta/pan.png'), " +
-                    "('Leche', 1.2, 'Lácteos', 'ruta/leche.png')");
+                    "('Manzana', 0.5, 'Frutas', 'images/manzana.png'), " +
+                    "('Pan', 1.0, 'Panadería', 'images/pan.png'), " +
+                    "('Leche', 1.2, 'Lácteos', 'images/leche.png')");
 
             log(Level.INFO, "Datos de prueba inicializados correctamente", null);
             return true;
@@ -198,12 +197,11 @@ public class ServicioPersistenciaBD {
     
     public void guardarUsuario(Usuario usuario) {
         try {
-            String sql = "INSERT INTO usuario (nombre, nombreDeUsuario, contraseña, activo) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO usuario (nombreDeUsuario, contraseña, activo) VALUES (?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, usuario.getNombreDeUsuario());
-            stmt.setString(2, usuario.getNombreDeUsuario());
-            stmt.setString(3, usuario.getContraseña());
-            stmt.setBoolean(4, usuario.getActivo());
+            stmt.setString(2, usuario.getContraseña());
+            stmt.setBoolean(3, usuario.getActivo());
             stmt.executeUpdate();
             stmt.close();
             log(Level.INFO, "Usuario guardado correctamente: " + usuario.getNombreDeUsuario(), null);
