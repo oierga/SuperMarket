@@ -12,6 +12,8 @@ import domain.Usuario;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -161,7 +163,18 @@ public class VentanaProductosDeCategoria extends JFrame {
         JScrollPane scrollPane = new JScrollPane(productGridPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                    scrollPane.getVerticalScrollBar().setValue(
+                        scrollPane.getVerticalScrollBar().getValue() + e.getUnitsToScroll() * scrollPane.getVerticalScrollBar().getUnitIncrement()
+                    );
+                }
+            }
+        });
+
         crearMenu();
       
         mainPanel.add(crearPanelCentral(), BorderLayout.CENTER);
