@@ -178,6 +178,8 @@ public class ServicioPersistenciaBD {
         return null;
     }
     
+    /*
+    
     public void guardarProducto(Producto producto) {
         try {
         	String sql = "INSERT INTO producto (nombre, precio, categoriaNombre, rutaImagen) VALUES (?, ?, ?, ?)";
@@ -191,6 +193,23 @@ public class ServicioPersistenciaBD {
         } catch (SQLException e) {
             lastError = e;
             log(Level.SEVERE, "Error al guardar producto", e);
+        }
+    }*/
+    
+    public void guardarUsuario(Usuario usuario) {
+        try {
+            String sql = "INSERT INTO usuario (nombre, nombreDeUsuario, contraseña, activo) VALUES (?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, usuario.getNombreDeUsuario());
+            stmt.setString(2, usuario.getNombreDeUsuario());
+            stmt.setString(3, usuario.getContraseña());
+            stmt.setBoolean(4, usuario.getActivo());
+            stmt.executeUpdate();
+            stmt.close();
+            log(Level.INFO, "Usuario guardado correctamente: " + usuario.getNombreDeUsuario(), null);
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al guardar usuario: " + usuario.getNombreDeUsuario(), e);
         }
     }
 
