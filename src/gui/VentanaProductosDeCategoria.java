@@ -10,6 +10,7 @@ import domain.Producto;
 import domain.TipoCategoria;
 import domain.TipoUsuario;
 import domain.Usuario;
+import main.Main;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,7 +35,6 @@ public class VentanaProductosDeCategoria extends JFrame {
     private Color colorAccent = new Color(33, 33, 33);
     private JPanel productGridPanel;
     private Map<String, String[]> productosPorCategoria;
-
 
 	    
     public VentanaProductosDeCategoria(Usuario usuario, String categoriaSeleccionada) {
@@ -166,18 +166,18 @@ public class VentanaProductosDeCategoria extends JFrame {
         productosPorCategoria.put("Panadería", panaderia);
         
         String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
-        ServicioPersistenciaBD servicioPersistenciaBD = new ServicioPersistenciaBD();
-        servicioPersistenciaBD.init("supermarket.db", "data");
-        servicioPersistenciaBD.initDatosTest("supermarket.db", "/data");
-        ArrayList<Producto> productos = servicioPersistenciaBD.cargarTodosProductos();
+        
+        
+        ArrayList<Producto> productos = ServicioPersistenciaBD.getInstance().cargarTodosProductos();
         for (String imagen : productosCategoriaSeleccionada) {
         	for (Producto producto: productos) {
         		if (producto.getRutaImagen().contains(imagen)) {
         			 productGridPanel.add(createProductPanel(
-                             producto.getRutaImagen(), producto.getNombre(),
+                             "/"+producto.getRutaImagen(), producto.getNombre(),
                              "Categoria: "+categoriaSeleccionada+" Producto: "+producto.getNombre(),
                              String.format("%.2f €", producto.getPrecio())
                          ));
+        			System.out.print(producto.getRutaImagen());
         		}   
         	}
         }
@@ -402,13 +402,12 @@ public class VentanaProductosDeCategoria extends JFrame {
         productGridPanel.removeAll();
 
         String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
-        ServicioPersistenciaBD servicioPersistenciaBD = new ServicioPersistenciaBD();
-        ArrayList<Producto> productos = servicioPersistenciaBD.cargarTodosProductos();
+        ArrayList<Producto> productos = ServicioPersistenciaBD.getInstance().cargarTodosProductos();
         for (String imagen : productosCategoriaSeleccionada) {
         	for (Producto producto: productos) {
         		if (producto.getRutaImagen().contains(imagen)) {
         			 productGridPanel.add(createProductPanel(
-                             producto.getRutaImagen(), producto.getNombre(),
+                             "/"+producto.getRutaImagen(), producto.getNombre(),
                              "Categoria: "+categoriaSeleccionada+" Producto: "+producto.getNombre(),
                              String.format("%.2f €", producto.getPrecio())
                          ));

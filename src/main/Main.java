@@ -11,9 +11,10 @@ import gui.VentanaLogin;
 import gui.VentanaSupermarket;
 
 //la idea va un poco por aqui
-
+import db.ServicioPersistenciaBD;
 
 public class Main {
+	public static ServicioPersistenciaBD servicioPersistenciaBD;
     public static void main(String[] args) {
     	
     	/*
@@ -53,9 +54,11 @@ public class Main {
 
         servicioPersistencia.close();
         */
+    	ServicioPersistenciaBD servicioBD = ServicioPersistenciaBD.getInstance();
+    	servicioBD.init("supermarket.db");
+
     	
-    	 ServicioPersistenciaBD servicioPersistencia = new ServicioPersistenciaBD();
-        VentanaLogin ventanaInicio = new VentanaLogin(servicioPersistencia);
+        new VentanaLogin(ServicioPersistenciaBD.getInstance());
         
         Usuario usuario = new Usuario("admin", "123", true, TipoUsuario.USUARIO);
         SwingUtilities.invokeLater(() -> {

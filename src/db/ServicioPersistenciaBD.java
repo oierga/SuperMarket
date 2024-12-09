@@ -1,91 +1,132 @@
 package db;
 
 import domain.Producto;
-import domain.TipoCategoria;
-import domain.Usuario;
 import domain.Categoria;
-import domain.TipoUsuario;
+import domain.Usuario;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServicioPersistenciaBD {
-
+    private static final String DB_PATH = "data/supermarket.db";  // Ruta del archivo de la base de datos
+    private static final String JDBC_URL = "jdbc:sqlite:" + DB_PATH;
+    private static Exception lastError = null;
+    private static ServicioPersistenciaBD instance; 
+    private Connection connection;
     private Logger logger = null;
 
-    private Connection connection;
-    private Statement statement;
-    private static Exception lastError = null;
-
-    public ServicioPersistenciaBD() {
+    // Constructor para establecer la conexión con la base de datos
+    private ServicioPersistenciaBD() {
+        try {
+            File dataDir = new File("data");
+            if (!dataDir.exists() && !dataDir.mkdir()) {
+                log(Level.SEVERE, "No se pudo crear la carpeta 'data'", null);
+            }
+            connection = DriverManager.getConnection(JDBC_URL); // Conexión a la base de datos ya existente
+            log(Level.INFO, "Conexión establecida a la base de datos.", null);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log(Level.SEVERE, "Error al establecer la conexión", e);
+        }
     }
 
-    public boolean init(String nombrePersistencia, String configPersistencia) {
+    // Método estático para acceder a la instancia
+    public static synchronized ServicioPersistenciaBD getInstance() {
+        if (instance == null) {
+            instance = new ServicioPersistenciaBD();
+        }
+        return instance;
+    }
+
+    // Método para obtener la conexión
+    public Connection getConnection() {
+        return connection;
+    }
+
+    // Método para cerrar la conexión
+    public void closeConnection() {
         try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + configPersistencia + nombrePersistencia);
-            log(Level.INFO, "Conectada base de datos " + nombrePersistencia, null);
-            statement = connection.createStatement();
-            statement.setQueryTimeout(10);
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log(Level.SEVERE, "Error al cerrar la conexión", e);
+        }
+    }
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS usuario (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "nombreDeUsuario STRING UNIQUE, " +
-                    "contraseña STRING, " +
-                    "activo BOOLEAN)");
+    // Método para inicializar la base de datos y crear tablas si no existen
+    public boolean init(String nombrePersistencia) {
+        String dbPath = "data/" + nombrePersistencia;
+        File dbFile = new File(dbPath);
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS producto (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "nombre STRING, " +
-                    "precio DOUBLE, " +
-                    "categoriaNombre STRING, " +
-                    "rutaImagen STRING)");
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+             Statement statement = connection.createStatement()) {
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS categoria (" +
-                    "nombre STRING PRIMARY KEY, " +
-                    "imagen STRING)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS carrito (" +
-                    "idUsuario INTEGER, " +
-                    "idProducto INTEGER, " +
-                    "FOREIGN KEY(idUsuario) REFERENCES usuario(id), " +
-                    "FOREIGN KEY(idProducto) REFERENCES producto(id))");
-
-            log(Level.INFO, "Tablas creadas correctamente", null);
+            if (!dbFile.exists()) {
+                log(Level.INFO, "Base de datos no encontrada, creando...", null);
+                // Si la base de datos no existe, creamos las tablas
+                createTables(statement);
+            } else {
+                log(Level.INFO, "Base de datos ya existe, conexión establecida.", null);
+            }
             return true;
-
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             lastError = e;
-            connection = null;
-            log(Level.SEVERE, "Error en conexión de base de datos " + nombrePersistencia, e);
+            log(Level.SEVERE, "Error en conexión o creación de la base de datos", e);
             return false;
         }
     }
 
-    public boolean initDatosTest(String nombrePersistencia, String configPersistencia) {
-        if (!init(nombrePersistencia, configPersistencia)) {
-            return false;
-        }
-        try {
-        	statement.executeUpdate("INSERT OR IGNORE INTO usuario (nombreDeUsuario, contraseña, activo) VALUES " +
-                    "('admin', '1234', 1), " +
-                    "('cliente', '5678', 1)");
+    // Método para crear tablas si la base de datos no existe
+    private void createTables(Statement statement) throws SQLException {
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS categoria (" +
+                "idCategoria INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "nombre TEXT, " +
+                "imagen TEXT)");
 
-            statement.executeUpdate("INSERT OR IGNORE INTO categoria (nombre, imagen) VALUES " +
-                    "('Frutas', 'ruta/frutas.png'), " +
-                    "('Panadería', 'ruta/panaderia.png'), " +
-                    "('Lácteos', 'ruta/lacteos.png')");
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS usuario (" +
+                "idUsuario INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "nombreDeUsuario TEXT UNIQUE, " +
+                "contraseña TEXT, " +
+                "activo INTEGER)");
 
-            statement.executeUpdate("INSERT OR IGNORE INTO producto (nombre, precio, categoriaNombre, rutaImagen) VALUES " +
-                    "('Manzana', 0.5, 'Frutas', 'images/manzana.png'), " +
-                    "('Pan', 1.0, 'Panadería', 'images/pan.png'), " +
-                    "('Leche', 1.2, 'Lácteos', 'images/leche.png')");
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS producto (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "nombre TEXT, " +
+                "precio DOUBLE, " +
+                "categoria INTEGER, " +
+                "rutaImagen TEXT, " +
+                "FOREIGN KEY(categoria) REFERENCES categoria(idCategoria))");
 
-            log(Level.INFO, "Datos de prueba inicializados correctamente", null);
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS carrito (" +
+                "idUsuario INTEGER, " +
+                "idProducto INTEGER, " +
+                "FOREIGN KEY(idUsuario) REFERENCES usuario(idUsuario), " +
+                "FOREIGN KEY(idProducto) REFERENCES producto(id))");
+
+        log(Level.INFO, "Tablas creadas correctamente", null);
+    }
+
+    // Método para inicializar datos de prueba
+    public boolean initDatosTest() {
+        try (Statement statement = connection.createStatement()) {
+            log(Level.INFO, "Cargando datos de prueba...", null);
+            statement.executeUpdate("INSERT INTO usuario (nombreDeUsuario, contraseña, activo) VALUES ('admin', '1234', 1),('cliente', '5678', 1)");
+
+            log(Level.INFO, "Usuarios insertados correctamente", null);
+
+            statement.executeUpdate("INSERT INTO categoria (nombre, imagen) VALUES ('Frutas', 'images/frutas.png'), ('Panadería', 'images/panaderia.png'), ('Lácteos', 'images/lacteos.png')");
+
+            log(Level.INFO, "Categorías insertadas correctamente", null);
+
+            statement.executeUpdate("INSERT INTO producto (nombre, precio, categoria, rutaImagen) VALUES ('Manzana', 0.5, 1, 'images/manzana.png'),('Pan', 1.0, 2, 'images/pan.png'), ('Leche', 1.2, 3, 'images/leche.png')");
+
+            log(Level.INFO, "Productos insertados correctamente", null);
             return true;
 
         } catch (SQLException e) {
@@ -94,28 +135,11 @@ public class ServicioPersistenciaBD {
             return false;
         }
     }
-    /*
-    public void guardarUsuario(Usuario usuario) {
-        try {
-            String sql = "INSERT INTO usuario (nombre, nombreDeUsuario, contraseña, activo) VALUES (?, ?, ?, ?)";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, usuario.getNombreDeUsuario());
-            stmt.setString(2, usuario.getNombreDeUsuario());
-            stmt.setString(3, usuario.getContraseña());
-            stmt.setBoolean(4, usuario.isActivo());
-            stmt.executeUpdate();
-            stmt.close();
-            log(Level.INFO, "Usuario guardado correctamente: " + usuario.getNombreDeUsuario(), null);
-        } catch (SQLException e) {
-            lastError = e;
-            log(Level.SEVERE, "Error al guardar usuario: " + usuario.getNombreDeUsuario(), e);
-        }
-    }
-    */
 
+    // Método para cargar todos los usuarios desde la base de datos
     public ArrayList<Usuario> cargarTodosUsuarios() {
         ArrayList<Usuario> usuarios = new ArrayList<>();
-        try {
+        try (Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT * FROM usuario");
             while (rs.next()) {
                 Usuario usuario = new Usuario(
@@ -133,13 +157,13 @@ public class ServicioPersistenciaBD {
         return usuarios;
     }
 
+    // Método para cargar todos los productos desde la base de datos
     public ArrayList<Producto> cargarTodosProductos() {
         ArrayList<Producto> productos = new ArrayList<>();
-        try {
+        try (Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT * FROM producto");
             while (rs.next()) {
-            	Categoria categoria = cargarCategoria(rs.getString("categoriaNombre"));
-
+                Categoria categoria = cargarCategoria(rs.getInt("idCategoria"));
                 Producto producto = new Producto(
                         rs.getInt("id"),
                         rs.getString("nombre"),
@@ -147,7 +171,6 @@ public class ServicioPersistenciaBD {
                         rs.getString("rutaImagen"),
                         categoria
                 );
-
                 productos.add(producto);
             }
             rs.close();
@@ -157,11 +180,11 @@ public class ServicioPersistenciaBD {
         }
         return productos;
     }
-    
-    public Categoria cargarCategoria(String nombreCategoria) {
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM categoria WHERE nombre = ?");
-            stmt.setString(1, nombreCategoria);
+
+    // Método para cargar una categoría desde la base de datos
+    public Categoria cargarCategoria(int idCategoria) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM categoria WHERE idCategoria = ?")) {
+            stmt.setInt(1, idCategoria);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Categoria(
@@ -172,38 +195,18 @@ public class ServicioPersistenciaBD {
             rs.close();
         } catch (SQLException e) {
             lastError = e;
-            log(Level.SEVERE, "Error al cargar la categoría " + nombreCategoria, e);
+            log(Level.SEVERE, "Error al cargar la categoría con ID: " + idCategoria, e);
         }
         return null;
     }
-    
-    /*
-    
-    public void guardarProducto(Producto producto) {
-        try {
-        	String sql = "INSERT INTO producto (nombre, precio, categoriaNombre, rutaImagen) VALUES (?, ?, ?, ?)";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, producto.getNombre());
-            stmt.setDouble(2, producto.getPrecio());
-            stmt.setString(3, producto.getCategoria().getNombre());
-            stmt.setString(4, producto.getRutaImagen()); 
-            stmt.executeUpdate();
-            stmt.close();
-        } catch (SQLException e) {
-            lastError = e;
-            log(Level.SEVERE, "Error al guardar producto", e);
-        }
-    }*/
-    
+
+    // Método para guardar un usuario en la base de datos
     public void guardarUsuario(Usuario usuario) {
-        try {
-            String sql = "INSERT INTO usuario (nombreDeUsuario, contraseña, activo) VALUES (?, ?, ?)";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO usuario (nombreDeUsuario, contraseña, activo) VALUES (?, ?, ?)")) {
             stmt.setString(1, usuario.getNombreDeUsuario());
             stmt.setString(2, usuario.getContraseña());
             stmt.setBoolean(3, usuario.getActivo());
             stmt.executeUpdate();
-            stmt.close();
             log(Level.INFO, "Usuario guardado correctamente: " + usuario.getNombreDeUsuario(), null);
         } catch (SQLException e) {
             lastError = e;
@@ -211,18 +214,7 @@ public class ServicioPersistenciaBD {
         }
     }
 
-
-    public void close() {
-        try {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
-            log(Level.INFO, "Conexión a base de datos cerrada", null);
-        } catch (SQLException e) {
-            lastError = e;
-            log(Level.SEVERE, "Error al cerrar conexión de base de datos", e);
-        }
-    }
-
+    // Método para registrar eventos en el log
     private void log(Level level, String msg, Throwable excepcion) {
         if (logger == null) {
             logger = Logger.getLogger("BD-log");
