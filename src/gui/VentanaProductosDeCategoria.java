@@ -30,6 +30,10 @@ public class VentanaProductosDeCategoria extends JFrame {
     private Color colorPrimario = new Color(76, 175, 80);
     private Color colorSecundario = new Color(245, 245, 245);
     private Color colorAccent = new Color(33, 33, 33);
+    private JPanel productGridPanel;
+    private Map<String, String[]> productosPorCategoria;
+
+
 	    
     public VentanaProductosDeCategoria(Usuario usuario, String categoriaSeleccionada) {
         this.usuario = usuario;
@@ -106,8 +110,10 @@ public class VentanaProductosDeCategoria extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				labelProductos.setText((String) comboBox.getSelectedItem());
+				String categoriaSeleccionada = (String) comboBox.getSelectedItem();
+		        if (!"Seleccionar".equals(categoriaSeleccionada)) {
+		            actualizarProductosPorCategoria(categoriaSeleccionada);
+		        }
 			}
         	
         });
@@ -140,7 +146,7 @@ public class VentanaProductosDeCategoria extends JFrame {
        
 
         // Panel de productos con ScrollPane
-        JPanel productGridPanel = new JPanel(new GridLayout(0, 5, 10, 10));
+        productGridPanel = new JPanel(new GridLayout(0, 5, 10, 10));
         productGridPanel.setBackground(Color.WHITE);
         String[] frutas = { "banana.png", "fresa.png", "kiwi.png", "mango.png", "manzana.png", "naranja.png", "pera.png" };
         String[] verduras = { "cebolla.png", "espinaca.png", "lechuga.png", "pepino.png", "pimiento.png", "tomate.png", "zanahoria.png" };
@@ -149,7 +155,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         String[] bebidas = { "agua.png", "cafe.png", "cerveza.png", "refresco.png", "te.png", "vino.png", "zumo_naranja.png" };
         String[] panaderia = { "bagel.png", "baguette.png", "croissant.png", "donut.png", "empanada.png", "magdalenas.png", "pan.png" };
         
-        Map<String, String[]> productosPorCategoria = new HashMap<>();
+        productosPorCategoria = new HashMap<>();
         productosPorCategoria.put("Frutas", frutas);
         productosPorCategoria.put("Verduras", verduras);
         productosPorCategoria.put("Lácteos", lacteos);
@@ -388,6 +394,25 @@ public class VentanaProductosDeCategoria extends JFrame {
         panel.setBackground(new Color(76, 175, 80));
         return panel;
     }
+    private void actualizarProductosPorCategoria(String categoriaSeleccionada) {
+        productGridPanel.removeAll();
+
+        String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
+
+        for (String imagen : productosCategoriaSeleccionada) {
+            String imagePath = "/images/" + imagen;    
+            productGridPanel.add(createProductPanel(
+                imagePath,
+                imagen.substring(0, imagen.length() - 4),
+                "Descripción breve del producto.",
+                String.format("%.2f €", (Math.random() * 10) + 1)
+            ));
+        }
+
+        productGridPanel.revalidate();
+        productGridPanel.repaint();
+    }
+    
     private void crearMenu() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBackground(Color.WHITE);
