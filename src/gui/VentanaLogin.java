@@ -90,11 +90,18 @@ public class VentanaLogin extends JFrame {
         } else if (!usuario.getActivo()) {
             lErrores.setText("Este usuario está bloqueado");
         } else {
-            lErrores.setText("Inicio de sesión exitoso");
+        	if(servicioPersistencia.verificarCredenciales(nombreUsuario, contrasena)) {
+                lErrores.setText("Inicio de sesión exitoso");
+                VentanaSupermarket ventanaSupermarket = new VentanaSupermarket(usuario);
+                ventanaSupermarket.setVisible(true);
+                dispose();
+        	}else{
+                lErrores.setText("Error de verificacion");
+
+        	};
         }
-        dispose();
-        VentanaSupermarket ventanaSupermarket = new VentanaSupermarket(usuario);
-        ventanaSupermarket.setVisible(true);
+       
+        
     }
 
     

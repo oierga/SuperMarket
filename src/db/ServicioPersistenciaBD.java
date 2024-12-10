@@ -194,8 +194,8 @@ public class ServicioPersistenciaBD {
     public boolean verificarCredenciales(String usuario, String contra) {
         // Consulta para buscar el usuario por su nombre de usuario
         String query = "SELECT * FROM usuario WHERE nombreDeUsuario = ? AND contrasena = ?";
-
-        try (Connection connection = getConnection();
+        conectar();
+        try (
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
             // Establecer los parámetros de la consulta
@@ -209,14 +209,17 @@ public class ServicioPersistenciaBD {
             if (rs.next()) {
                 // Si se encontró un usuario, las credenciales son válidas
                 return true;
+            }else {
+            	return false;
             }
 
         } catch (SQLException e) {
             log(Level.SEVERE, "Error al verificar las credenciales", e);
+            return false;
         }
 
         // Si no se encontró el usuario o las credenciales no coinciden
-        return false;
+        
     }
 
 

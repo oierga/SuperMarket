@@ -54,17 +54,12 @@ public class Main {
 
         servicioPersistencia.close();
         */
-    	ServicioPersistenciaBD servicioBD = ServicioPersistenciaBD.getInstance();
-    	servicioBD.init("supermarket.db");
-
+    	ServicioPersistenciaBD.getInstance().init("supermarket.db");
+    	
     	
         new VentanaLogin(ServicioPersistenciaBD.getInstance());
         
-        Usuario usuario = new Usuario("admin", "123", true, TipoUsuario.USUARIO);
-        SwingUtilities.invokeLater(() -> {
-            VentanaSupermarket ventana = new VentanaSupermarket(usuario);
-            ventana.setVisible(true);
-        });
+        
         
         
     
