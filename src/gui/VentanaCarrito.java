@@ -7,6 +7,8 @@ import domain.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class VentanaCarrito extends JFrame {
     public VentanaCarrito(VentanaCategorias ventanaCategorias, Usuario usuario2) {
     	
         this.ventanaCategorias = ventanaCategorias;
-    	this.usuario = usuario;
+    	this.usuario = usuario2;
     	this.carrito = CarritoCompras.getInstance();
     	
         setTitle("Carrito de Compras");
@@ -94,11 +96,14 @@ public class VentanaCarrito extends JFrame {
                     "¡Compra realizada con éxito!",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
-                carrito.vaciarCarrito();
                 actualizarListaProductos();
-                VentanaSupermarket ventanaSupermarket = new VentanaSupermarket(usuario);
-                ventanaSupermarket.setVisible(true);
-;
+                Map<Producto,Integer> productosCarrito = CarritoCompras.getInstance().getProductos();
+                for (Map.Entry<Producto, Integer> entry: productosCarrito.entrySet()) {
+                	System.out.print(entry.toString());
+                	ServicioPersistenciaBD.getInstance().guardarVenta(ServicioPersistenciaBD.getInstance().getUsuario().getIdUsuario(),entry.getKey().getIdProducto(),entry.getValue(),""+LocalDate.now()+LocalTime.now());
+                }
+                carrito.vaciarCarrito();
+                new VentanaSupermarket(usuario).setVisible(true);                
                 dispose();
             }
         });
@@ -138,7 +143,7 @@ public class VentanaCarrito extends JFrame {
     }
     
     public void agregarProductoAlCarrito(Producto producto, int cantidad) {
-        carrito.agregarProducto(producto, cantidad);
+       
         //actualizarListaProductos(productosCarritoUnidad,productosCarrito2);
         labelTotal.setText("Total: " + carrito.getTotalFormateado());
     }

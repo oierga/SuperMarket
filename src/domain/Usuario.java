@@ -21,7 +21,16 @@ public class Usuario {
         this.tipo = tipo;
     }
 
-    public String getNombreDeUsuario() {
+    public Usuario(int int1, String usuario, String contra, int i) {
+    	this.idUsuario = int1;
+		// TODO Auto-generated constructor stub
+    	this.nombreDeUsuario=usuario;
+    	this.contraseña = contra;
+    	this.activo = true;
+	}
+
+
+	public String getNombreDeUsuario() {
         return nombreDeUsuario;
     }
 

@@ -19,7 +19,7 @@ public class CarritoCompras {
     }
 
     public void agregarProducto(Producto producto, int cantidad) {
-        productos.put(producto, productos.getOrDefault(producto, 0) + cantidad);
+        productos.put(producto, productos.getOrDefault(producto,0) + cantidad);
     }
 
     public void removerProducto(Producto producto) {

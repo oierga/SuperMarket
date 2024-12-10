@@ -6,10 +6,13 @@ import domain.Usuario;
 
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
 
 public class ServicioPersistenciaBD {
     private static final String DB_PATH = "data/supermarket.db";  // Ruta del archivo de la base de datos
@@ -18,6 +21,7 @@ public class ServicioPersistenciaBD {
     private static ServicioPersistenciaBD instance; 
     private Connection connection;
     private Logger logger = null;
+    private Usuario usuario = null;
 
     // Constructor para establecer la conexión con la base de datos
     private ServicioPersistenciaBD() {
@@ -106,6 +110,7 @@ public class ServicioPersistenciaBD {
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS carrito (" +
                 "idUsuario INTEGER, " +
                 "idProducto INTEGER, " +
+                "cantidad INTEGER, " +
                 "FOREIGN KEY(idUsuario) REFERENCES usuario(idUsuario), " +
                 "FOREIGN KEY(idProducto) REFERENCES producto(id))");
 
@@ -208,6 +213,8 @@ public class ServicioPersistenciaBD {
             // Verificar si se encuentra un usuario que coincida con las credenciales
             if (rs.next()) {
                 // Si se encontró un usuario, las credenciales son válidas
+            	
+            	instance.setUsuario(new Usuario(rs.getInt(1),usuario,contra,1));
                 return true;
             }else {
             	return false;
@@ -273,4 +280,43 @@ public class ServicioPersistenciaBD {
             logger.log(level, msg, excepcion);
         }
     }
+    public boolean guardarVenta(int idUsuario, int idProducto, int cantidad, String fecha) {
+        try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO carrito(idUsuario, idProducto, cantidad, fecha) VALUES (?,?,?,?)")){
+        	stmt.setInt(1, idUsuario);
+        	stmt.setInt(2, idProducto);
+        	stmt.setInt(3, cantidad);
+        	stmt.setString(4, ""+LocalDate.now());
+        	stmt.executeUpdate();
+        	System.out.print("Compra guardada");
+        	return true;
+        } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	
+    	
+    	return false;
+    }
+    public Producto productoPorNombre(String nombre) {
+    	ArrayList<Producto> productos = instance.cargarTodosProductos();
+    	Producto productoEncontrado = null;
+    	boolean encontrado = false;
+    	for (Producto producto: productos) {
+    		if (producto.getNombre().contains(nombre.toLowerCase())) {
+    			productoEncontrado = producto;
+    		}
+    		
+    			
+    		}
+    	return productoEncontrado;
+    }
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }

@@ -53,6 +53,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.setBackground(new Color(242, 243, 244));
         ImageIcon bannerIcon = cargarImagen("/images/banner.png",1200,500);
+       JLabel carritoLabel = crearIcono("/images/cart.png",80,80);
         Image bannerImage = bannerIcon.getImage().getScaledInstance(1200, 130, Image.SCALE_SMOOTH);; // Obtener la imagen de la imagen cargada
         JLabel bannerLabel = new JLabel(new ImageIcon(bannerImage));
         bannerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -64,6 +65,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         bannerPanel.setLayout(new FlowLayout(FlowLayout.LEADING));  // Centrar la imagen
         bannerPanel.setBackground(Color.LIGHT_GRAY);  // Color de fondo opcional
         bannerPanel.add(bannerLabel);
+        bannerPanel.add(carritoLabel);
         bannerPanel.setBackground(new Color(76, 175, 80));
        
        //Panel botones navegacion
@@ -108,6 +110,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         panelBotones.setBackground(new Color(76, 175, 80));
         panelBotones.add(categoria);
         panelBotones.add(comboBox);
+        panelBotones.add(carritoLabel);
         comboBox.addActionListener(new ActionListener() {
 
 			@Override
@@ -127,7 +130,33 @@ public class VentanaProductosDeCategoria extends JFrame {
        
         panelBotonesNavegacion.setBackground(new Color(76, 175, 80));
       
-        
+     // Panel para los iconos
+        JPanel panelIconos = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        panelIconos.setOpaque(false); // Hacer que el fondo sea transparente
+
+        // Icono de perfil
+        JLabel iconoPerfil = crearIcono("/images/profile.png", 32, 32);
+        iconoPerfil.setToolTipText("Perfil");
+        iconoPerfil.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                //abrirPerfil(); // Método que abrirá la ventana del perfil
+            }
+        });
+
+        // Icono de carrito
+        JLabel iconoCarrito = crearIcono("/images/cart.png", 32, 32);
+        iconoCarrito.setToolTipText("Carrito");
+        iconoCarrito.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                abrirVentanaCarrito(productosCarrito, productosCarritoUnidad);
+            }
+        });
+
+        // Añadir los iconos al panel
+        panelIconos.add(iconoPerfil);
+        panelIconos.add(iconoCarrito);
+
+        // Añadir el panelIconos al topPanel
         
         //Configuracion del logo en el top panel
         ImageIcon logoIcon = new ImageIcon(VentanaSupermarket.class.getResource("/images/crema.png"));
@@ -166,7 +195,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         productosPorCategoria.put("Panadería", panaderia);
         
         String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
-        
+        auxPanel.add(panelIconos);
         
         ArrayList<Producto> productos = ServicioPersistenciaBD.getInstance().cargarTodosProductos();
         for (String imagen : productosCategoriaSeleccionada) {
@@ -212,7 +241,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS));
         productPanel.setBackground(Color.WHITE);
         productPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-
+        
         // Tamaño deseado para las imágenes
         int imageWidth = 100;
         int imageHeight = 100;
@@ -270,10 +299,11 @@ public class VentanaProductosDeCategoria extends JFrame {
 				if (opcion==0) {
 					String seleccion = (String) comboUnidades.getSelectedItem();
 			        int  unidadesSeleccionadas = Integer.parseInt(seleccion); 
+			        System.out.print(unidadesSeleccionadas);
 			        String precioAux = price.substring(0, price.length() - 1).replace(",", ".");
+			        
 			        double precio = Double.parseDouble(precioAux);
-					Producto producto = new Producto (productName, precio);
-		            ventanaCarrito.agregarProductoAlCarrito(producto, unidadesSeleccionadas);
+					CarritoCompras.getInstance().agregarProducto(ServicioPersistenciaBD.getInstance().productoPorNombre(productName), unidadesSeleccionadas);
 		            ventanaCarrito.actualizarListaProductos();
 		            JOptionPane.showMessageDialog(null, "Producto añadido al carrito.");
 					
@@ -468,7 +498,11 @@ public class VentanaProductosDeCategoria extends JFrame {
         
         setJMenuBar(menuBar);
     }
-    
+    private JLabel crearIcono(String ruta, int ancho, int alto) {
+        ImageIcon icono = new ImageIcon(ruta);
+        Image img = icono.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+        return new JLabel(new ImageIcon(img));
+    }
     private void abrirVentanaCarrito(ArrayList<Producto> productosCarrito2, HashMap<Producto,Integer> productosCarritoUnidad) {
         if (ventanaCarrito == null) {
             ventanaCarrito = new VentanaCarrito(ventanaCategorias, usuario);
