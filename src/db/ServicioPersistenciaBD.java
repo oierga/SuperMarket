@@ -156,9 +156,20 @@ public class ServicioPersistenciaBD {
         }
         return usuarios;
     }
-
-    // Método para cargar todos los productos desde la base de datos
+    public void conectar() {
+        try {
+            String dbUrl = "jdbc:sqlite:data/supermarket.db";
+            connection = DriverManager.getConnection(dbUrl);
+            if (connection != null) {
+                System.out.println("Conexión exitosa a la base de datos.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log(Level.SEVERE, "Error al conectar a la base de datos", e);
+        }
+    }
     public ArrayList<Producto> cargarTodosProductos() {
+    	conectar();
         ArrayList<Producto> productos = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT * FROM producto");
@@ -180,6 +191,34 @@ public class ServicioPersistenciaBD {
         }
         return productos;
     }
+    public boolean verificarCredenciales(String usuario, String contra) {
+        // Consulta para buscar el usuario por su nombre de usuario
+        String query = "SELECT * FROM usuario WHERE nombreDeUsuario = ? AND contrasena = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            // Establecer los parámetros de la consulta
+            stmt.setString(1, usuario);
+            stmt.setString(2, contra);
+
+            // Ejecutar la consulta
+            ResultSet rs = stmt.executeQuery();
+
+            // Verificar si se encuentra un usuario que coincida con las credenciales
+            if (rs.next()) {
+                // Si se encontró un usuario, las credenciales son válidas
+                return true;
+            }
+
+        } catch (SQLException e) {
+            log(Level.SEVERE, "Error al verificar las credenciales", e);
+        }
+
+        // Si no se encontró el usuario o las credenciales no coinciden
+        return false;
+    }
+
 
     // Método para cargar una categoría desde la base de datos
     public Categoria cargarCategoria(int idCategoria) {
