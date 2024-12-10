@@ -173,7 +173,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         	for (Producto producto: productos) {
         		if (producto.getRutaImagen().contains(imagen)) {
         			 productGridPanel.add(createProductPanel(
-                             "/"+producto.getRutaImagen(), producto.getNombre(),
+                             "/"+producto.getRutaImagen(), (producto.getNombre()).substring(0,1).toUpperCase()+(producto.getNombre()).substring(1,(producto.getNombre()).length()).replace("_", " "),
                              "Categoria: "+categoriaSeleccionada+" Producto: "+producto.getNombre(),
                              String.format("%.2f €", producto.getPrecio())
                          ));
@@ -407,8 +407,8 @@ public class VentanaProductosDeCategoria extends JFrame {
         	for (Producto producto: productos) {
         		if (producto.getRutaImagen().contains(imagen)) {
         			 productGridPanel.add(createProductPanel(
-                             "/"+producto.getRutaImagen(), producto.getNombre(),
-                             "Categoria: "+categoriaSeleccionada+" Producto: "+producto.getNombre(),
+                             "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
+                             "Categoria: "+categoriaSeleccionada+" Producto: "+producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
                              String.format("%.2f €", producto.getPrecio())
                          ));
         		}   
