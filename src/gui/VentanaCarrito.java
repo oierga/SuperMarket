@@ -144,36 +144,53 @@ public class VentanaCarrito extends JFrame {
     }
 
     void actualizarListaProductos() {
-        panelProductos.removeAll();
-        
+        panelProductos.removeAll();  // Limpiar el panel de productos antes de agregar los nuevos
+
         for (Map.Entry<Producto, Integer> entry : carrito.getProductos().entrySet()) {
             Producto producto = entry.getKey();
             int cantidad = entry.getValue();
-            System.out.print(entry);
+            
             JPanel itemPanel = new JPanel(new BorderLayout());
             itemPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)
             ));
 
+            // Etiquetas de nombre y precio
             JLabel labelNombre = new JLabel(producto.getNombre());
             JLabel labelPrecio = new JLabel(String.format("€%.2f x %d = €%.2f", 
                     producto.getPrecio(), cantidad, producto.getPrecio() * cantidad));
+            
+            // Obtener la ruta de la imagen
+            String imagePath = "src/images/" + producto.getNombre().toLowerCase() + ".png";  // Ruta de la imagen
+            JLabel labelFoto = new JLabel();
+            
+            // Intentar cargar la imagen
+            try {
+                ImageIcon imageIcon = new ImageIcon(imagePath);
+                Image image = imageIcon.getImage();  // Obtener la imagen original
+                Image scaledImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);  // Redimensionar la imagen
+                labelFoto.setIcon(new ImageIcon(scaledImage));  // Asignar la imagen redimensionada
+            } catch (Exception e) {
+                // Si no se encuentra la imagen, poner una imagen predeterminada o un mensaje
+                labelFoto.setText("Imagen no disponible");
+            }
 
+            // Botón de eliminar
             JButton btnEliminar = new JButton("Eliminar");
             btnEliminar.addActionListener(e -> {
                 carrito.removerProducto(producto);
-                //actualizarListaProductos();
+                actualizarListaProductos();  // Volver a actualizar la lista
                 recalcularDescuento();
-                itemPanel.remove(labelPrecio);
-                itemPanel.remove(labelNombre);
-                panelProductos.repaint();
-                btnEliminar.setVisible(false);
-                repaint();
             });
 
-            itemPanel.add(labelNombre, BorderLayout.WEST);
-            itemPanel.add(labelPrecio, BorderLayout.CENTER);
+            // Añadir los componentes al panel del producto
+            JPanel productPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            productPanel.add(labelFoto);   // Añadir imagen
+            productPanel.add(labelNombre); // Añadir nombre
+            productPanel.add(labelPrecio); // Añadir precio
+
+            itemPanel.add(productPanel, BorderLayout.CENTER);
             itemPanel.add(btnEliminar, BorderLayout.EAST);
 
             panelProductos.add(itemPanel);
@@ -181,8 +198,8 @@ public class VentanaCarrito extends JFrame {
 
         panelProductos.revalidate();
         panelProductos.repaint();
-        
     }
+
     private void recalcularDescuento() {
         double totalSinDescuento = carrito.getTotal();
         
