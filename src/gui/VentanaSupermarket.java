@@ -9,6 +9,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import db.ServicioPersistenciaBD;
 import domain.Producto;
 import domain.TipoUsuario;
 import domain.Usuario;
@@ -23,6 +24,8 @@ public class VentanaSupermarket extends JFrame {
     private Color colorPrimario = new Color(76, 175, 80);
     private Color colorSecundario = new Color(245, 245, 245);
     private Color colorAccent = new Color(33, 33, 33);
+    JTextField nombreField;
+    JPasswordField contrasenaField;
 
     public VentanaSupermarket(Usuario usuario) {
         this.usuario = usuario;
@@ -95,14 +98,31 @@ public class VentanaSupermarket extends JFrame {
         caracteristicasPanel.add(crearPanelCaracteristica("Envío Gratis", "En pedidos superiores a 50€", "🚚"));
         caracteristicasPanel.add(crearPanelCaracteristica("Productos Frescos", "Calidad garantizada", "🥬"));
         caracteristicasPanel.add(crearPanelCaracteristica("Atención 24/7", "Estamos para ayudarte", "💬"));
+        JPanel panelLogin = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets (10,10,10,10);
+        nombreField = new JTextField(20);
+        JLabel nombreLabel = new JLabel("Nombre de usuario:");
+        JLabel contraLabel = new JLabel("Contraseña: ");
+        contrasenaField = new JPasswordField(20);
+        gbc.gridwidth=2;
+        panelLogin.add(nombreLabel, gbc);
+        panelLogin.add(nombreField,gbc);
+        gbc.gridy=2;
+        panelLogin.add(contraLabel,gbc);
+        panelLogin.add(contrasenaField,gbc);
 
         JPanel botonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         botonPanel.setBackground(colorSecundario);
         JButton btnComprar = crearBotonComprar();
+        
+        
         botonPanel.add(btnComprar);
         
         panel.add(caracteristicasPanel, BorderLayout.NORTH);
-        panel.add(botonPanel, BorderLayout.CENTER);
+        panel.add(panelLogin, BorderLayout.CENTER);
+        panel.add(botonPanel, BorderLayout.SOUTH);
         
         return panel;
     }
@@ -152,7 +172,18 @@ public class VentanaSupermarket extends JFrame {
         btnComprar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                btnComprar.setBackground(colorPrimario.darker());
+            	String usuario = nombreField.getText();
+            	
+            	String contra ="";
+            	for (char c : contrasenaField.getPassword()) {
+            		contra=contra+c;
+            	}
+            	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(usuario, contra)) {
+            		 btnComprar.setBackground(colorPrimario.darker());
+            		 
+            		 new VentanaCategorias(ServicioPersistenciaBD.getInstance().getUsuario());
+            	};
+               
             }
             
             @Override

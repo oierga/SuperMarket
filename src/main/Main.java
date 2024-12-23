@@ -57,7 +57,7 @@ public class Main {
     	ServicioPersistenciaBD.getInstance().init("supermarket.db");
     	
     	
-        new VentanaLogin(ServicioPersistenciaBD.getInstance());
+        new VentanaLogin(ServicioPersistenciaBD.getInstance()).setVisible(true);;
         
         
         

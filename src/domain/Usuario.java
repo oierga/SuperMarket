@@ -3,20 +3,20 @@ package domain;
 public class Usuario {
 	private int idUsuario;
     private String nombreDeUsuario;
-    private String contraseña;
+    private String contrasena;
     private boolean activo;
     private TipoUsuario tipo;
 
     public Usuario(String nombreDeUsuario, String contraseña, boolean activo) {
         this.nombreDeUsuario = nombreDeUsuario;
-        this.contraseña = contraseña;
+        this.contrasena = contraseña;
         this.activo = activo;
     }
 
   
     public Usuario(String nombreDeUsuario, String contraseña, boolean activo, TipoUsuario tipo) {
         this.nombreDeUsuario = nombreDeUsuario;
-        this.contraseña = contraseña;
+        this.contrasena = contraseña;
         this.activo = activo;
         this.tipo = tipo;
     }
@@ -25,8 +25,13 @@ public class Usuario {
     	this.idUsuario = int1;
 		// TODO Auto-generated constructor stub
     	this.nombreDeUsuario=usuario;
-    	this.contraseña = contra;
+    	this.contrasena = contra;
     	this.activo = true;
+	}
+
+
+	public Usuario() {
+		// TODO Auto-generated constructor stub
 	}
 
 
@@ -34,8 +39,8 @@ public class Usuario {
         return nombreDeUsuario;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
     public boolean getActivo() {
@@ -65,8 +70,8 @@ public class Usuario {
 	}
 
 
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 
 

@@ -1,6 +1,7 @@
 package db;
 
 import domain.Producto;
+import domain.TipoUsuario;
 import domain.Categoria;
 import domain.Usuario;
 
@@ -21,7 +22,7 @@ public class ServicioPersistenciaBD {
     private static ServicioPersistenciaBD instance; 
     private Connection connection;
     private Logger logger = null;
-    private Usuario usuario = null;
+    private Usuario usuario = new Usuario("admin","123",true,TipoUsuario.ADMIN);
 
     // Constructor para establecer la conexión con la base de datos
     private ServicioPersistenciaBD() {
@@ -96,7 +97,7 @@ public class ServicioPersistenciaBD {
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS usuario (" +
                 "idUsuario INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "nombreDeUsuario TEXT UNIQUE, " +
-                "contraseña TEXT, " +
+                "contrasena TEXT, " +
                 "activo INTEGER)");
 
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS producto (" +
@@ -121,7 +122,7 @@ public class ServicioPersistenciaBD {
     public boolean initDatosTest() {
         try (Statement statement = connection.createStatement()) {
             log(Level.INFO, "Cargando datos de prueba...", null);
-            statement.executeUpdate("INSERT INTO usuario (nombreDeUsuario, contraseña, activo) VALUES ('admin', '1234', 1),('cliente', '5678', 1)");
+            statement.executeUpdate("INSERT INTO usuario (nombreDeUsuario, contrasena, activo) VALUES ('admin', '1234', 1),('cliente', '5678', 1)");
 
             log(Level.INFO, "Usuarios insertados correctamente", null);
 
@@ -149,7 +150,7 @@ public class ServicioPersistenciaBD {
             while (rs.next()) {
                 Usuario usuario = new Usuario(
                         rs.getString("nombreDeUsuario"),
-                        rs.getString("contraseña"),
+                        rs.getString("contrasena"),
                         rs.getBoolean("activo")
                 );
                 usuarios.add(usuario);
@@ -251,9 +252,9 @@ public class ServicioPersistenciaBD {
 
     // Método para guardar un usuario en la base de datos
     public void guardarUsuario(Usuario usuario) {
-        try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO usuario (nombreDeUsuario, contraseña, activo) VALUES (?, ?, ?)")) {
+        try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO usuario (nombreDeUsuario, contrasena, activo) VALUES (?, ?, ?)")) {
             stmt.setString(1, usuario.getNombreDeUsuario());
-            stmt.setString(2, usuario.getContraseña());
+            stmt.setString(2, usuario.getContrasena());
             stmt.setBoolean(3, usuario.getActivo());
             stmt.executeUpdate();
             log(Level.INFO, "Usuario guardado correctamente: " + usuario.getNombreDeUsuario(), null);

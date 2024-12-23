@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 
+import db.ServicioPersistenciaBD;
 import domain.Usuario;
 
 import java.awt.*;
@@ -119,4 +120,5 @@ public class VentanaCategorias extends JFrame {
             return null;
         }
     }
+   
 }

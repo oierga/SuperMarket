@@ -564,11 +564,10 @@ public class VentanaProductosDeCategoria extends JFrame {
        java.net.URL imageUrl = getClass().getResource(nombreImagen);        
        if (imageUrl != null) {
            
-           imageUrl = getClass().getResource(nombreImagen);
-           ImageIcon iconoOriginal = new ImageIcon(imageUrl);
+           
+           ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(nombreImagen));
            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
 
-           System.out.println("Ruta cargada: " + imageUrl);
 
            return new ImageIcon(imagenEscalada);
        } else {
