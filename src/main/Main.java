@@ -7,7 +7,6 @@ import db.ServicioPersistenciaBD;
 import domain.Producto;
 import domain.TipoUsuario;
 import domain.Usuario;
-import gui.VentanaLogin;
 import gui.VentanaSupermarket;
 
 //la idea va un poco por aqui
@@ -57,7 +56,7 @@ public class Main {
     	ServicioPersistenciaBD.getInstance().init("supermarket.db");
     	
     	
-        new VentanaLogin(ServicioPersistenciaBD.getInstance()).setVisible(true);;
+        new VentanaSupermarket(ServicioPersistenciaBD.getInstance().getUsuario());;
         
         
         
