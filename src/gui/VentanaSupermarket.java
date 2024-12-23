@@ -180,7 +180,6 @@ public class VentanaSupermarket extends JFrame {
             	}
             	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(usuario, contra)) {
             		 btnComprar.setBackground(colorPrimario.darker());
-            		 
             		 new VentanaCategorias(ServicioPersistenciaBD.getInstance().getUsuario());
             	};
                
