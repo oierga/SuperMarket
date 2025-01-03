@@ -105,25 +105,45 @@ public class VentanaSupermarket extends JFrame {
         nombreField = new JTextField(20);
         JLabel nombreLabel = new JLabel("Nombre de usuario:");
         JLabel contraLabel = new JLabel("Contraseña: ");
-        contrasenaField = new JPasswordField(20);
-        gbc.gridwidth=2;
-        panelLogin.add(nombreLabel, gbc);
-        panelLogin.add(nombreField,gbc);
-        gbc.gridy=2;
-        panelLogin.add(contraLabel,gbc);
-        panelLogin.add(contrasenaField,gbc);
+        JLabel registrarLabel = new JLabel("<html>¿Aún no tienes cuenta? <span style='color:green; text-decoration:underline; cursor:pointer;'>Regístrate ahora!</span></html>");
+        registrarLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        JPanel botonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        botonPanel.setBackground(colorSecundario);
+        registrarLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new VentanaRegistro(ServicioPersistenciaBD.getInstance()); // Método para abrir la ventana de registro
+            }
+        });
+
+        contrasenaField = new JPasswordField(20);
+
+        gbc.gridwidth = 1;
+        panelLogin.add(nombreLabel, gbc);
+        panelLogin.add(nombreField, gbc);
+        gbc.gridy = 4;
+        panelLogin.add(contraLabel, gbc);
+        panelLogin.add(contrasenaField, gbc);
+
+        JPanel registroPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
+        registroPanel.setBackground(colorSecundario);
+
         JButton btnComprar = crearBotonComprar();
+        btnComprar.setPreferredSize(new Dimension(240, 55)); // Tamaño personalizado del botón
         
+        registroPanel.add(registrarLabel); // Texto "Regístrate ahora!" centrado
         
-        botonPanel.add(btnComprar);
+        JPanel botonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
+        botonPanel.add(btnComprar);    // Botón centrado también
         
+        JPanel botonYRegistroPanel = new JPanel(new BorderLayout());
+        botonYRegistroPanel.add(registroPanel,BorderLayout.NORTH);
+        botonYRegistroPanel.add(botonPanel,BorderLayout.CENTER);
+        
+
         panel.add(caracteristicasPanel, BorderLayout.NORTH);
         panel.add(panelLogin, BorderLayout.CENTER);
-        panel.add(botonPanel, BorderLayout.SOUTH);
-        
+        panel.add(botonYRegistroPanel, BorderLayout.SOUTH); // Añadir el panel combinado al sur
+
         return panel;
     }
     
