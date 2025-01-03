@@ -45,7 +45,7 @@ public class VentanaCarrito extends JFrame {
 
         JPanel panelInferior = new JPanel(new BorderLayout());
         
-        labelTotal = new JLabel("Total: €0.00");
+        labelTotal = new JLabel("Total: "+CarritoCompras.getInstance().getTotal()+" €");
         labelTotal.setFont(new Font("Arial", Font.BOLD, 16));
         labelTotal.setHorizontalAlignment(SwingConstants.CENTER);
         panelInferior.add(labelTotal, BorderLayout.CENTER);
@@ -144,14 +144,14 @@ public class VentanaCarrito extends JFrame {
     
     public void agregarProductoAlCarrito(Producto producto, int cantidad) {
        
-        //actualizarListaProductos(productosCarritoUnidad,productosCarrito2);
+        actualizarListaProductos();
         labelTotal.setText("Total: " + carrito.getTotalFormateado());
     }
 
     void actualizarListaProductos() {
         panelProductos.removeAll();  // Limpiar el panel de productos antes de agregar los nuevos
 
-        for (Map.Entry<Producto, Integer> entry : carrito.getProductos().entrySet()) {
+        for (Map.Entry<Producto, Integer> entry : CarritoCompras.getInstance().getProductos().entrySet()) {
             Producto producto = entry.getKey();
             int cantidad = entry.getValue();
             
@@ -162,7 +162,7 @@ public class VentanaCarrito extends JFrame {
             ));
 
             // Etiquetas de nombre y precio
-            JLabel labelNombre = new JLabel(producto.getNombre());
+            JLabel labelNombre = new JLabel(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()));
             JLabel labelPrecio = new JLabel(String.format("€%.2f x %d = €%.2f", 
                     producto.getPrecio(), cantidad, producto.getPrecio() * cantidad));
             
@@ -206,7 +206,7 @@ public class VentanaCarrito extends JFrame {
     }
 
     private void recalcularDescuento() {
-        double totalSinDescuento = carrito.getTotal();
+        double totalSinDescuento = CarritoCompras.getInstance().getTotal();
         
         if (descuentoAplicado > 0) {
             descuentoAplicado = totalSinDescuento * 0.06; 

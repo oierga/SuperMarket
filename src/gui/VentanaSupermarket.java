@@ -111,7 +111,7 @@ public class VentanaSupermarket extends JFrame {
         registrarLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new VentanaRegistro(ServicioPersistenciaBD.getInstance()); // Método para abrir la ventana de registro
+                new VentanaRegistro(ServicioPersistenciaBD.getInstance()); 
             }
         });
 
