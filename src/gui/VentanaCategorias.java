@@ -19,8 +19,8 @@ public class VentanaCategorias extends JFrame {
     private VentanaCarrito ventanaCarrito;
     private Usuario usuario;
 	
-    public VentanaCategorias(Usuario usuario) {
-    	this.usuario = usuario;
+    public VentanaCategorias() {
+    	this.usuario = ServicioPersistenciaBD.getInstance().getUsuario();
         setTitle("Categorías");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -42,7 +42,7 @@ public class VentanaCategorias extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Mostrar la ventana del carrito
                 if (ventanaCarrito == null) {
-                    ventanaCarrito = new VentanaCarrito(VentanaCategorias.this, usuario);
+                    ventanaCarrito = new VentanaCarrito();
                 }
                 ventanaCarrito.setVisible(true);
             }
@@ -133,7 +133,7 @@ public class VentanaCategorias extends JFrame {
 
         // Acción al hacer clic
         btnCategoria.addActionListener(e -> {
-            VentanaProductosDeCategoria ventanaProductos = new VentanaProductosDeCategoria(usuario, categoria);
+            VentanaProductosDeCategoria ventanaProductos = new VentanaProductosDeCategoria( categoria);
             ventanaProductos.setVisible(true);
         });
 

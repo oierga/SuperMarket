@@ -33,6 +33,16 @@ public class CarritoCompras {
     public void vaciarCarrito() {
         productos.clear();
     }
+    public double getTotal2() {
+        double total = 0.0;
+        for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
+            Producto producto = entry.getKey();
+            int cantidad = entry.getValue();
+            total += producto.getPrecio() * cantidad;
+        }
+        return total;
+    }
+
 
     public double getTotal() {
         return productos.entrySet().stream()
@@ -41,5 +51,11 @@ public class CarritoCompras {
     }
     public String getTotalFormateado() {
         return String.format("€%.2f", getTotal());
+    }
+    public void mostrarCarrito() {
+    	 for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
+             Producto producto = entry.getKey();
+             System.out.print(producto.getNombre()+": "+producto.getPrecio());
+         }
     }
 }

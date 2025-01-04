@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class VentanaCarrito extends JFrame {
 	
+	private static VentanaCarrito instance;
 	private CarritoCompras carrito;
     private JPanel panelProductos;
     private JLabel labelTotal;
@@ -24,10 +25,9 @@ public class VentanaCarrito extends JFrame {
     private Usuario usuario; 
     private  VentanaCategorias ventanaCategorias;
     
-    public VentanaCarrito(VentanaCategorias ventanaCategorias, Usuario usuario2) {
+    public VentanaCarrito() {
     	
-        this.ventanaCategorias = ventanaCategorias;
-    	this.usuario = usuario2;
+    	this.usuario = ServicioPersistenciaBD.getInstance().getUsuario();
     	this.carrito = CarritoCompras.getInstance();
     	
         setTitle("Carrito de Compras");
@@ -41,7 +41,7 @@ public class VentanaCarrito extends JFrame {
 
         panelProductos = new JPanel();
         panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
-        actualizarListaProductos();
+       
 
         JPanel panelInferior = new JPanel(new BorderLayout());
         
@@ -99,12 +99,11 @@ public class VentanaCarrito extends JFrame {
                 actualizarListaProductos();
                 Map<Producto,Integer> productosCarrito = CarritoCompras.getInstance().getProductos();
                 for (Map.Entry<Producto, Integer> entry: productosCarrito.entrySet()) {
-                	System.out.print(entry.toString());
+
                 	ServicioPersistenciaBD.getInstance().guardarVenta(ServicioPersistenciaBD.getInstance().getUsuario().getIdUsuario(),entry.getKey().getIdProducto(),entry.getValue(),""+LocalDate.now()+LocalTime.now());
                 }
                 carrito.vaciarCarrito();
                 new VentanaSupermarket(usuario).setVisible(true);                
-                dispose();
             }
         });
         
@@ -149,8 +148,7 @@ public class VentanaCarrito extends JFrame {
     }
 
     void actualizarListaProductos() {
-        panelProductos.removeAll();  // Limpiar el panel de productos antes de agregar los nuevos
-
+    	panelProductos.removeAll();
         for (Map.Entry<Producto, Integer> entry : CarritoCompras.getInstance().getProductos().entrySet()) {
             Producto producto = entry.getKey();
             int cantidad = entry.getValue();
@@ -165,7 +163,7 @@ public class VentanaCarrito extends JFrame {
             JLabel labelNombre = new JLabel(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()));
             JLabel labelPrecio = new JLabel(String.format("€%.2f x %d = €%.2f", 
                     producto.getPrecio(), cantidad, producto.getPrecio() * cantidad));
-            
+            JLabel labelUnidades = new JLabel("Unidades: "+String.format("%d", cantidad));
             // Obtener la ruta de la imagen
             String imagePath = "src/images/" + producto.getNombre().toLowerCase() + ".png";  // Ruta de la imagen
             JLabel labelFoto = new JLabel();
@@ -184,28 +182,34 @@ public class VentanaCarrito extends JFrame {
             // Botón de eliminar
             JButton btnEliminar = new JButton("Eliminar");
             btnEliminar.addActionListener(e -> {
-                carrito.removerProducto(producto);
+                CarritoCompras.getInstance().removerProducto(producto);
                 actualizarListaProductos();  // Volver a actualizar la lista
                 recalcularDescuento();
             });
 
             // Añadir los componentes al panel del producto
-            JPanel productPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            productPanel.add(labelFoto);   // Añadir imagen
-            productPanel.add(labelNombre); // Añadir nombre
-            productPanel.add(labelPrecio); // Añadir precio
+            JPanel productPanel = new JPanel();
+            productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS)); // Layout vertical
 
+            productPanel.add(labelFoto);   // Añadir imagen
+            productPanel.add(labelNombre);
+            productPanel.add(labelUnidades);// Añadir nombre
+            productPanel.add(labelPrecio); // Añadir precio
+            
             itemPanel.add(productPanel, BorderLayout.CENTER);
             itemPanel.add(btnEliminar, BorderLayout.EAST);
+           
 
             panelProductos.add(itemPanel);
+            //panelProductos.add(Box.createVerticalStrut(200)); // Espacio de 20px entre botones
+
         }
 
         panelProductos.revalidate();
         panelProductos.repaint();
     }
 
-    private void recalcularDescuento() {
+    public void recalcularDescuento() {
         double totalSinDescuento = CarritoCompras.getInstance().getTotal();
         
         if (descuentoAplicado > 0) {
@@ -225,4 +229,17 @@ public class VentanaCarrito extends JFrame {
 	public void setCarrito(CarritoCompras carrito) {
 		this.carrito = carrito;
 	}
+
+	public static VentanaCarrito getInstance() {
+		if (instance==null) {
+			instance = new VentanaCarrito();
+		}
+		return instance;
+	}
+
+	public static void setInstance(VentanaCarrito instance) {
+		VentanaCarrito.instance = instance;
+	}
+
+	
 }

@@ -28,7 +28,6 @@ public class VentanaProductosDeCategoria extends JFrame {
     private double totalCarrito;
     protected ArrayList<Producto> productosCarrito = new ArrayList<>();
     protected HashMap<Producto, Integer> productosCarritoUnidad = new HashMap<>();
-    private VentanaCarrito ventanaCarrito;
     private VentanaCategorias ventanaCategorias;
     private Color colorPrimario = new Color(76, 175, 80);
     private Color colorSecundario = new Color(245, 245, 245);
@@ -37,10 +36,9 @@ public class VentanaProductosDeCategoria extends JFrame {
     private Map<String, String[]> productosPorCategoria;
 
 	    
-    public VentanaProductosDeCategoria(Usuario usuario, String categoriaSeleccionada) {
-        this.usuario = usuario;
+    public VentanaProductosDeCategoria(String categoriaSeleccionada) {
+        this.usuario = ServicioPersistenciaBD.getInstance().getUsuario();
     	//Configuracion ventana
-    	ventanaCarrito = new VentanaCarrito(ventanaCategorias,usuario);
         setTitle("Supermercado - Página Inicial");
         setSize(1600, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,7 +101,7 @@ public class VentanaProductosDeCategoria extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				abrirVentanaCarrito(productosCarrito,productosCarritoUnidad);
+				abrirVentanaCarrito();
 			}
         	
         });
@@ -148,7 +146,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         iconoCarrito.setToolTipText("Carrito");
         iconoCarrito.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                abrirVentanaCarrito(productosCarrito, productosCarritoUnidad);
+                abrirVentanaCarrito();
             }
         });
 
@@ -207,7 +205,6 @@ public class VentanaProductosDeCategoria extends JFrame {
                              + " Producto: "+producto.getNombre(),
                              String.format("%.2f €", producto.getPrecio())
                          ));
-        			System.out.print(producto.getRutaImagen());
         		}   
         	}
         }
@@ -297,21 +294,12 @@ public class VentanaProductosDeCategoria extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				int opcion = JOptionPane.showConfirmDialog(null, "¿Desea añadir este producto a la cesta?");
-				if (opcion==0) {
-					String seleccion = (String) comboUnidades.getSelectedItem();
-			        int  unidadesSeleccionadas = Integer.parseInt(seleccion); 
-			        System.out.print(unidadesSeleccionadas);
-			        String precioAux = price.substring(0, price.length() - 1).replace(",", ".");
-			        
-			        double precio = Double.parseDouble(precioAux);
-					CarritoCompras.getInstance().agregarProducto(ServicioPersistenciaBD.getInstance().productoPorNombre(productName), unidadesSeleccionadas);
-		            ventanaCarrito.actualizarListaProductos();
+				if (opcion==0) { 
+					CarritoCompras.getInstance().agregarProducto(ServicioPersistenciaBD.getInstance().productoPorNombre(productName.toLowerCase()),  Integer.parseInt((String) comboUnidades.getSelectedItem()));
 		            JOptionPane.showMessageDialog(null, "Producto añadido al carrito.");
-					
+		            CarritoCompras.getInstance().mostrarCarrito();
 				}
-				
 			}
-        	
         });
         // Añadir componentes al panel del producto
         productPanel.add(productImage);
@@ -459,7 +447,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         
         JMenuItem itemCarrito = new JMenuItem("Ver Carrito");
         itemCarrito.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        itemCarrito.addActionListener(e -> abrirVentanaCarrito(productosCarrito,productosCarritoUnidad));
+        itemCarrito.addActionListener(e -> abrirVentanaCarrito());
         
         if (tipoUsuario == TipoUsuario.USUARIO) {
             JMenuItem itemHacerseSocio = new JMenuItem("Hacerse Socio");
@@ -504,26 +492,10 @@ public class VentanaProductosDeCategoria extends JFrame {
         Image img = icono.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         return new JLabel(new ImageIcon(img));
     }
-    private void abrirVentanaCarrito(ArrayList<Producto> productosCarrito2, HashMap<Producto,Integer> productosCarritoUnidad) {
-        if (ventanaCarrito == null) {
-            ventanaCarrito = new VentanaCarrito(ventanaCategorias, usuario);
-        } else {
-            if (!productosCarrito2.isEmpty()) {
-                CarritoCompras carrito = ventanaCarrito.getCarrito();
-                Map<Producto, Integer> carritoProductos = carrito.getProductos();
-          
-                // Añadir productos que aún no están en el carrito
-                for (Producto producto : productosCarrito2) {
-                    if (!carritoProductos.containsKey(producto)) {
-                    	int unidades = productosCarritoUnidad.get(producto);
-                        carrito.agregarProducto(producto, unidades);
-                    }
-                }
-                ventanaCarrito.actualizarListaProductos();
-                //ventanaCarrito.recalcularTotal(productosCarritoUnidad,productosCarrito);// Asegura que la lista visual se actualice
-            }
-        }
-        ventanaCarrito.setVisible(true);
+    private void abrirVentanaCarrito() {
+        VentanaCarrito.getInstance().actualizarListaProductos();
+        VentanaCarrito.getInstance().recalcularDescuento();
+        VentanaCarrito.getInstance().setVisible(true);
     }
 
     

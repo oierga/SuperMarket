@@ -21,7 +21,7 @@ public class VentanaRegistro extends JFrame{
     
     public VentanaRegistro(ServicioPersistenciaBD servicioPersistencia) {
     	setSize(1920,1080);
-    	 setLocationRelativeTo(null);
+    	setLocationRelativeTo(null);
         lNombreDeUsuario = new JLabel("Nombre de usuario:");
         lNombreDeUsuario.setBounds(10, 10, 160, 30);
         tfNombreDeUsuario = new JTextField();

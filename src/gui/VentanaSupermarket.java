@@ -200,7 +200,7 @@ public class VentanaSupermarket extends JFrame {
             	}
             	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(usuario, contra)) {
             		 btnComprar.setBackground(colorPrimario.darker());
-            		 new VentanaCategorias(ServicioPersistenciaBD.getInstance().getUsuario());
+            		 new VentanaCategorias();
             	};
                
             }
@@ -315,7 +315,7 @@ public class VentanaSupermarket extends JFrame {
     
     private void abrirVentanaCarrito() {
         if (ventanaCarrito == null) {
-            ventanaCarrito = new VentanaCarrito(ventanaCategorias,usuario);
+            ventanaCarrito = new VentanaCarrito();
         }
         ventanaCarrito.setVisible(true);
     }
@@ -342,7 +342,7 @@ public class VentanaSupermarket extends JFrame {
     
     private void abrirVentanaCategorias() {
         if (ventanaCategorias == null) {
-            ventanaCategorias = new VentanaCategorias(usuario);
+            ventanaCategorias = new VentanaCategorias();
         }
         ventanaCategorias.setVisible(true);
     }
