@@ -28,9 +28,7 @@ public class VentanaSupermarket extends JFrame {
     JPasswordField contrasenaField;
     JLabel lblSaludo;
 
-    public VentanaSupermarket(Usuario usuario) {
-        this.usuario = usuario;
-        tipoUsuario = usuario.getTipo();
+    public VentanaSupermarket() {
         
         configurarVentana();
         crearMenu();
@@ -66,7 +64,7 @@ public class VentanaSupermarket extends JFrame {
         
         JPanel saludoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         saludoPanel.setBackground(colorPrimario);
-        lblSaludo = new JLabel("¡Bienvenido/a a SuperMarket " + usuario.getNombreDeUsuario() + "!");
+        lblSaludo = new JLabel("¡Bienvenido/a a Deusto SuperMarket !");
         lblSaludo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         lblSaludo.setForeground(Color.WHITE);
         saludoPanel.add(lblSaludo);
@@ -216,6 +214,8 @@ public class VentanaSupermarket extends JFrame {
             	for (char c : contrasenaField.getPassword()) {
             		contra=contra+c;
             	}
+            	ServicioPersistenciaBD.getInstance().setUsuario(new Usuario(usuario,contra,true,TipoUsuario.USUARIO));
+  
             	//ServicioPersistenciaBD.getInstance().setUsuario(new Usuario(usuario,contra,true,TipoUsuario.USUARIO));
             	System.out.print(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena()));
             	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena())) {

@@ -531,7 +531,7 @@ public class VentanaProductosDeCategoria extends JFrame {
    public static void main(String[] args) {
        Usuario usuario = new Usuario("admin", "123", true, TipoUsuario.ADMIN.USUARIO);
 
-	   new VentanaSupermarket(usuario);
+	   new VentanaSupermarket();
    }
    private ImageIcon cargarImagen(String nombreImagen, int ancho, int alto) {
        java.net.URL imageUrl = getClass().getResource(nombreImagen);        

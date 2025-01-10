@@ -56,7 +56,7 @@ public class Main {
     	ServicioPersistenciaBD.getInstance().init("supermarket.db");
     	
     	
-        new VentanaSupermarket(ServicioPersistenciaBD.getInstance().getUsuario());;
+        new VentanaSupermarket();;
         
         
         

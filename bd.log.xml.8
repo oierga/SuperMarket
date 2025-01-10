@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2024-12-09T23:35:16.673279Z</date>
-  <millis>1733787316673</millis>
-  <nanos>279000</nanos>
+  <date>2024-12-10T02:26:33.020521Z</date>
+  <millis>1733797593020</millis>
+  <nanos>521000</nanos>
   <sequence>0</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -14,9 +14,9 @@
   <message>Conexión establecida a la base de datos.</message>
 </record>
 <record>
-  <date>2024-12-09T23:35:16.688880Z</date>
-  <millis>1733787316688</millis>
-  <nanos>880000</nanos>
+  <date>2024-12-10T02:26:33.034885Z</date>
+  <millis>1733797593034</millis>
+  <nanos>885000</nanos>
   <sequence>1</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -26,42 +26,47 @@
   <message>Base de datos ya existe, conexión establecida.</message>
 </record>
 <record>
-  <date>2024-12-09T23:35:19.892026Z</date>
-  <millis>1733787319892</millis>
-  <nanos>26000</nanos>
+  <date>2024-12-10T02:26:39.902209Z</date>
+  <millis>1733797599902</millis>
+  <nanos>209000</nanos>
   <sequence>2</sequence>
   <logger>BD-log</logger>
   <level>SEVERE</level>
   <class>db.ServicioPersistenciaBD</class>
   <method>log</method>
   <thread>35</thread>
-  <message>Error al cargar todos los productos</message>
+  <message>Error al verificar las credenciales</message>
   <exception>
-    <message>java.sql.SQLException: no such column: 'categoria'</message>
+    <message>java.sql.SQLException: column 0 out of bounds [1,4]</message>
     <frame>
       <class>org.sqlite.RS</class>
-      <method>findColumn</method>
-      <line>121</line>
+      <method>checkCol</method>
+      <line>71</line>
+    </frame>
+    <frame>
+      <class>org.sqlite.RS</class>
+      <method>markCol</method>
+      <line>78</line>
     </frame>
     <frame>
       <class>org.sqlite.RS</class>
       <method>getInt</method>
-      <line>293</line>
+      <line>289</line>
     </frame>
     <frame>
       <class>db.ServicioPersistenciaBD</class>
-      <method>cargarTodosProductos</method>
-      <line>166</line>
+      <method>verificarCredenciales</method>
+      <line>218</line>
     </frame>
     <frame>
-      <class>gui.VentanaProductosDeCategoria</class>
-      <method>&lt;init&gt;</method>
-      <line>171</line>
+      <class>gui.VentanaLogin</class>
+      <method>handleLogin</method>
+      <line>93</line>
     </frame>
     <frame>
-      <class>gui.VentanaCategorias$2</class>
-      <method>actionPerformed</method>
-      <line>100</line>
+      <class>gui.VentanaLogin</class>
+      <method>lambda$1</method>
+      <line>48</line>
     </frame>
     <frame>
       <class>javax.swing.AbstractButton</class>
@@ -245,9 +250,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2024-12-10T00:09:15.605308Z</date>
-  <millis>1733789355605</millis>
-  <nanos>308000</nanos>
+  <date>2024-12-23T16:46:09.454586Z</date>
+  <millis>1734972369454</millis>
+  <nanos>586000</nanos>
   <sequence>0</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -257,9 +262,9 @@
   <message>Conexión establecida a la base de datos.</message>
 </record>
 <record>
-  <date>2024-12-10T00:09:15.622004Z</date>
-  <millis>1733789355622</millis>
-  <nanos>4000</nanos>
+  <date>2024-12-23T16:46:09.468198Z</date>
+  <millis>1734972369468</millis>
+  <nanos>198000</nanos>
   <sequence>1</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -273,41 +278,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2024-12-10T01:55:02.662869Z</date>
-  <millis>1733795702662</millis>
-  <nanos>869000</nanos>
-  <sequence>0</sequence>
-  <logger>BD-log</logger>
-  <level>INFO</level>
-  <class>db.ServicioPersistenciaBD</class>
-  <method>log</method>
-  <thread>24</thread>
-  <message>Conexión establecida a la base de datos.</message>
-</record>
-</log>
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE log SYSTEM "logger.dtd">
-<log>
-<record>
-  <date>2024-12-10T01:57:38.903177Z</date>
-  <millis>1733795858903</millis>
-  <nanos>177000</nanos>
-  <sequence>0</sequence>
-  <logger>BD-log</logger>
-  <level>INFO</level>
-  <class>db.ServicioPersistenciaBD</class>
-  <method>log</method>
-  <thread>24</thread>
-  <message>Conexión establecida a la base de datos.</message>
-</record>
-</log>
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE log SYSTEM "logger.dtd">
-<log>
-<record>
-  <date>2024-12-10T02:24:28.549463Z</date>
-  <millis>1733797468549</millis>
-  <nanos>463000</nanos>
+  <date>2024-12-23T16:46:30.234575Z</date>
+  <millis>1734972390234</millis>
+  <nanos>575000</nanos>
   <sequence>0</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -317,9 +290,9 @@
   <message>Conexión establecida a la base de datos.</message>
 </record>
 <record>
-  <date>2024-12-10T02:24:28.564945Z</date>
-  <millis>1733797468564</millis>
-  <nanos>945000</nanos>
+  <date>2024-12-23T16:46:30.250407Z</date>
+  <millis>1734972390250</millis>
+  <nanos>407000</nanos>
   <sequence>1</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -333,9 +306,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2024-12-23T16:44:41.357288Z</date>
-  <millis>1734972281357</millis>
-  <nanos>288000</nanos>
+  <date>2024-12-23T16:46:50.607003Z</date>
+  <millis>1734972410607</millis>
+  <nanos>3000</nanos>
   <sequence>0</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -345,9 +318,9 @@
   <message>Conexión establecida a la base de datos.</message>
 </record>
 <record>
-  <date>2024-12-23T16:44:41.371160Z</date>
-  <millis>1734972281371</millis>
-  <nanos>160000</nanos>
+  <date>2024-12-23T16:46:50.622340Z</date>
+  <millis>1734972410622</millis>
+  <nanos>340000</nanos>
   <sequence>1</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -361,15 +334,27 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2025-01-03T21:32:14.255153Z</date>
-  <millis>1735939934255</millis>
-  <nanos>153000</nanos>
+  <date>2024-12-23T16:47:04.867318Z</date>
+  <millis>1734972424867</millis>
+  <nanos>318000</nanos>
   <sequence>0</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
   <class>db.ServicioPersistenciaBD</class>
   <method>log</method>
-  <thread>24</thread>
+  <thread>1</thread>
   <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2024-12-23T16:47:04.880783Z</date>
+  <millis>1734972424880</millis>
+  <nanos>783000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
 </record>
 </log>

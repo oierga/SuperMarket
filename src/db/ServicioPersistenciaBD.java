@@ -22,7 +22,7 @@ public class ServicioPersistenciaBD {
     private static ServicioPersistenciaBD instance; 
     private Connection connection;
     private Logger logger = null;
-    private Usuario usuario = new Usuario("admin","1234",true,TipoUsuario.ADMIN);
+    private Usuario usuario ;
 
     // Constructor para establecer la conexión con la base de datos
     private ServicioPersistenciaBD() {

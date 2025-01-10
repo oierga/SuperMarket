@@ -128,7 +128,8 @@ public class VentanaCarrito extends JFrame {
                 	ServicioPersistenciaBD.getInstance().guardarVenta(ServicioPersistenciaBD.getInstance().getUsuario().getIdUsuario(),entry.getKey().getIdProducto(),entry.getValue(),""+LocalDate.now()+LocalTime.now());
                 }
                 carrito.vaciarCarrito();
-                new VentanaSupermarket(usuario).setVisible(true);                
+                dispose();
+                new VentanaSupermarket().setVisible(true);                
             }
         });
         
