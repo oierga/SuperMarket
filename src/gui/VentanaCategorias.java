@@ -40,11 +40,14 @@ public class VentanaCategorias extends JFrame {
         btnVerCarrito.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Mostrar la ventana del carrito
-                if (ventanaCarrito == null) {
-                    ventanaCarrito = new VentanaCarrito();
-                }
-                ventanaCarrito.setVisible(true);
+            	
+            	//obtener la instacia unica de carrito
+            	VentanaCarrito ventanaCarrito = VentanaCarrito.getInstance(VentanaCategorias.this);
+            	
+            	ventanaCarrito.setVisible(true);
+            	
+            	//y pa ocultar la ventana actual
+            	VentanaCategorias.this.setVisible(false);
             }
         });
         
