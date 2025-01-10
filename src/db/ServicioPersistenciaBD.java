@@ -22,7 +22,7 @@ public class ServicioPersistenciaBD {
     private static ServicioPersistenciaBD instance; 
     private Connection connection;
     private Logger logger = null;
-    private Usuario usuario = new Usuario("admin","123",true,TipoUsuario.ADMIN);
+    private Usuario usuario = new Usuario("admin","1234",true,TipoUsuario.ADMIN);
 
     // Constructor para establecer la conexión con la base de datos
     private ServicioPersistenciaBD() {
@@ -207,17 +207,20 @@ public class ServicioPersistenciaBD {
             // Establecer los parámetros de la consulta
             stmt.setString(1, usuario);
             stmt.setString(2, contra);
-
+            System.out.print("Verificando usuario: "+usuario+", Contrasena: "+contra);
             // Ejecutar la consulta
             ResultSet rs = stmt.executeQuery();
-
+            System.out.print(stmt.toString());
             // Verificar si se encuentra un usuario que coincida con las credenciales
             if (rs.next()) {
                 // Si se encontró un usuario, las credenciales son válidas
-            	
+                System.out.print("Usuario verificado");
+
             	instance.setUsuario(new Usuario(rs.getInt(1),usuario,contra,1));
                 return true;
             }else {
+                System.out.print("No ha habido match para Usuario: "+usuario+", Contrasena: "+contra);
+
             	return false;
             }
 

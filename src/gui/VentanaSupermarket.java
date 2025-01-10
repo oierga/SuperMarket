@@ -26,6 +26,7 @@ public class VentanaSupermarket extends JFrame {
     private Color colorAccent = new Color(33, 33, 33);
     JTextField nombreField;
     JPasswordField contrasenaField;
+    JLabel lblSaludo;
 
     public VentanaSupermarket(Usuario usuario) {
         this.usuario = usuario;
@@ -65,7 +66,7 @@ public class VentanaSupermarket extends JFrame {
         
         JPanel saludoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         saludoPanel.setBackground(colorPrimario);
-        JLabel lblSaludo = new JLabel("¡Bienvenido/a a SuperMarket, " + usuario.getNombreDeUsuario() + "!");
+        lblSaludo = new JLabel("¡Bienvenido/a a SuperMarket " + usuario.getNombreDeUsuario() + "!");
         lblSaludo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         lblSaludo.setForeground(Color.WHITE);
         saludoPanel.add(lblSaludo);
@@ -192,16 +193,9 @@ public class VentanaSupermarket extends JFrame {
         btnComprar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-            	String usuario = nombreField.getText();
             	
-            	String contra ="";
-            	for (char c : contrasenaField.getPassword()) {
-            		contra=contra+c;
-            	}
-            	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(usuario, contra)) {
             		 btnComprar.setBackground(colorPrimario.darker());
-            		 new VentanaCategorias();
-            	};
+         
                
             }
             
@@ -211,7 +205,24 @@ public class VentanaSupermarket extends JFrame {
             }
         });
         
-        btnComprar.addActionListener(e -> abrirVentanaCategorias());
+        btnComprar.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+            	System.out.print(contrasenaField.getPassword());
+
+				String usuario = nombreField.getText();
+            	String contra ="";
+            	for (char c : contrasenaField.getPassword()) {
+            		contra=contra+c;
+            	}
+            	//ServicioPersistenciaBD.getInstance().setUsuario(new Usuario(usuario,contra,true,TipoUsuario.USUARIO));
+            	System.out.print(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena()));
+            	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena())) {
+            		 new VentanaCategorias().setVisible(true);;
+            	};
+			}
+        });
         
         return btnComprar;
     }
@@ -353,9 +364,5 @@ public class VentanaSupermarket extends JFrame {
             ventanaCategorias.actualizarTotalCarrito(nuevoTotal);
         }
     }
-    //Este main es para probar la ventana mientras trabajo con ella
-    public static void main(String[] args) {
-    	Usuario usuario = new Usuario("admin", "123", true, TipoUsuario.USUARIO);
-    	new VentanaSupermarket(usuario);
-    }
+    
 }

@@ -85,7 +85,7 @@ public class VentanaCarrito extends JFrame {
         panelCupon.add(btnAplicarCupon);
         
         panelInferior.add(panelCupon, BorderLayout.NORTH);
-        
+
         labelDescuento = new JLabel("Descuento: €0.00");
         labelDescuento.setFont(new Font("Arial", Font.BOLD, 14));
         labelDescuento.setForeground(COLOR_PRINCIPAL);
@@ -99,8 +99,8 @@ public class VentanaCarrito extends JFrame {
         });
         
 
-        JButton btnComprar = new JButton("Realizar Compra");
-        btnComprar.setBackground(COLOR_PRINCIPAL);
+        JButton btnComprar = createStyledButton("Realizar Compra");
+        btnComprar.setBackground(COLOR_FONDO);
         btnComprar.setForeground(Color.WHITE);
         btnComprar.addActionListener(e -> {
             if (carrito.getProductos().isEmpty()) {
