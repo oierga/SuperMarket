@@ -302,14 +302,11 @@ public class ServicioPersistenciaBD {
     public Producto productoPorNombre(String nombre) {
     	ArrayList<Producto> productos = instance.cargarTodosProductos();
     	Producto productoEncontrado = null;
-    	boolean encontrado = false;
     	for (Producto producto: productos) {
     		if (producto.getNombre().contains(nombre.toLowerCase())) {
     			productoEncontrado = producto;
     		}
-    		
-    			
-    		}
+    	}
     	return productoEncontrado;
     }
 
