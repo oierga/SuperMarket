@@ -7,6 +7,8 @@ import domain.Producto;
 import domain.Usuario;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,7 +21,8 @@ public class VentanaCarrito extends JFrame {
 	private static final Color COLOR_PRINCIPAL = new Color(34, 139, 34);  
     private static final Color COLOR_SECUNDARIO = new Color(144, 238, 144);  
     private static final Color COLOR_FONDO = new Color(240, 255, 240);
-	
+    private Color colorPrimario = new Color(76, 175, 80);
+
 	private static VentanaCarrito instance;
 	private CarritoCompras carrito;
     private JPanel panelProductos;
@@ -77,7 +80,7 @@ public class VentanaCarrito extends JFrame {
             BorderFactory.createLineBorder(COLOR_PRINCIPAL),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         
-        JButton btnAplicarCupon = new JButton("Aplicar");
+        JButton btnAplicarCupon = createStyledButton("Aplicar");
         btnAplicarCupon.addActionListener(e -> aplicarCupon());
         
         panelCupon.add(labelCupon);
@@ -91,7 +94,7 @@ public class VentanaCarrito extends JFrame {
         labelDescuento.setForeground(COLOR_PRINCIPAL);
         panelInferior.add(labelDescuento, BorderLayout.SOUTH);
 
-        JButton btnVaciar = new JButton("Vaciar Carrito");
+        JButton btnVaciar = createStyledButton("Vaciar Carrito");
         btnVaciar.addActionListener(e -> {
             carrito.vaciarCarrito();
             actualizarListaProductos();
@@ -100,7 +103,13 @@ public class VentanaCarrito extends JFrame {
         
 
         JButton btnComprar = createStyledButton("Realizar Compra");
-        btnComprar.setBackground(COLOR_FONDO);
+        btnComprar.setOpaque(true);
+
+        btnComprar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnComprar.setBorder(new LineBorder(colorPrimario, 1));
+        btnComprar.setFocusPainted(false);
+        btnComprar.setPreferredSize(new Dimension(120,32));
+        btnComprar.setBackground(colorPrimario);
         btnComprar.setForeground(Color.WHITE);
         btnComprar.addActionListener(e -> {
             if (carrito.getProductos().isEmpty()) {
