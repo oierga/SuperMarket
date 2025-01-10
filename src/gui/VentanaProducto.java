@@ -70,7 +70,7 @@ public class VentanaProducto extends JFrame {
                 if (respuesta == JOptionPane.YES_OPTION) {
                     JOptionPane.showMessageDialog(null, nombre + " añadido al carrito.");
                     idEnCarrito[idEnCarritoGeneral.length] = 1;
-                    new VentanaSupermarket(usuario).setVisible(true);
+                    new VentanaSupermarket().setVisible(true);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "No se añadió el producto al carrito.");
@@ -85,7 +85,7 @@ public class VentanaProducto extends JFrame {
         btnCerrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	new VentanaSupermarket(usuario).setVisible(true);;
+            	new VentanaSupermarket().setVisible(true);;
                 dispose(); 
             }
         });
