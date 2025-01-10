@@ -90,7 +90,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         	
         });
         JLabel categoria = new JLabel("Categoría: ");
-        String[] categorias = {"Seleccionar","Frutas", "Verduras", "Lácteos", "Bebidas", "Carnes"};
+        String[] categorias = {"Seleccionar","Frutas", "Verduras", "Lacteos", "Bebidas", "Carnes"};
         JComboBox<String> comboBox = new JComboBox<>(categorias);
         
         labelProductos.setFont(new Font("Arial", Font.BOLD, 16));
@@ -187,7 +187,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         productosPorCategoria = new HashMap<>();
         productosPorCategoria.put("Frutas", frutas);
         productosPorCategoria.put("Verduras", verduras);
-        productosPorCategoria.put("Lácteos", lacteos);
+        productosPorCategoria.put("Lacteos", lacteos);
         productosPorCategoria.put("Carnes", carnes);
         productosPorCategoria.put("Bebidas", bebidas);
         productosPorCategoria.put("Panadería", panaderia);
