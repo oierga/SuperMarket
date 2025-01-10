@@ -40,7 +40,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         this.usuario = ServicioPersistenciaBD.getInstance().getUsuario();
     	//Configuracion ventana
         setTitle("Supermercado - Página Inicial");
-        setSize(1600, 1000);
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
        

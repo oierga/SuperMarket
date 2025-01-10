@@ -222,7 +222,8 @@ public class VentanaSupermarket extends JFrame {
             	//ServicioPersistenciaBD.getInstance().setUsuario(new Usuario(usuario,contra,true,TipoUsuario.USUARIO));
             	System.out.print(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena()));
             	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena())) {
-            		 new VentanaCategorias().setVisible(true);;
+            		 new VentanaCategorias().setVisible(true);
+            		 dispose();
             	}else{
             		lblError.setText("Credenciales incorrectas, inténtelo de nuevo.");
             		lblError.setForeground(Color.RED);
