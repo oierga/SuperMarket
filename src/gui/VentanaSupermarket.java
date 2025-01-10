@@ -26,7 +26,7 @@ public class VentanaSupermarket extends JFrame {
     private Color colorAccent = new Color(33, 33, 33);
     JTextField nombreField;
     JPasswordField contrasenaField;
-    JLabel lblSaludo;
+    JLabel lblSaludo,lblError;
 
     public VentanaSupermarket() {
         
@@ -122,7 +122,10 @@ public class VentanaSupermarket extends JFrame {
         gbc.gridy = 4;
         panelLogin.add(contraLabel, gbc);
         panelLogin.add(contrasenaField, gbc);
-
+        gbc.gridy=6;
+        gbc.gridx=1;
+        lblError = new JLabel("");
+        panelLogin.add(lblError,gbc);
         JPanel registroPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
         registroPanel.setBackground(colorSecundario);
 
@@ -220,6 +223,9 @@ public class VentanaSupermarket extends JFrame {
             	System.out.print(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena()));
             	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena())) {
             		 new VentanaCategorias().setVisible(true);;
+            	}else{
+            		lblError.setText("Credenciales incorrectas, inténtelo de nuevo.");
+            		lblError.setForeground(Color.RED);
             	};
 			}
         });

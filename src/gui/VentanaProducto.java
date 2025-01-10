@@ -74,6 +74,7 @@ public class VentanaProducto extends JFrame {
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "No se añadió el producto al carrito.");
+                    
                 }
             }
         });

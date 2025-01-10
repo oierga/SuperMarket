@@ -207,10 +207,8 @@ public class ServicioPersistenciaBD {
             // Establecer los parámetros de la consulta
             stmt.setString(1, usuario);
             stmt.setString(2, contra);
-            System.out.print("Verificando usuario: "+usuario+", Contrasena: "+contra);
             // Ejecutar la consulta
             ResultSet rs = stmt.executeQuery();
-            System.out.print(stmt.toString());
             // Verificar si se encuentra un usuario que coincida con las credenciales
             if (rs.next()) {
                 // Si se encontró un usuario, las credenciales son válidas
@@ -219,8 +217,8 @@ public class ServicioPersistenciaBD {
             	instance.setUsuario(new Usuario(rs.getInt(1),usuario,contra,1));
                 return true;
             }else {
-                System.out.print("No ha habido match para Usuario: "+usuario+", Contrasena: "+contra);
 
+            	
             	return false;
             }
 
