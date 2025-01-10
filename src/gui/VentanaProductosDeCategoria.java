@@ -206,7 +206,7 @@ public class VentanaProductosDeCategoria extends JFrame {
                     productGridPanel.add(createProductPanel(
                         "/" + producto.getRutaImagen(),
                         producto.getNombre().substring(0, 1).toUpperCase() + producto.getNombre().substring(1).replace("_", " "),
-                        "Categoría: " + categoriaSeleccionada + "\n" +
+                        "Categoría: " + categoriaSeleccionada + " | " +
                         "Producto: " + producto.getNombre(),
                         String.format("%.2f €", producto.getPrecio())
                     ));
@@ -408,11 +408,12 @@ public class VentanaProductosDeCategoria extends JFrame {
             {"✉️", "soporte@supermercado.com"}
         };
         
-        JPanel infoPanel = new JPanel(new GridLayout(1, 1, 0, 6));
-        infoPanel.setBackground(new Color(76, 175, 80));
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
+        infoPanel.setBackground(new Color(76, 175, 80));  // Fondo primario
         
         for (String[] info : contactInfo) {
-            JPanel linePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            JPanel linePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             linePanel.setBackground(Color.WHITE);
             
             JLabel lblIcono = new JLabel(info[0]);
@@ -420,11 +421,14 @@ public class VentanaProductosDeCategoria extends JFrame {
             
             JLabel lblTexto = new JLabel(info[1]);
             lblTexto.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            lblTexto.setForeground(Color.WHITE);
             
             linePanel.add(lblIcono);
             linePanel.add(Box.createRigidArea(new Dimension(10, 0)));
             linePanel.add(lblTexto);
+            
             linePanel.setBackground(new Color(76, 175, 80));
+            
             infoPanel.add(linePanel);
         }
         

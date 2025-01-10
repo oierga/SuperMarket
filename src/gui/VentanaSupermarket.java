@@ -237,11 +237,11 @@ public class VentanaSupermarket extends JFrame {
     private JPanel crearPanelContacto() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(colorPrimario);
         panel.setBorder(new CompoundBorder(
-            new LineBorder(Color.LIGHT_GRAY, 1),
-            new EmptyBorder(20, 30, 20, 30)
-        ));
+                new LineBorder(colorPrimario.darker(), 2),
+                new EmptyBorder(30, 40, 30, 40)
+            ));
         
         JLabel lblContacto = new JLabel("Contacto y Atención al Cliente");
         lblContacto.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -255,11 +255,11 @@ public class VentanaSupermarket extends JFrame {
         };
         
         JPanel infoPanel = new JPanel(new GridLayout(contactInfo.length, 1, 0, 10));
-        infoPanel.setBackground(Color.WHITE);
+        infoPanel.setBackground(colorPrimario);
         
         for (String[] info : contactInfo) {
             JPanel linePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            linePanel.setBackground(Color.WHITE);
+            linePanel.setBackground(colorPrimario);
             
             JLabel lblIcono = new JLabel(info[0]);
             lblIcono.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
