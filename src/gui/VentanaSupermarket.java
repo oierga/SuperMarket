@@ -15,7 +15,7 @@ import domain.TipoUsuario;
 import domain.Usuario;
 
 public class VentanaSupermarket extends JFrame {
-	private static boolean debug = true;
+	private static boolean debug = false;
 
     private static final long serialVersionUID = 1L;
     private Usuario usuario;
@@ -225,9 +225,9 @@ public class VentanaSupermarket extends JFrame {
             	System.out.print(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena()));
             	if(ServicioPersistenciaBD.getInstance().verificarCredenciales(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario(), ServicioPersistenciaBD.getInstance().getUsuario().getContrasena())) {
             		 new VentanaCategorias().setVisible(true);
+            		 
             		 dispose();
-            	}else if (debug=true) {
-            		new VentanaCategorias().setVisible(true);
+            	
             	}else{
             		lblError.setText("Credenciales incorrectas, inténtelo de nuevo.");
             		lblError.setForeground(Color.RED);

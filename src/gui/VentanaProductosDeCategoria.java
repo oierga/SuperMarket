@@ -776,7 +776,7 @@ public class VentanaProductosDeCategoria extends JFrame {
 	}
 
 	private void mostrarPerfil() {
-	    JOptionPane.showMessageDialog(this, "Mostrando Mi Cuenta...");
+	    new VentanaUsuario(ServicioPersistenciaBD.getInstance().getUsuario()).setVisible(true);;
 	}
 	// Función para crear el banner con cambio de imagen cada 5 segundos
 	private JPanel crearBannerConCambioDeImagen() {
