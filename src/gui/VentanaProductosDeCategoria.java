@@ -555,12 +555,11 @@ public class VentanaProductosDeCategoria extends JFrame {
         ArrayList<Producto> productos = ServicioPersistenciaBD.getInstance().cargarTodosProductos();
         if (soloOfertas) {
             	for (Producto producto: productos) {
-        			System.out.print("Producto: "+producto.getNombre()+" Encontrado: "+nombresConDescuento.containsKey(producto.getNombre()));
 
             		if (nombresConDescuento.containsKey(producto.getNombre().toLowerCase())) {
                			 productGridPanel.add(createProductPanel(
                                     "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
-                                    "Categoria: "+producto.getCategoria().getNombre()+"| Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
+                                    "Categoria: "+producto.getCategoria().getNombre()+" | Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
                                     producto.getPrecio()
                                 ));
             			}   
@@ -573,7 +572,7 @@ public class VentanaProductosDeCategoria extends JFrame {
             			if (producto.getRutaImagen().contains(imagen)) {
                			 productGridPanel.add(createProductPanel(
                                     "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
-                                    "Categoria: "+categoriaSeleccionada+" Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
+                                    "Categoria: "+categoriaSeleccionada+" |  Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
                                     producto.getPrecio()
                                 ));
             			}   
@@ -701,7 +700,6 @@ public class VentanaProductosDeCategoria extends JFrame {
 	}
 
 	private void mostrarOfertas() {
-	    JOptionPane.showMessageDialog(this, "Mostrando Ofertas...");
 	    actualizarProductosPorCategoria("",true);
 	}
 
