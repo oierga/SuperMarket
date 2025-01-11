@@ -2,93 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2024-12-23T16:47:48.792442Z</date>
-  <millis>1734972468792</millis>
-  <nanos>442000</nanos>
-  <sequence>0</sequence>
-  <logger>BD-log</logger>
-  <level>INFO</level>
-  <class>db.ServicioPersistenciaBD</class>
-  <method>log</method>
-  <thread>1</thread>
-  <message>Conexión establecida a la base de datos.</message>
-</record>
-<record>
-  <date>2024-12-23T16:47:48.806174Z</date>
-  <millis>1734972468806</millis>
-  <nanos>174000</nanos>
-  <sequence>1</sequence>
-  <logger>BD-log</logger>
-  <level>INFO</level>
-  <class>db.ServicioPersistenciaBD</class>
-  <method>log</method>
-  <thread>1</thread>
-  <message>Base de datos ya existe, conexión establecida.</message>
-</record>
-</log>
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE log SYSTEM "logger.dtd">
-<log>
-<record>
-  <date>2024-12-23T16:48:04.935474Z</date>
-  <millis>1734972484935</millis>
-  <nanos>474000</nanos>
-  <sequence>0</sequence>
-  <logger>BD-log</logger>
-  <level>INFO</level>
-  <class>db.ServicioPersistenciaBD</class>
-  <method>log</method>
-  <thread>1</thread>
-  <message>Conexión establecida a la base de datos.</message>
-</record>
-<record>
-  <date>2024-12-23T16:48:04.949734Z</date>
-  <millis>1734972484949</millis>
-  <nanos>734000</nanos>
-  <sequence>1</sequence>
-  <logger>BD-log</logger>
-  <level>INFO</level>
-  <class>db.ServicioPersistenciaBD</class>
-  <method>log</method>
-  <thread>1</thread>
-  <message>Base de datos ya existe, conexión establecida.</message>
-</record>
-</log>
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE log SYSTEM "logger.dtd">
-<log>
-<record>
-  <date>2024-12-23T16:48:21.664680Z</date>
-  <millis>1734972501664</millis>
-  <nanos>680000</nanos>
-  <sequence>0</sequence>
-  <logger>BD-log</logger>
-  <level>INFO</level>
-  <class>db.ServicioPersistenciaBD</class>
-  <method>log</method>
-  <thread>1</thread>
-  <message>Conexión establecida a la base de datos.</message>
-</record>
-<record>
-  <date>2024-12-23T16:48:21.678082Z</date>
-  <millis>1734972501678</millis>
-  <nanos>82000</nanos>
-  <sequence>1</sequence>
-  <logger>BD-log</logger>
-  <level>INFO</level>
-  <class>db.ServicioPersistenciaBD</class>
-  <method>log</method>
-  <thread>1</thread>
-  <message>Base de datos ya existe, conexión establecida.</message>
-</record>
-</log>
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE log SYSTEM "logger.dtd">
-<log>
-<record>
-  <date>2024-12-23T16:48:56.524748Z</date>
-  <millis>1734972536524</millis>
-  <nanos>748000</nanos>
+  <date>2025-01-11T10:24:55.433471Z</date>
+  <millis>1736591095433</millis>
+  <nanos>471000</nanos>
   <sequence>0</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -102,9 +18,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2024-12-23T16:49:25.165364Z</date>
-  <millis>1734972565165</millis>
-  <nanos>364000</nanos>
+  <date>2025-01-11T10:26:16.861320Z</date>
+  <millis>1736591176861</millis>
+  <nanos>320000</nanos>
   <sequence>0</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>
@@ -118,9 +34,121 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2025-01-11T10:24:14.837687Z</date>
-  <millis>1736591054837</millis>
-  <nanos>687000</nanos>
+  <date>2025-01-11T10:26:38.115671Z</date>
+  <millis>1736591198115</millis>
+  <nanos>671000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T10:27:11.227682Z</date>
+  <millis>1736591231227</millis>
+  <nanos>682000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T10:27:46.139371Z</date>
+  <millis>1736591266139</millis>
+  <nanos>371000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T10:28:17.870666Z</date>
+  <millis>1736591297870</millis>
+  <nanos>666000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T10:28:33.376063Z</date>
+  <millis>1736591313376</millis>
+  <nanos>63000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T10:29:54.677629Z</date>
+  <millis>1736591394677</millis>
+  <nanos>629000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T10:31:09.683888Z</date>
+  <millis>1736591469683</millis>
+  <nanos>888000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T10:31:49.065375Z</date>
+  <millis>1736591509065</millis>
+  <nanos>375000</nanos>
   <sequence>0</sequence>
   <logger>BD-log</logger>
   <level>INFO</level>

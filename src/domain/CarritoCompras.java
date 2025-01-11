@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import db.ServicioPersistenciaBD;
+
 public class CarritoCompras {
     private static CarritoCompras instance;
     private HashMap<Producto, Integer> productos = new HashMap<>();
@@ -19,7 +21,12 @@ public class CarritoCompras {
     }
 
     public void agregarProducto(Producto producto, int cantidad) {
-        productos.put(producto, productos.getOrDefault(producto, 0) + cantidad);
+    	Map<String,Double> productosConDescuento = ServicioPersistenciaBD.getInstance().obtenerNombresConDescuento();
+    	if (productosConDescuento.containsKey(producto.getNombre().toLowerCase())) {
+    		producto.setPrecio(producto.getPrecio()*(1-productosConDescuento.get(producto.getNombre())*0.01));
+
+    	}
+    	productos.put(producto, productos.getOrDefault(producto, 0) + cantidad);
     }
 
     public void removerProducto(Producto producto) {
