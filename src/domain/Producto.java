@@ -24,6 +24,10 @@ public class Producto {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Producto() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getIdProducto() {
         return idProducto;
     }

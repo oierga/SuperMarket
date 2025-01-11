@@ -9,6 +9,8 @@ import javax.swing.border.LineBorder;
 import db.ServicioPersistenciaBD;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class VentanaUsuario extends JFrame {
 
@@ -105,6 +107,20 @@ public class VentanaUsuario extends JFrame {
         comboTipo.setBorder(BorderFactory.createLineBorder(COLOR_PRINCIPAL));
         panelCentral.add(comboTipo, gbc);
 
+        gbc.gridx=0;
+        gbc.gridy=5;
+        JButton btnHistorial = createStyledButton("Historial de Compras");
+        btnHistorial.setForeground(COLOR_PRINCIPAL); // Opcional: Darle un estilo de enlace
+        btnHistorial.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambiar el cursor al de mano
+        btnHistorial.setOpaque(true);
+        btnHistorial.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+                new VentanaHistorial(ServicioPersistenciaBD.getInstance().getUsuario()).setVisible(true);; // Llamar al método que abre la ventana
+
+			}
+        });
         mainPanel.add(panelCentral, BorderLayout.CENTER);
 
         // Sección inferior: Botones
@@ -134,6 +150,7 @@ public class VentanaUsuario extends JFrame {
 
         JButton btnCancelar = createStyledButton("Cancelar");
         btnCancelar.addActionListener(e -> dispose());
+        panelBotones.add(btnHistorial,FlowLayout.LEFT);
 
         panelBotones.add(btnGuardar);
         panelBotones.add(btnEditar);

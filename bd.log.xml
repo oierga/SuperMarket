@@ -5586,3 +5586,59 @@
   <thread>24</thread>
   <message>Conexión establecida a la base de datos.</message>
 </record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T18:07:11.893453Z</date>
+  <millis>1736618831893</millis>
+  <nanos>453000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-11T18:07:19.214361Z</date>
+  <millis>1736618839214</millis>
+  <nanos>361000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Usuario guardado correctamente: prueba</message>
+</record>
+<record>
+  <date>2025-01-11T18:08:01.352490Z</date>
+  <millis>1736618881352</millis>
+  <nanos>490000</nanos>
+  <sequence>2</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Usuario actualizado correctamente: prueba1</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-11T18:14:38.626859Z</date>
+  <millis>1736619278626</millis>
+  <nanos>859000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>

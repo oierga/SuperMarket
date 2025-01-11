@@ -13,8 +13,15 @@ public class Usuario {
         this.activo = activo;
     }
 
-  
+
     public Usuario(String nombreDeUsuario, String contraseña, boolean activo, TipoUsuario tipo) {
+        this.nombreDeUsuario = nombreDeUsuario;
+        this.contrasena = contraseña;
+        this.activo = activo;
+        this.tipo = tipo;
+    }
+    public Usuario(int idUsuario,String nombreDeUsuario, String contraseña, boolean activo, TipoUsuario tipo) {
+    	this.idUsuario = idUsuario;
         this.nombreDeUsuario = nombreDeUsuario;
         this.contrasena = contraseña;
         this.activo = activo;

@@ -4,12 +4,14 @@ import domain.Producto;
 import domain.TipoUsuario;
 import domain.Categoria;
 import domain.Usuario;
+import domain.Venta;
 
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -151,9 +153,11 @@ public class ServicioPersistenciaBD {
             ResultSet rs = statement.executeQuery("SELECT * FROM usuario");
             while (rs.next()) {
                 Usuario usuario = new Usuario(
+                		rs.getInt("id"),
                         rs.getString("nombreDeUsuario"),
                         rs.getString("contrasena"),
-                        rs.getBoolean("activo")
+                        rs.getBoolean("activo"),
+                        TipoUsuario.USUARIO
                 );
                 usuarios.add(usuario);
             }
@@ -372,4 +376,50 @@ public class ServicioPersistenciaBD {
 		
 		return nombresConDescuento;
 	}
+	public List<Venta> cargarVentas() {
+	    List<Venta> ventas = new ArrayList<>();
+	    String query = "SELECT idUsuario, idProducto, cantidad, fecha FROM carrito";
+
+	    try (PreparedStatement stmt = connection.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+
+	        while (rs.next()) {
+	            int idUsuario = rs.getInt("idUsuario");
+	            int idProducto = rs.getInt("idProducto");
+	            int cantidad = rs.getInt("cantidad");
+	            String fecha = rs.getString("fecha");
+
+	            Venta venta = new Venta(idUsuario, idProducto, cantidad, fecha);
+	            ventas.add(venta);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        log(Level.SEVERE, "Error al cargar las ventas de la base de datos.", e);
+	    }
+
+	    return ventas;
+	}
+	public Producto obtenerProductoPorId(int id) {
+    	conectar();
+        Producto producto = null;
+        try (Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery("SELECT * FROM producto WHERE id = "+id);
+            while (rs.next()) {
+                Categoria categoria = cargarCategoria(rs.getInt("idCategoria"));
+                producto = new Producto(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getDouble("precio"),
+                        rs.getString("rutaImagen"),
+                        categoria
+                );
+               
+            }
+            rs.close();
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al cargar todos los productos", e);
+        }
+        return producto;
+    }
 }
