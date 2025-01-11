@@ -9,6 +9,8 @@ import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -317,5 +319,25 @@ public class ServicioPersistenciaBD {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public Map<String, Double> obtenerNombresConDescuento() {
+		// TODO Auto-generated method stub
+		Map<String, Double> nombresConDescuento = new HashMap<>();
+		try(Statement stmt = connection.createStatement()){
+			
+			ResultSet rs = stmt.executeQuery("SELECT * FROM descuentos");
+			while (rs.next()) {
+				String nombre = rs.getString(1);
+				double descuento = rs.getDouble(2);
+				nombresConDescuento.put(nombre, descuento);
+			}
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return nombresConDescuento;
 	}
 }

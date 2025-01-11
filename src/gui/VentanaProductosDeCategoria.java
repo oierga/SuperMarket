@@ -288,7 +288,7 @@ public class VentanaProductosDeCategoria extends JFrame {
             item.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             item.addActionListener(e -> {
                 // Lógica para cada categoría
-                System.out.println("Categoría seleccionada: " + categoria);
+                actualizarProductosPorCategoria(categoria);
             });
             categoriasMenu.add(item);
         }
@@ -298,7 +298,7 @@ public class VentanaProductosDeCategoria extends JFrame {
 
     // Método para verificar si el ratón no está en el menú y cerrarlo
     private void verificarCierreMenu(JPopupMenu menu, JButton boton) {
-        Timer timer = new Timer(100, e -> {
+        Timer timer = new Timer(1000, e -> {
             PointerInfo pointerInfo = MouseInfo.getPointerInfo();
             if (pointerInfo != null) {
                 Point location = pointerInfo.getLocation();
@@ -316,41 +316,29 @@ public class VentanaProductosDeCategoria extends JFrame {
     }
 
 
-
     private JPanel createProductPanel(String imagePath, String productName, String productDescription, String price) {
-    	JPanel productPanel = new JPanel();
-    	JLabel productImage = new JLabel();
-    	productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS));
-        productPanel.setPreferredSize(new Dimension(200,270)); // Tamaño para mantener diseño limpio
+        JPanel productPanel = new JPanel();
+        productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS)); // Alineación vertical para los componentes
+        productPanel.setPreferredSize(new Dimension(180, 240)); // Tamaño para mantener diseño limpio
         productPanel.setBackground(Color.WHITE);
-        productPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        
-     // Tamaño deseado para las imágenes más pequeñas
+
+        // Tamaño deseado para las imágenes más pequeñas
         int imageWidth = 120;
         int imageHeight = 120;
 
         // Imagen del producto
-        
-        
-       
-            try {
-
-                // Ajustar la imagen
-                ImageIcon originalIcon = cargarImagen(imagePath, imageWidth, imageHeight);
-                Image scaledImage = originalIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
-                productImage.setIcon(new ImageIcon(scaledImage));
-
-                // Ajustar el borde y márgenes del panel del producto
-                productPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-                
-            } catch (Exception e) {
-                // Manejo de errores si la imagen no se puede cargar
-                System.out.println("Error al cargar la imagen: " + imagePath);
-                productImage.setText("Imagen no disponible");
-            }
-            productImage.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
+        JLabel productImage = new JLabel();
+        try {
+            // Ajustar la imagen
+            ImageIcon originalIcon = cargarImagen(imagePath, imageWidth, imageHeight);
+            Image scaledImage = originalIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
+            productImage.setIcon(new ImageIcon(scaledImage));
+        } catch (Exception e) {
+            // Manejo de errores si la imagen no se puede cargar
+            System.out.println("Error al cargar la imagen: " + imagePath);
+            productImage.setText("Imagen no disponible");
+        }
+        productImage.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar la imagen
 
         // Nombre del producto
         JLabel nameLabel = new JLabel(productName);
@@ -358,7 +346,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Descripción del producto
-        JLabel descriptionLabel = new JLabel("<html><p style='text-align:center;'>" + productDescription + "</p></html>");
+        JLabel descriptionLabel = new JLabel(productDescription );
         descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -367,8 +355,28 @@ public class VentanaProductosDeCategoria extends JFrame {
         priceLabel.setFont(new Font("Arial", Font.BOLD, 16));
         priceLabel.setForeground(new Color(0, 102, 204)); // Color similar al de Carrefour
         priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-     // Array de unidades
+        Map<String,Double> productosConDescuento = ServicioPersistenciaBD.getInstance().obtenerNombresConDescuento();
+        // Si el producto está en oferta, mostrar el porcentaje de descuento
+        if (productosConDescuento.containsKey(productName)) {
+            JLabel discountLabel = new JLabel(String.format("-%.0f%%", productosConDescuento.get(productName)));
+            discountLabel.setBackground(Color.RED);  // Fondo rojo
+            discountLabel.setForeground(Color.WHITE);  // Texto blanco
+            discountLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            discountLabel.setOpaque(true);  // Asegura que el fondo se vea
+            discountLabel.setPreferredSize(new Dimension(60, 25));  // Tamaño pequeño del label
+            discountLabel.setHorizontalAlignment(SwingConstants.CENTER);  // Alineación a la izquierda
+
+            // Panel para el label de descuento, alineado a la izquierda
+            JPanel discountPanel = new JPanel();
+            discountPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+            discountPanel.setBackground(Color.WHITE);
+            discountPanel.add(discountLabel);
+
+            // Añadir el panel de descuento en la parte superior izquierda del panel del producto
+            productPanel.add(discountPanel);
+        }
+
+        // Array de unidades
         String[] unidades = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
         JComboBox<String> comboUnidades = new JComboBox<>(unidades);
         comboUnidades.setSelectedIndex(0); // Seleccionar "1" como valor inicial
@@ -397,24 +405,25 @@ public class VentanaProductosDeCategoria extends JFrame {
             }
         });
 
-     // Panel para el botón y combo (para alinearlos horizontalmente)
-     JPanel buttonPanel = new JPanel();
-     buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5)); // Alineación a la izquierda con espaciado de 10px
-     buttonPanel.setBackground(null); // Eliminar cualquier color de fondo del panel
-     buttonPanel.add(comboUnidades);
-     buttonPanel.add(addButton);
+        // Panel para el botón y combo (para alinearlos horizontalmente)
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5)); // Alineación a la izquierda con espaciado de 5px
+        buttonPanel.setBackground(null); // Eliminar cualquier color de fondo del panel
+        buttonPanel.add(comboUnidades);
+        buttonPanel.add(addButton);
 
-     // Añadir componentes al panel del producto
-     productPanel.add(productImage);
-     productPanel.add(Box.createVerticalStrut(3));
-     productPanel.add(nameLabel);
-     productPanel.add(descriptionLabel);
-     productPanel.add(priceLabel);
-     productPanel.add(Box.createVerticalStrut(3));
-     productPanel.add(buttonPanel); // Añadir panel con el JComboBox y el botón
+        // Añadir componentes al panel del producto en el orden correcto
+        productPanel.add(productImage);
+        productPanel.add(Box.createVerticalStrut(3));
+        productPanel.add(nameLabel);
+        productPanel.add(descriptionLabel);
+        productPanel.add(priceLabel);
+        productPanel.add(Box.createVerticalStrut(3));
+        productPanel.add(buttonPanel); // Añadir panel con el JComboBox y el botón
 
         return productPanel;
     }
+
     private JPanel crearPanelCentral() {
         JPanel panel = new JPanel(new BorderLayout(0, 20));
         JPanel productosPanel = new JPanel();
@@ -536,7 +545,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         		if (producto.getRutaImagen().contains(imagen)) {
         			 productGridPanel.add(createProductPanel(
                              "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
-                             "Categoria: "+categoriaSeleccionada+" Producto: "+producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
+                             "Categoria: "+categoriaSeleccionada+" Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
                              String.format("%.2f €", producto.getPrecio())
                          ));
         		}   
