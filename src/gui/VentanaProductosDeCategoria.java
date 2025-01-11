@@ -24,6 +24,7 @@ import java.util.Map;
 public class VentanaProductosDeCategoria extends JFrame {
 	private static final long serialVersionUID = 1L;
     private Usuario usuario;
+    protected String categoriaSeleccionada;
     private static TipoUsuario tipoUsuario;
     private double totalCarrito;
     protected ArrayList<Producto> productosCarrito = new ArrayList<>();
@@ -38,6 +39,7 @@ public class VentanaProductosDeCategoria extends JFrame {
 	    
     public VentanaProductosDeCategoria(String categoriaSeleccionada) {
         this.usuario = ServicioPersistenciaBD.getInstance().getUsuario();
+        this.categoriaSeleccionada = categoriaSeleccionada;
     	//Configuracion ventana
         setTitle("Supermercado - Página Inicial");
         setSize(1290, 800);
@@ -50,16 +52,20 @@ public class VentanaProductosDeCategoria extends JFrame {
         //Top panel, panel del banner
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.setBackground(new Color(242, 243, 244));
-        ImageIcon bannerIcon = cargarImagen("/images/banner.png",1200,500);
+        ImageIcon bannerIcon = cargarImagen("/images/banner0.png",1200,500);
        JLabel carritoLabel = crearIcono("/images/cart.png",80,80);
         Image bannerImage = bannerIcon.getImage().getScaledInstance(1200, 130, Image.SCALE_SMOOTH);; // Obtener la imagen de la imagen cargada
         JLabel bannerLabel = new JLabel(new ImageIcon(bannerImage));
+        
         bannerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
            public void mouseClicked(java.awt.event.MouseEvent evt) {
             	hacerSocio();
             }
         });
-        JPanel bannerPanel = crearBannerConCambioDeImagen();        bannerPanel.setLayout(new FlowLayout(FlowLayout.LEADING));  // Centrar la imagen
+        
+        JPanel bannerPanel = crearBannerConCambioDeImagen(); 
+        redimensionarBanner(bannerLabel,0);
+        bannerPanel.setLayout(new FlowLayout(FlowLayout.LEADING));  // Centrar la imagen
         bannerPanel.setBackground(Color.LIGHT_GRAY);  // Color de fondo opcional
         bannerPanel.add(bannerLabel);
         bannerPanel.add(carritoLabel);
@@ -156,7 +162,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         productGridPanel.setBackground(Color.WHITE);
 
         // Añadir productos al panel
-        String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
+        String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(this.categoriaSeleccionada, new String[0]);
         ArrayList<Producto> productos = ServicioPersistenciaBD.getInstance().cargarTodosProductos();
 
         for (String imagen : productosCategoriaSeleccionada) {
@@ -165,7 +171,7 @@ public class VentanaProductosDeCategoria extends JFrame {
                     productGridPanel.add(createProductPanel(
                         "/" + producto.getRutaImagen(),
                         producto.getNombre().substring(0, 1).toUpperCase() + producto.getNombre().substring(1).replace("_", " "),
-                        "Categoría: " + categoriaSeleccionada + " | " +
+                        "Categoría: " + this.categoriaSeleccionada + " | " +
                         "Producto: " + producto.getNombre(),
                        producto.getPrecio())
                     );
@@ -202,6 +208,9 @@ public class VentanaProductosDeCategoria extends JFrame {
             @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) {
                 actualizarProductosPorCategoria("",false,textBuscar.getText());
+                if (textBuscar.getText().length()==0) {
+                	actualizarProductosPorCategoria(getCategoriaSeleccionada(),false,"");
+                }
             }
 
             @Override
@@ -238,6 +247,10 @@ public class VentanaProductosDeCategoria extends JFrame {
         add(mainPanel);
         setVisible(true);
     }
+	protected String getCategoriaSeleccionada() {
+		// TODO Auto-generated method stub
+		return this.categoriaSeleccionada;
+	}
 	private JPanel crearMenuNavegacion() {
         JPanel menuPanel = new JPanel();
        
@@ -332,6 +345,7 @@ public class VentanaProductosDeCategoria extends JFrame {
             item.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             item.addActionListener(e -> {
                 // Lógica para cada categoría
+            	categoriaSeleccionada = categoria;
                 actualizarProductosPorCategoria(categoria,false,"");
             });
             categoriasMenu.add(item);
@@ -597,7 +611,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         Map<String,Double> nombresConDescuento = ServicioPersistenciaBD.getInstance().obtenerNombresConDescuento();
         String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
         ArrayList<Producto> productos = ServicioPersistenciaBD.getInstance().cargarTodosProductos();
-        if (soloOfertas) {
+        if (soloOfertas) { //Mostrar Ofertas
             	for (Producto producto: productos) {
 
             		if (nombresConDescuento.containsKey(producto.getNombre().toLowerCase())) {
@@ -610,30 +624,33 @@ public class VentanaProductosDeCategoria extends JFrame {
             		
             	
         	}
-        }else if (!soloOfertas && productoABuscar.equals("")){
-        	for (String imagen : productosCategoriaSeleccionada) {
-            	for (Producto producto: productos) {
-            			if (producto.getRutaImagen().contains(imagen)) {
-               			 productGridPanel.add(createProductPanel(
-                                    "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
-                                    "Categoria: "+categoriaSeleccionada+" |  Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
-                                    producto.getPrecio()
-                                ));
-            			}   
-            		}
-        	}
-        }else {
-        	if (!(productoABuscar.equals(""))) {
+        
+        }else if (!(productoABuscar.equals(""))){ //Buscar producto por input
+        	
         		for (Producto producto: productos) {
         			if (producto.getNombre().contains(productoABuscar)) {
             			productGridPanel.add(createProductPanel("/"+producto.getRutaImagen(),producto.getNombre().substring(0,1).toUpperCase()
             					+producto.getNombre().substring(1),"Categoria: "+producto.getCategoria().getNombre()+" | Producto: "
             							+producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1),producto.getPrecio()));
 
-        			}
+        			
         		}
         	}
-        }
+        }else {
+            	for (String imagen : productosCategoriaSeleccionada) {
+                	for (Producto producto: productos) {
+                			if (producto.getRutaImagen().contains(imagen)) {
+                   			 productGridPanel.add(createProductPanel(
+                                        "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
+                                        "Categoria: "+categoriaSeleccionada+" |  Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
+                                        producto.getPrecio()
+                                    ));
+                			}   
+                		}
+            	}
+        	}
+        	
+        
         productGridPanel.revalidate();
         productGridPanel.repaint();
     }
@@ -768,6 +785,8 @@ public class VentanaProductosDeCategoria extends JFrame {
 	    
 	    // Crear una etiqueta para mostrar la imagen del banner
 	    JLabel bannerLabel = new JLabel();
+	    int[] imagenIndex = { 0 };  // Array para hacer el índice mutable dentro del Timer
+
 	    bannerPanel.add(bannerLabel, BorderLayout.CENTER);
 	    
 	    // Crear el ícono de carrito (este se mantendrá fijo)
@@ -776,12 +795,11 @@ public class VentanaProductosDeCategoria extends JFrame {
 	    
 	    // Array de imágenes del banner
 	    String[] imagenesBanner = {
-	        "/images/banner.png",  // Primera image  // Segunda imagen
-	        "/images/banner2.png"   // Tercera imagen
+	        "/images/banner0.png",  // Primera image  // Segunda imagen
+	        "/images/banner1.png"   // Tercera imagen
 	    };
 
 	    // Función para cambiar la imagen cada 5 segundos
-	    int[] imagenIndex = { 0 };  // Array para hacer el índice mutable dentro del Timer
 	    
 	    // Crear el Timer para cambiar la imagen cada 5 segundos
 	    Timer bannerTimer = new Timer(5000, e -> {
@@ -795,13 +813,22 @@ public class VentanaProductosDeCategoria extends JFrame {
 	        
 	        // Cambiar la imagen en el JLabel
 	        bannerLabel.setIcon(new ImageIcon(getClass().getResource(imagenesBanner[imagenIndex[0]])));
+	        redimensionarBanner(bannerLabel,imagenIndex[0]);
+
+		    addComponentListener(new java.awt.event.ComponentAdapter() {
+	            @Override
+	            public void componentResized(java.awt.event.ComponentEvent evt) {
+	                redimensionarBanner(bannerLabel,imagenIndex[0]);
+	                
+
+
+	            }
+	        });
 	    });
 	    bannerTimer.start();
 	    
 	    // Establecer el tamaño y color del fondo
 	    bannerPanel.setBackground(new Color(76, 175, 80)); // Color de fondo
-	    bannerLabel.setIcon(new ImageIcon(getClass().getResource(imagenesBanner[imagenIndex[0]]))); // Establecer la primera imagen
-
 	    // Establecer el evento para hacer algo al hacer clic en el banner
 	    bannerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 	        public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -811,5 +838,20 @@ public class VentanaProductosDeCategoria extends JFrame {
 
 	    return bannerPanel;
 	}
+	private void redimensionarBanner(JLabel bannerLabel,int index) {
+	    // Obtener el tamaño actual del JFrame
+	    int anchoVentana = getWidth();
+	    int alturaBanner = (int) (anchoVentana * 0.1); // Ajustar la altura proporcionalmente al ancho
 
+	    // Escalar la imagen del banner
+	    ImageIcon bannerIcon = new ImageIcon(VentanaSupermarket.class.getResource("/images/banner"+index+".png"));
+	    Image bannerImage = bannerIcon.getImage().getScaledInstance(anchoVentana, alturaBanner, Image.SCALE_SMOOTH);
+
+	    // Actualizar el JLabel con la imagen escalada
+	    bannerLabel.setIcon(new ImageIcon(bannerImage));
+
+	    // Refrescar el JLabel
+	    bannerLabel.revalidate();
+	    bannerLabel.repaint();
+	}
 }
