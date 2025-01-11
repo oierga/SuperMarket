@@ -328,7 +328,7 @@ public class ServicioPersistenciaBD {
 			
 			ResultSet rs = stmt.executeQuery("SELECT * FROM descuentos");
 			while (rs.next()) {
-				String nombre = rs.getString(1);
+				String nombre = rs.getString(1).toLowerCase();
 				double descuento = rs.getDouble(2);
 				nombresConDescuento.put(nombre, descuento);
 			}

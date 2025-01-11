@@ -167,8 +167,8 @@ public class VentanaProductosDeCategoria extends JFrame {
                         producto.getNombre().substring(0, 1).toUpperCase() + producto.getNombre().substring(1).replace("_", " "),
                         "Categoría: " + categoriaSeleccionada + " | " +
                         "Producto: " + producto.getNombre(),
-                        String.format("%.2f €", producto.getPrecio())
-                    ));
+                       producto.getPrecio())
+                    );
                 }
             }
         }
@@ -282,13 +282,13 @@ public class VentanaProductosDeCategoria extends JFrame {
         JPopupMenu categoriasMenu = new JPopupMenu();
 
         // Listado de categorías (puedes cargar estas categorías dinámicamente)
-        String[] categorias = {"Frutas", "Verduras", "Lacteos", "Carnes", "Bebidas", "Panaderia"};
+        String[] categorias = {"Frutas", "Verduras", "Lacteos", "Carnes", "Bebidas", "Panadería"};
         for (String categoria : categorias) {
             JMenuItem item = new JMenuItem(categoria);
             item.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             item.addActionListener(e -> {
                 // Lógica para cada categoría
-                actualizarProductosPorCategoria(categoria);
+                actualizarProductosPorCategoria(categoria,false);
             });
             categoriasMenu.add(item);
         }
@@ -316,10 +316,10 @@ public class VentanaProductosDeCategoria extends JFrame {
     }
 
 
-    private JPanel createProductPanel(String imagePath, String productName, String productDescription, String price) {
+    private JPanel createProductPanel(String imagePath, String productName, String productDescription, double price) {
         JPanel productPanel = new JPanel();
         productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS)); // Alineación vertical para los componentes
-        productPanel.setPreferredSize(new Dimension(180, 240)); // Tamaño para mantener diseño limpio
+        productPanel.setPreferredSize(new Dimension(180, 260)); // Tamaño para mantener diseño limpio
         productPanel.setBackground(Color.WHITE);
 
         // Tamaño deseado para las imágenes más pequeñas
@@ -351,31 +351,43 @@ public class VentanaProductosDeCategoria extends JFrame {
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Precio
-        JLabel priceLabel = new JLabel(price);
+        JLabel priceLabel = new JLabel(""+price+" €");
         priceLabel.setFont(new Font("Arial", Font.BOLD, 16));
         priceLabel.setForeground(new Color(0, 102, 204)); // Color similar al de Carrefour
-        priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel discountLabel = new JLabel();
+        discountLabel.setPreferredSize(new Dimension(60, 25));  // Tamaño pequeño del label
+        JPanel discountPanel = new JPanel();
+
         Map<String,Double> productosConDescuento = ServicioPersistenciaBD.getInstance().obtenerNombresConDescuento();
         // Si el producto está en oferta, mostrar el porcentaje de descuento
-        if (productosConDescuento.containsKey(productName)) {
-            JLabel discountLabel = new JLabel(String.format("-%.0f%%", productosConDescuento.get(productName)));
+        if (productosConDescuento.containsKey(productName.toLowerCase())) {
+            // Crear el label de descuento
+        	discountLabel.setText(String.format("-%.0f%%", productosConDescuento.get(productName.toLowerCase())));
             discountLabel.setBackground(Color.RED);  // Fondo rojo
-            discountLabel.setForeground(Color.WHITE);  // Texto blanco
+            discountLabel.setForeground(Color.WHITE);  // Texto rojo
             discountLabel.setFont(new Font("Arial", Font.BOLD, 12));
             discountLabel.setOpaque(true);  // Asegura que el fondo se vea
-            discountLabel.setPreferredSize(new Dimension(60, 25));  // Tamaño pequeño del label
-            discountLabel.setHorizontalAlignment(SwingConstants.CENTER);  // Alineación a la izquierda
+            discountLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+            // Calcular el precio descontado
+            double precioDescontado = price * (1 - (productosConDescuento.get(productName.toLowerCase()) * 0.01));
+            String priceText = "<html><strike>" + price + " €</strike>  " + String.format("%.2f", precioDescontado) + " € </html>";
+            priceLabel.setText(priceText);
+            priceLabel.setForeground(Color.RED);
+            priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Alineación central del precio
 
             // Panel para el label de descuento, alineado a la izquierda
-            JPanel discountPanel = new JPanel();
             discountPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-            discountPanel.setBackground(Color.WHITE);
-            discountPanel.add(discountLabel);
-
-            // Añadir el panel de descuento en la parte superior izquierda del panel del producto
-            productPanel.add(discountPanel);
         }
+        discountPanel.setBackground(Color.WHITE); 
 
+        discountPanel.add(discountLabel);
+
+        // Añadir el panel de descuento en la parte superior izquierda del panel del producto
+        productPanel.add(discountPanel);
+
+        // Ajustar el alignment del precio para que quede centrado
+        priceLabel.setHorizontalAlignment(SwingConstants.CENTER);  //
         // Array de unidades
         String[] unidades = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
         JComboBox<String> comboUnidades = new JComboBox<>(unidades);
@@ -417,6 +429,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         productPanel.add(Box.createVerticalStrut(3));
         productPanel.add(nameLabel);
         productPanel.add(descriptionLabel);
+        productPanel.add(Box.createVerticalStrut(6));
         productPanel.add(priceLabel);
         productPanel.add(Box.createVerticalStrut(3));
         productPanel.add(buttonPanel); // Añadir panel con el JComboBox y el botón
@@ -535,23 +548,38 @@ public class VentanaProductosDeCategoria extends JFrame {
         panel.setBackground(new Color(76, 175, 80));
         return panel;
     }
-    private void actualizarProductosPorCategoria(String categoriaSeleccionada) {
+    private void actualizarProductosPorCategoria(String categoriaSeleccionada,boolean soloOfertas) {
         productGridPanel.removeAll();
-
+        Map<String,Double> nombresConDescuento = ServicioPersistenciaBD.getInstance().obtenerNombresConDescuento();
         String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
         ArrayList<Producto> productos = ServicioPersistenciaBD.getInstance().cargarTodosProductos();
-        for (String imagen : productosCategoriaSeleccionada) {
-        	for (Producto producto: productos) {
-        		if (producto.getRutaImagen().contains(imagen)) {
-        			 productGridPanel.add(createProductPanel(
-                             "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
-                             "Categoria: "+categoriaSeleccionada+" Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
-                             String.format("%.2f €", producto.getPrecio())
-                         ));
-        		}   
-        	}
-        }
+        if (soloOfertas) {
+            	for (Producto producto: productos) {
+        			System.out.print("Producto: "+producto.getNombre()+" Encontrado: "+nombresConDescuento.containsKey(producto.getNombre()));
 
+            		if (nombresConDescuento.containsKey(producto.getNombre().toLowerCase())) {
+               			 productGridPanel.add(createProductPanel(
+                                    "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
+                                    "Categoria: "+producto.getCategoria().getNombre()+"| Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
+                                    producto.getPrecio()
+                                ));
+            			}   
+            		
+            	
+        	}
+        }else {
+        	for (String imagen : productosCategoriaSeleccionada) {
+            	for (Producto producto: productos) {
+            			if (producto.getRutaImagen().contains(imagen)) {
+               			 productGridPanel.add(createProductPanel(
+                                    "/"+producto.getRutaImagen(), producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1,producto.getNombre().length()).replace("_", " "),
+                                    "Categoria: "+categoriaSeleccionada+" Producto: "+(producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1)).replace("_", " "),
+                                    producto.getPrecio()
+                                ));
+            			}   
+            		}
+        }
+        }
         productGridPanel.revalidate();
         productGridPanel.repaint();
     }
@@ -666,16 +694,15 @@ public class VentanaProductosDeCategoria extends JFrame {
            return null;
        }
    }
-   private void mostrarCategorias() {
-	    JOptionPane.showMessageDialog(this, "Navegando a Categorías...");
-	}
 
 	private void mostrarZonaSocios() {
 	    JOptionPane.showMessageDialog(this, "Accediendo a la Zona de Socios...");
+	    new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario());
 	}
 
 	private void mostrarOfertas() {
 	    JOptionPane.showMessageDialog(this, "Mostrando Ofertas...");
+	    actualizarProductosPorCategoria("",true);
 	}
 
 	private void mostrarPerfil() {
