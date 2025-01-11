@@ -5,6 +5,9 @@ import domain.TipoUsuario;
 import domain.Usuario;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+
+import db.ServicioPersistenciaBD;
+
 import java.awt.*;
 
 public class VentanaUsuario extends JFrame {
@@ -119,10 +122,12 @@ public class VentanaUsuario extends JFrame {
         
         JButton btnGuardar = createStyledButton("Guardar");
         btnGuardar.addActionListener(e -> {
+        	String nombre = usuario.getNombreDeUsuario();
             usuario.setNombreDeUsuario(campoNombreUsuario.getText().trim());
             usuario.setContrasena(new String(campoContrasena.getPassword()));
             usuario.setActivo(checkActivo.isSelected());
             usuario.setTipo(tipoUsuario);
+            ServicioPersistenciaBD.getInstance().actualizarUsuario(nombre,usuario);
             JOptionPane.showMessageDialog(this, "Cambios guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         });

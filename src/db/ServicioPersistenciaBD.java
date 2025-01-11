@@ -252,7 +252,39 @@ public class ServicioPersistenciaBD {
         }
         return null;
     }
+    public void actualizarUsuario(String nombre,Usuario usuario) {
+        String sql = "UPDATE usuario SET nombreDeUsuario = ?, contrasena = ?, activo = ? WHERE nombreDeUsuario = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Establecer los valores para la actualización
+            stmt.setString(1, usuario.getNombreDeUsuario());
+            stmt.setString(2, usuario.getContrasena());
+            stmt.setBoolean(3, usuario.getActivo());
+            stmt.setString(4, nombre); // Suponiendo que el nombre anterior es la clave para buscar
 
+            int filasActualizadas = stmt.executeUpdate();
+            if (filasActualizadas > 0) {
+                log(Level.INFO, "Usuario actualizado correctamente: " + usuario.getNombreDeUsuario(), null);
+            } else {
+                log(Level.WARNING, "No se encontró el usuario para actualizar: " + usuario.getNombreDeUsuario(), null);
+            }
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al actualizar usuario: " + usuario.getNombreDeUsuario(), e);
+        }
+    }
+
+    public void eliminarUsuario(Usuario usuario) {
+        try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM usuario (nombreDeUsuario, contrasena, activo) VALUES (?, ?, ?)")) {
+            stmt.setString(1, usuario.getNombreDeUsuario());
+            stmt.setString(2, usuario.getContrasena());
+            stmt.setBoolean(3, usuario.getActivo());
+            stmt.executeUpdate();
+            log(Level.INFO, "Usuario eliminado correctamente: " + usuario.getNombreDeUsuario(), null);
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al eliminar usuario: " + usuario.getNombreDeUsuario(), e);
+        }
+    }
     // Método para guardar un usuario en la base de datos
     public void guardarUsuario(Usuario usuario) {
         try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO usuario (nombreDeUsuario, contrasena, activo) VALUES (?, ?, ?)")) {
