@@ -40,7 +40,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         this.usuario = ServicioPersistenciaBD.getInstance().getUsuario();
     	//Configuracion ventana
         setTitle("Supermercado - Página Inicial");
-        setSize(1000, 800);
+        setSize(1290, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
        
@@ -59,74 +59,24 @@ public class VentanaProductosDeCategoria extends JFrame {
             	hacerSocio();
             }
         });
-        JPanel bannerPanel = new JPanel();
-        bannerPanel.setLayout(new FlowLayout(FlowLayout.LEADING));  // Centrar la imagen
+        JPanel bannerPanel = crearBannerConCambioDeImagen();        bannerPanel.setLayout(new FlowLayout(FlowLayout.LEADING));  // Centrar la imagen
         bannerPanel.setBackground(Color.LIGHT_GRAY);  // Color de fondo opcional
         bannerPanel.add(bannerLabel);
         bannerPanel.add(carritoLabel);
         bannerPanel.setBackground(new Color(76, 175, 80));
        
-       //Panel botones navegacion
-        JButton verTodoButton = new JButton("Ver todos los productos");
-        JButton verDestacadosButton = new JButton("Ver productos destacados");
-        JPanel panelBotonesNavegacion = new JPanel(new BorderLayout());
-        JLabel labelProductos = new JLabel();
-        verDestacadosButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				labelProductos.setText("Productos Destacados");
-			}
-        	
-        });
-        verTodoButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				labelProductos.setText("Todos los productos");
-				
-			}
-        	
-        });
-        JLabel categoria = new JLabel("Categoría: ");
-        String[] categorias = {"Seleccionar","Frutas", "Verduras", "Lacteos", "Bebidas", "Carnes"};
-        JComboBox<String> comboBox = new JComboBox<>(categorias);
         
-        labelProductos.setFont(new Font("Arial", Font.BOLD, 16));
-        JPanel panelBotones = new JPanel();
-        JButton botonCarrito = new JButton("Ver Carrito");
-        botonCarrito.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				abrirVentanaCarrito();
-			}
-        	
-        });
-        panelBotones.setBackground(new Color(76, 175, 80));
-        panelBotones.add(categoria);
-        panelBotones.add(comboBox);
-        panelBotones.add(carritoLabel);
-        comboBox.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String categoriaSeleccionada = (String) comboBox.getSelectedItem();
-		        if (!"Seleccionar".equals(categoriaSeleccionada)) {
-		            actualizarProductosPorCategoria(categoriaSeleccionada);
-		        }
-			}
-        	
-        });
-        panelBotones.add(verDestacadosButton);
-        panelBotones.add(verTodoButton);
-        panelBotones.add(botonCarrito);
-        panelBotonesNavegacion.add(labelProductos,BorderLayout.WEST);
-        panelBotonesNavegacion.add(panelBotones, BorderLayout.CENTER);
+        // Llamamos a la nueva función para crear el banner con imágenes cambiantes
        
-        panelBotonesNavegacion.setBackground(new Color(76, 175, 80));
+        topPanel.add(bannerPanel);
+
+        // Añadir topPanel al contenedor principal
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+
+       //Panel botones navegacion
+        
+       
       
      // Panel para los iconos
         JPanel panelIconos = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -170,8 +120,15 @@ public class VentanaProductosDeCategoria extends JFrame {
         
         JPanel auxPanel = new JPanel(new BorderLayout());
         auxPanel.setBackground(new Color(76, 175, 80));
+        JPanel espacioVerde = new JPanel();
+        espacioVerde.setBackground(new Color(76, 175, 80)); // Color verde, igual que el fondo del menú
+        espacioVerde.setPreferredSize(new Dimension(1000, 30));
         auxPanel.add(bannerPanel,BorderLayout.NORTH);
-        auxPanel.add(panelBotonesNavegacion, BorderLayout.SOUTH);
+        JPanel espacioVerdeBanner = new JPanel();
+        espacioVerdeBanner.setBackground(new Color(76, 175, 80)); 
+        espacioVerdeBanner.setPreferredSize(new Dimension(1000, 30));
+        auxPanel.add(espacioVerdeBanner, BorderLayout.CENTER);
+
        
      // Panel de productos con scroll
 
@@ -193,7 +150,9 @@ public class VentanaProductosDeCategoria extends JFrame {
         
      // Panel de productos con FlowLayout (4 productos por fila)
         productGridPanel = new JPanel();
-        productGridPanel.setLayout(new GridLayout(0, 3, 15, 15)); // 3 columnas, filas dinámicas, espaciado de 15px
+        productGridPanel.setLayout(new GridLayout(0, 3, 15, 15));
+        productGridPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
+// 3 columnas, filas dinámicas, espaciado de 15px
         productGridPanel.setBackground(Color.WHITE);
 
         // Añadir productos al panel
@@ -220,9 +179,14 @@ public class VentanaProductosDeCategoria extends JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
+     // Crear el panel del menú
+        JPanel menuPanel = crearMenuNavegacion();
 
+        // Incorporar el menú debajo del banner
+        auxPanel.add(menuPanel, BorderLayout.CENTER); // Añadir el menú al área debajo del banner
         crearMenu();
-      
+     // Añadir un panel vacío o espacio verde adicional debajo del menú
+        auxPanel.add(espacioVerde, BorderLayout.SOUTH); // Agregar debajo del menú
         mainPanel.add(crearPanelCentral(), BorderLayout.CENTER);
         mainPanel.add(crearPanelContacto(), BorderLayout.SOUTH);
         mainPanel.add(auxPanel, BorderLayout.NORTH);
@@ -230,7 +194,129 @@ public class VentanaProductosDeCategoria extends JFrame {
 
         add(mainPanel);
         setVisible(true);
+    }private JPanel crearMenuNavegacion() {
+        JPanel menuPanel = new JPanel();
+       
+        menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10)); // Centrado con espacios
+        menuPanel.setBackground(new Color(76, 175, 80)); // Fondo color primario
+
+        // Opciones del menú con íconos
+        String[][] opcionesMenu = {
+            {"Categorías", "/images/categorias.png"},
+            {"Ofertas", "/images/ofertas.png"},
+            {"Carrito", "/images/carrito.png"},
+            {"Zona socios", "/images/socios.png"},
+            {"Mi cuenta", "/images/cuenta.png"}
+        };
+
+        for (String[] opcion : opcionesMenu) {
+            String texto = opcion[0];
+            String rutaIcono = opcion[1];
+
+            // Crear un botón estilizado
+            JButton boton = new JButton(texto);
+            boton.setFocusPainted(false);
+            boton.setContentAreaFilled(true);
+            boton.setOpaque(true);
+            boton.setBackground(new Color(76, 175, 80)); // Color verde
+            boton.setForeground(Color.WHITE); // Texto blanco
+            boton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            boton.setHorizontalTextPosition(SwingConstants.CENTER);
+            boton.setVerticalTextPosition(SwingConstants.BOTTOM);
+            boton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 2),
+                BorderFactory.createEmptyBorder(10, 15, 10, 15)
+            ));
+
+            // Añadir interactividad al botón
+            boton.addMouseListener(new java.awt.event.MouseAdapter() {
+                private JPopupMenu categoriasMenu;
+
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    boton.setBackground(new Color(56, 142, 60));
+                    if ("Categorías".equals(texto)) {
+                        if (categoriasMenu == null) {
+                            categoriasMenu = crearMenuCategorias(boton);
+                        }
+                        categoriasMenu.show(boton, 0, boton.getHeight());
+                    }
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    boton.setBackground(new Color(76, 175, 80));
+                    if (categoriasMenu != null) {
+                        verificarCierreMenu(categoriasMenu, boton);
+                    }
+                }
+            });
+
+            // Añadir acción según la opción
+            boton.addActionListener(e -> {
+                switch (texto) {
+                    case "Ofertas":
+                        mostrarOfertas();
+                        break;
+                    case "Carrito":
+                        abrirVentanaCarrito();
+                        break;
+                    case "Zona socios":
+                        mostrarZonaSocios();
+                        break;
+                    case "Mi cuenta":
+                        mostrarPerfil();
+                        break;
+                }
+            });
+
+            // Agregar botón al panel del menú
+            menuPanel.add(boton);
+        }
+
+        return menuPanel;
     }
+
+    // Método para crear el menú de categorías
+    private JPopupMenu crearMenuCategorias(JButton boton) {
+        JPopupMenu categoriasMenu = new JPopupMenu();
+
+        // Listado de categorías (puedes cargar estas categorías dinámicamente)
+        String[] categorias = {"Frutas", "Verduras", "Lacteos", "Carnes", "Bebidas", "Panaderia"};
+        for (String categoria : categorias) {
+            JMenuItem item = new JMenuItem(categoria);
+            item.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            item.addActionListener(e -> {
+                // Lógica para cada categoría
+                System.out.println("Categoría seleccionada: " + categoria);
+            });
+            categoriasMenu.add(item);
+        }
+
+        return categoriasMenu;
+    }
+
+    // Método para verificar si el ratón no está en el menú y cerrarlo
+    private void verificarCierreMenu(JPopupMenu menu, JButton boton) {
+        Timer timer = new Timer(100, e -> {
+            PointerInfo pointerInfo = MouseInfo.getPointerInfo();
+            if (pointerInfo != null) {
+                Point location = pointerInfo.getLocation();
+                SwingUtilities.convertPointFromScreen(location, boton);
+
+                // Cerrar el menú si el ratón no está sobre el botón ni sobre el menú
+                if (!boton.getBounds().contains(location) && !menu.getBounds().contains(location)) {
+                    menu.setVisible(false);
+                    ((Timer) e.getSource()).stop();
+                }
+            }
+        });
+        timer.setRepeats(true);
+        timer.start();
+    }
+
+
+
     private JPanel createProductPanel(String imagePath, String productName, String productDescription, String price) {
     	JPanel productPanel = new JPanel();
     	JLabel productImage = new JLabel();
@@ -267,7 +353,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         
 
         // Nombre del producto
-        JLabel nameLabel = new JLabel(productName.substring(0,1).toUpperCase()+productName.substring(1,productName.length()));
+        JLabel nameLabel = new JLabel(productName);
         nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -334,7 +420,9 @@ public class VentanaProductosDeCategoria extends JFrame {
         JPanel productosPanel = new JPanel();
         JButton verDestacadosButton = new JButton("Productos destacados");
         JButton verTodosButton = new JButton("Ver todos los productos");
+        
         productosPanel.setBackground(new Color(76, 175, 80));
+        
         productosPanel.add(verTodosButton);
         productosPanel.add(verDestacadosButton);
         panel.add(productosPanel, BorderLayout.NORTH);
@@ -569,4 +657,70 @@ public class VentanaProductosDeCategoria extends JFrame {
            return null;
        }
    }
+   private void mostrarCategorias() {
+	    JOptionPane.showMessageDialog(this, "Navegando a Categorías...");
+	}
+
+	private void mostrarZonaSocios() {
+	    JOptionPane.showMessageDialog(this, "Accediendo a la Zona de Socios...");
+	}
+
+	private void mostrarOfertas() {
+	    JOptionPane.showMessageDialog(this, "Mostrando Ofertas...");
+	}
+
+	private void mostrarPerfil() {
+	    JOptionPane.showMessageDialog(this, "Mostrando Mi Cuenta...");
+	}
+	// Función para crear el banner con cambio de imagen cada 5 segundos
+	private JPanel crearBannerConCambioDeImagen() {
+	    JPanel bannerPanel = new JPanel();
+	    bannerPanel.setLayout(new BorderLayout());
+	    
+	    // Crear una etiqueta para mostrar la imagen del banner
+	    JLabel bannerLabel = new JLabel();
+	    bannerPanel.add(bannerLabel, BorderLayout.CENTER);
+	    
+	    // Crear el ícono de carrito (este se mantendrá fijo)
+	    JLabel carritoLabel = crearIcono("/images/cart.png", 80, 80);
+	    bannerPanel.add(carritoLabel, BorderLayout.EAST);
+	    
+	    // Array de imágenes del banner
+	    String[] imagenesBanner = {
+	        "/images/banner.png",  // Primera image  // Segunda imagen
+	        "/images/banner2.png"   // Tercera imagen
+	    };
+
+	    // Función para cambiar la imagen cada 5 segundos
+	    int[] imagenIndex = { 0 };  // Array para hacer el índice mutable dentro del Timer
+	    
+	    // Crear el Timer para cambiar la imagen cada 5 segundos
+	    Timer bannerTimer = new Timer(5000, e -> {
+	        // Cambiar la imagen del banner
+	        imagenIndex[0]++;
+	        
+	        // Si el índice supera el tamaño del array, volver al inicio
+	        if (imagenIndex[0] >= imagenesBanner.length) {
+	            imagenIndex[0] = 0;
+	        }
+	        
+	        // Cambiar la imagen en el JLabel
+	        bannerLabel.setIcon(new ImageIcon(getClass().getResource(imagenesBanner[imagenIndex[0]])));
+	    });
+	    bannerTimer.start();
+	    
+	    // Establecer el tamaño y color del fondo
+	    bannerPanel.setBackground(new Color(76, 175, 80)); // Color de fondo
+	    bannerLabel.setIcon(new ImageIcon(getClass().getResource(imagenesBanner[imagenIndex[0]]))); // Establecer la primera imagen
+
+	    // Establecer el evento para hacer algo al hacer clic en el banner
+	    bannerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+	        public void mouseClicked(java.awt.event.MouseEvent evt) {
+	            hacerSocio();
+	        }
+	    });
+
+	    return bannerPanel;
+	}
+
 }

@@ -21,7 +21,7 @@ public class VentanaCategorias extends JFrame {
     public VentanaCategorias() {
         this.usuario = ServicioPersistenciaBD.getInstance().getUsuario();
         setTitle("Categorías");
-        setSize(1000, 800);
+        setSize(1290, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 

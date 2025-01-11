@@ -15,7 +15,7 @@ import db.ServicioPersistenciaBD;
 public class Main {
 	public static ServicioPersistenciaBD servicioPersistenciaBD;
     public static void main(String[] args) {
-    	
+    
     	/*
     	String nombrePersistencia = "supermarket.db";
         String configPersistencia = "resources/";
