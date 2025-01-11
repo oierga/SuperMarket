@@ -186,7 +186,50 @@ public class VentanaProductosDeCategoria extends JFrame {
         auxPanel.add(menuPanel, BorderLayout.CENTER); // Añadir el menú al área debajo del banner
         crearMenu();
      // Añadir un panel vacío o espacio verde adicional debajo del menú
-        auxPanel.add(espacioVerde, BorderLayout.SOUTH); // Agregar debajo del menú
+     // Panel para la barra de búsqueda
+        JPanel barraBusquedaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        barraBusquedaPanel.setBackground(new Color(76, 175, 80)); // Color de fondo, igual que el resto del diseño
+
+        
+        JTextField textBuscar = new JTextField();
+        textBuscar.setPreferredSize(new Dimension(300, 30));
+        textBuscar.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                actualizarProductosPorCategoria("",false,textBuscar.getText());
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                actualizarProductosPorCategoria("",false,textBuscar.getText());
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                actualizarProductosPorCategoria("",false,textBuscar.getText());
+            }
+        });
+
+        JButton botonBuscar = new JButton("Buscar");
+        botonBuscar.setPreferredSize(new Dimension(100, 30)); // Ajusta el tamaño del botón
+        botonBuscar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				actualizarProductosPorCategoria("",false,textBuscar.getText().toLowerCase());
+			}
+        	
+        });
+        // Añadir componentes al panel
+        barraBusquedaPanel.add(textBuscar,FlowLayout.LEFT);
+        barraBusquedaPanel.add(botonBuscar);
+        barraBusquedaPanel.setBackground(colorPrimario.darker());
+        // Añadir la barra de búsqueda al panel principal
+        auxPanel.add(barraBusquedaPanel, BorderLayout.SOUTH);
+
+       
+
         mainPanel.add(crearPanelCentral(), BorderLayout.CENTER);
         mainPanel.add(crearPanelContacto(), BorderLayout.SOUTH);
         mainPanel.add(auxPanel, BorderLayout.NORTH);
@@ -194,7 +237,8 @@ public class VentanaProductosDeCategoria extends JFrame {
 
         add(mainPanel);
         setVisible(true);
-    }private JPanel crearMenuNavegacion() {
+    }
+	private JPanel crearMenuNavegacion() {
         JPanel menuPanel = new JPanel();
        
         menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10)); // Centrado con espacios
@@ -288,7 +332,7 @@ public class VentanaProductosDeCategoria extends JFrame {
             item.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             item.addActionListener(e -> {
                 // Lógica para cada categoría
-                actualizarProductosPorCategoria(categoria,false);
+                actualizarProductosPorCategoria(categoria,false,"");
             });
             categoriasMenu.add(item);
         }
@@ -548,7 +592,7 @@ public class VentanaProductosDeCategoria extends JFrame {
         panel.setBackground(new Color(76, 175, 80));
         return panel;
     }
-    private void actualizarProductosPorCategoria(String categoriaSeleccionada,boolean soloOfertas) {
+    private void actualizarProductosPorCategoria(String categoriaSeleccionada,boolean soloOfertas,String productoABuscar) {
         productGridPanel.removeAll();
         Map<String,Double> nombresConDescuento = ServicioPersistenciaBD.getInstance().obtenerNombresConDescuento();
         String[] productosCategoriaSeleccionada = productosPorCategoria.getOrDefault(categoriaSeleccionada, new String[0]);
@@ -566,7 +610,7 @@ public class VentanaProductosDeCategoria extends JFrame {
             		
             	
         	}
-        }else {
+        }else if (!soloOfertas && productoABuscar.equals("")){
         	for (String imagen : productosCategoriaSeleccionada) {
             	for (Producto producto: productos) {
             			if (producto.getRutaImagen().contains(imagen)) {
@@ -577,7 +621,18 @@ public class VentanaProductosDeCategoria extends JFrame {
                                 ));
             			}   
             		}
-        }
+        	}
+        }else {
+        	if (!(productoABuscar.equals(""))) {
+        		for (Producto producto: productos) {
+        			if (producto.getNombre().contains(productoABuscar)) {
+            			productGridPanel.add(createProductPanel("/"+producto.getRutaImagen(),producto.getNombre().substring(0,1).toUpperCase()
+            					+producto.getNombre().substring(1),"Categoria: "+producto.getCategoria().getNombre()+" | Producto: "
+            							+producto.getNombre().substring(0,1).toUpperCase()+producto.getNombre().substring(1),producto.getPrecio()));
+
+        			}
+        		}
+        	}
         }
         productGridPanel.revalidate();
         productGridPanel.repaint();
@@ -700,7 +755,7 @@ public class VentanaProductosDeCategoria extends JFrame {
 	}
 
 	private void mostrarOfertas() {
-	    actualizarProductosPorCategoria("",true);
+	    actualizarProductosPorCategoria("",true,"");
 	}
 
 	private void mostrarPerfil() {
