@@ -65,4 +65,18 @@ public class CarritoCompras {
              System.out.print(producto.getNombre()+": "+producto.getPrecio());
          }
     }
+    
+    public double calcularTotalRecursivo() {
+        return calcularTotal(new ArrayList<>(productos.entrySet()), 0);
+    }
+
+    private double calcularTotal(List<Map.Entry<Producto, Integer>> items, int index) {
+        if (index >= items.size()) {
+            return 0;
+        }
+        Map.Entry<Producto, Integer> item = items.get(index);
+        double subtotal = item.getKey().getPrecio() * item.getValue(); 
+        return subtotal + calcularTotal(items, index + 1); 
+    }
+
 }

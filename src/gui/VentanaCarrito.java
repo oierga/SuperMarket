@@ -60,7 +60,7 @@ public class VentanaCarrito extends JFrame {
         JPanel panelInferior = new JPanel(new BorderLayout());
         panelInferior.setBackground(COLOR_FONDO);
         
-        labelTotal = new JLabel("Total: "+CarritoCompras.getInstance().getTotal()+" €");
+        labelTotal = new JLabel("Total: "+CarritoCompras.getInstance().calcularTotalRecursivo()+" €");
         labelTotal.setFont(new Font("Arial", Font.BOLD, 18));
         labelTotal.setForeground(COLOR_PRINCIPAL);
         labelTotal.setHorizontalAlignment(SwingConstants.CENTER);
@@ -96,9 +96,9 @@ public class VentanaCarrito extends JFrame {
 
         JButton btnVaciar = createStyledButton("Vaciar Carrito");
         btnVaciar.addActionListener(e -> {
-            carrito.vaciarCarrito();
-            actualizarListaProductos();
-            labelTotal.setText("Total: €0.00");
+        	carrito.vaciarCarrito();     
+            actualizarListaProductos();  
+            actualizarTotal();   
         });
         
 
@@ -206,9 +206,11 @@ public class VentanaCarrito extends JFrame {
         String cuponIngresado = campoCupon.getText().trim();
         
         if (cuponIngresado.equals("ABC123")) {
-            descuentoAplicado = carrito.getTotal() * 0.06;  
-            labelDescuento.setText("Descuento: €" + String.format("%.2f", descuentoAplicado));
-            recalcularDescuento();        } else {
+        	descuentoAplicado = carrito.calcularTotalRecursivo() * 0.06;
+        	labelDescuento.setText("Descuento: €" + String.format("%.2f", descuentoAplicado));
+        	recalcularDescuento();
+        	actualizarTotal(); 
+     } else {
             JOptionPane.showMessageDialog(this, 
                 "Código de descuento inválido", 
                 "Error", 
@@ -219,7 +221,8 @@ public class VentanaCarrito extends JFrame {
     public void agregarProductoAlCarrito(Producto producto, int cantidad) {
        
         actualizarListaProductos();
-        labelTotal.setText("Total: " + carrito.getTotalFormateado());
+        actualizarTotal(); 
+
     }
 
     void actualizarListaProductos() {
@@ -266,9 +269,10 @@ public class VentanaCarrito extends JFrame {
             JButton btnEliminar = createStyledButton("Eliminar");
             btnEliminar.addActionListener(e -> {
                 CarritoCompras.getInstance().removerProducto(producto);
-                actualizarListaProductos();  // Volver a actualizar la lista
-                recalcularDescuento();
+                actualizarListaProductos();
+                actualizarTotal();          
             });
+
 
             // Añadir los componentes al panel del producto
             JPanel productPanel = new JPanel();
@@ -301,7 +305,8 @@ public class VentanaCarrito extends JFrame {
     }
 
     public void recalcularDescuento() {
-        double totalSinDescuento = CarritoCompras.getInstance().getTotal();
+    	double totalSinDescuento = CarritoCompras.getInstance().calcularTotalRecursivo();
+
         
         if (descuentoAplicado > 0) {
             descuentoAplicado = totalSinDescuento * 0.06; 
@@ -339,6 +344,13 @@ public class VentanaCarrito extends JFrame {
 	public static void setInstance(VentanaCarrito instance) {
 		VentanaCarrito.instance = instance;
 	}
+	
+	public void actualizarTotal() {
+	    CarritoCompras carrito = CarritoCompras.getInstance(); 
+	    double total = carrito.calcularTotalRecursivo(); 
+	    labelTotal.setText("Total: " + String.format("%.2f", total) + " €"); 
+	}
+
 
 	
 }
