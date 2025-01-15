@@ -40,15 +40,6 @@ public class CarritoCompras {
     public void vaciarCarrito() {
         productos.clear();
     }
-    public double getTotal2() {
-        double total = 0.0;
-        for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
-            Producto producto = entry.getKey();
-            int cantidad = entry.getValue();
-            total += producto.getPrecio() * cantidad;
-        }
-        return total;
-    }
 
 
     public double getTotal() {
@@ -56,9 +47,11 @@ public class CarritoCompras {
             .mapToDouble(e -> e.getKey().getPrecio() * e.getValue())
             .sum();
     }
+    
     public String getTotalFormateado() {
-        return String.format("€%.2f", getTotal());
+        return String.format("€%.2f", calcularTotalRecursivo());
     }
+
     public void mostrarCarrito() {
     	 for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
              Producto producto = entry.getKey();
