@@ -57,7 +57,8 @@ public class VentanaHistorial extends JFrame {
         for (int i = 0; i < ventasDeUsuario.size(); i++) {
             Venta venta = ventasDeUsuario.get(i);
             data[i][0] = venta.getIdUsuario();
-            data[i][1] = venta.getIdProducto();
+            data[i][1] = ServicioPersistenciaBD.getInstance().obtenerProductoPorId(venta.getIdProducto()).getNombre().substring(0,1).toUpperCase()
+            		+ServicioPersistenciaBD.getInstance().obtenerProductoPorId(venta.getIdProducto()).getNombre().substring(1);
             data[i][2] = venta.getCantidad();
             data[i][3] = venta.getFecha();
             data[i][4] = ServicioPersistenciaBD.getInstance().obtenerProductoPorId(venta.getIdProducto()).getPrecio()+" €";
