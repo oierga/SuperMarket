@@ -130,13 +130,14 @@ public class VentanaCarrito extends JFrame {
                     "¡Compra realizada con éxito!",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
-                actualizarListaProductos();
                 Map<Producto,Integer> productosCarrito = CarritoCompras.getInstance().getProductos();
                 for (Map.Entry<Producto, Integer> entry: productosCarrito.entrySet()) {
 
                 	ServicioPersistenciaBD.getInstance().guardarVenta(ServicioPersistenciaBD.getInstance().getUsuario().getIdUsuario(),entry.getKey().getIdProducto(),entry.getValue(),""+LocalDate.now()+LocalTime.now());
                 }
                 carrito.vaciarCarrito();
+                actualizarListaProductos();
+                actualizarTotal();
                 dispose();
                 new VentanaSupermarket().setVisible(true);                
             }
@@ -204,17 +205,16 @@ public class VentanaCarrito extends JFrame {
     
     private void aplicarCupon() {
         String cuponIngresado = campoCupon.getText().trim();
+        String codigoValido = VentanaSocio.getCodigoDescuento();
         
-        if (cuponIngresado.equals("ABC123")) {
-        	descuentoAplicado = carrito.calcularTotalRecursivo() * 0.06;
-        	labelDescuento.setText("Descuento: €" + String.format("%.2f", descuentoAplicado));
-        	recalcularDescuento();
-        	actualizarTotal(); 
-     } else {
-            JOptionPane.showMessageDialog(this, 
-                "Código de descuento inválido", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+        if (cuponIngresado.equals(codigoValido)) {
+            descuentoAplicado = carrito.calcularTotalRecursivo() * 0.06; 
+            labelDescuento.setText("Descuento: €" + String.format("%.2f", descuentoAplicado));
+            recalcularDescuento();
+            actualizarTotal();
+            JOptionPane.showMessageDialog(this, "¡Código aplicado con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Código de descuento inválido", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -347,7 +347,7 @@ public class VentanaCarrito extends JFrame {
 	
 	public void actualizarTotal() {
 	    CarritoCompras carrito = CarritoCompras.getInstance(); 
-	    double total = carrito.calcularTotalRecursivo(); 
+	    double total = carrito.calcularTotalRecursivo() - descuentoAplicado; 
 	    labelTotal.setText("Total: " + String.format("%.2f", total) + " €"); 
 	}
 

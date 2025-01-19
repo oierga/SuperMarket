@@ -15,6 +15,8 @@ public class VentanaSocio extends JFrame {
     private static final Color COLOR_PRINCIPAL = new Color(70, 130, 180); // Azul acero
     private static final Color COLOR_SECUNDARIO = new Color(176, 196, 222); // Azul claro
     private static final Color COLOR_FONDO = new Color(245, 245, 245); // Fondo gris claro
+    private static String codigoDescuento;
+
 
     private Usuario socio;
 
@@ -92,13 +94,12 @@ public class VentanaSocio extends JFrame {
         panelCentral.add(new JLabel("Cupones Disponibles:"), gbc);
 
         gbc.gridx = 1;
-        JTextArea areaCupones = new JTextArea(5, 20);
-        areaCupones.setText(String.join("\n", generarCupon(),generarCupon(),generarCupon())); // Asumiendo que socio.getCupones() devuelve una lista de Strings
-        areaCupones.setFont(new Font("Arial", Font.PLAIN, 14));
-        areaCupones.setBorder(BorderFactory.createLineBorder(COLOR_PRINCIPAL));
-        areaCupones.setEditable(false);
-        panelCentral.add(new JScrollPane(areaCupones), gbc);
-
+        JTextField textFieldCupon = new JTextField(getCodigoDescuento());
+        textFieldCupon.setFont(new Font("Arial", Font.PLAIN, 14));
+        textFieldCupon.setBorder(BorderFactory.createLineBorder(COLOR_PRINCIPAL));
+        textFieldCupon.setHorizontalAlignment(SwingConstants.CENTER);
+        panelCentral.add(textFieldCupon, gbc);
+        textFieldCupon.setEditable(false);
         mainPanel.add(panelCentral, BorderLayout.CENTER);
 
         // Sección inferior: Botones
@@ -155,7 +156,7 @@ public class VentanaSocio extends JFrame {
 
         return button;
     }
-    private String generarCupon() {
+    private static String generarCupon() {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
         StringBuilder cupon = new StringBuilder();
@@ -164,6 +165,13 @@ public class VentanaSocio extends JFrame {
         }
         return cupon.toString();
     }
+    public static String getCodigoDescuento() {
+        if (codigoDescuento == null) {
+            codigoDescuento = generarCupon();
+        }
+        return codigoDescuento;
+    }
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
