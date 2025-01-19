@@ -12,9 +12,11 @@ import java.util.Random;
 
 public class VentanaSocio extends JFrame {
 
-    private static final Color COLOR_PRINCIPAL = new Color(70, 130, 180); // Azul acero
-    private static final Color COLOR_SECUNDARIO = new Color(176, 196, 222); // Azul claro
-    private static final Color COLOR_FONDO = new Color(245, 245, 245); // Fondo gris claro
+	private static final Color COLOR_PRINCIPAL = new Color(34, 139, 34); 
+    private static final Color COLOR_SECUNDARIO = new Color(144, 238, 144); 
+    private static final Color COLOR_FONDO = new Color(255, 250, 240); 
+    private static final Font FUENTE_TITULO = new Font("Arial", Font.BOLD, 22);
+    private static final Font FUENTE_NORMAL = new Font("Arial", Font.PLAIN, 14);
     private static String codigoDescuento;
 
 
@@ -32,16 +34,20 @@ public class VentanaSocio extends JFrame {
         mainPanel.setBackground(COLOR_FONDO);
 
         // Sección superior: Título
-        JLabel titulo = new JLabel("Perfil de Socio", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+        JPanel panelSuperior = new JPanel(new BorderLayout());
+        panelSuperior.setBackground(COLOR_FONDO);
+        
+        JLabel titulo = new JLabel("¡Bienvenido, " + socio.getNombreDeUsuario() + "!", SwingConstants.CENTER);
+        titulo.setFont(FUENTE_TITULO);
         titulo.setForeground(COLOR_PRINCIPAL);
-        mainPanel.add(titulo, BorderLayout.NORTH);
+        panelSuperior.add(titulo, BorderLayout.CENTER);
+        mainPanel.add(panelSuperior, BorderLayout.NORTH);
 
         // Sección central: Información del socio
         JPanel panelCentral = new JPanel(new GridBagLayout());
         panelCentral.setBackground(COLOR_FONDO);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Nombre del Socio
@@ -51,24 +57,14 @@ public class VentanaSocio extends JFrame {
 
         gbc.gridx = 1;
         JTextField campoNombre = new JTextField(socio.getNombreDeUsuario(), 15);
-        campoNombre.setFont(new Font("Arial", Font.PLAIN, 14));
-        campoNombre.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(COLOR_PRINCIPAL),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        configurarCampoTexto(campoNombre);
         campoNombre.setEditable(false);
-        campoNombre.setEnabled(false);
         panelCentral.add(campoNombre, gbc);
-
-        // ID de Socio
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-
-        gbc.gridx = 1;
        
 
         // Membresía Activa
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         panelCentral.add(new JLabel("Membresía Activa:"), gbc);
 
         gbc.gridx = 1;
@@ -79,27 +75,34 @@ public class VentanaSocio extends JFrame {
 
         // Tipo de Membresía
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         panelCentral.add(new JLabel("Tipo de Membresía:"), gbc);
 
         gbc.gridx = 1;
         JLabel tipoMembresia = new JLabel(socio.getTipo().toString());
-        tipoMembresia.setFont(new Font("Arial", Font.PLAIN, 14));
+        tipoMembresia.setFont(FUENTE_NORMAL);
         tipoMembresia.setBorder(BorderFactory.createLineBorder(COLOR_PRINCIPAL));
+        tipoMembresia.setHorizontalAlignment(SwingConstants.CENTER);
         panelCentral.add(tipoMembresia, gbc);
 
         // Mostrar Cupones
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         panelCentral.add(new JLabel("Cupones Disponibles:"), gbc);
 
         gbc.gridx = 1;
         JTextField textFieldCupon = new JTextField(getCodigoDescuento());
-        textFieldCupon.setFont(new Font("Arial", Font.PLAIN, 14));
-        textFieldCupon.setBorder(BorderFactory.createLineBorder(COLOR_PRINCIPAL));
+        configurarCampoTexto(textFieldCupon);
         textFieldCupon.setHorizontalAlignment(SwingConstants.CENTER);
-        panelCentral.add(textFieldCupon, gbc);
         textFieldCupon.setEditable(false);
+        panelCentral.add(textFieldCupon, gbc);
+        
+        JButton btnGenerarCupon = createStyledButton("Generar Nuevo Cupón");
+        btnGenerarCupon.addActionListener(e -> textFieldCupon.setText(generarCupon()));
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        panelCentral.add(btnGenerarCupon, gbc);
         mainPanel.add(panelCentral, BorderLayout.CENTER);
 
         // Sección inferior: Botones
@@ -130,7 +133,13 @@ public class VentanaSocio extends JFrame {
 
         add(mainPanel);
     }
-
+    private void configurarCampoTexto(JTextField textField) {
+        textField.setFont(FUENTE_NORMAL);
+        textField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(COLOR_PRINCIPAL),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+    }
+    
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 12));
