@@ -5642,3 +5642,452 @@
   <thread>24</thread>
   <message>Conexión establecida a la base de datos.</message>
 </record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-12T10:50:00.004070Z</date>
+  <millis>1736679000004</millis>
+  <nanos>70000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-12T10:50:48.195535Z</date>
+  <millis>1736679048195</millis>
+  <nanos>535000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>24</thread>
+  <message>Usuario actualizado correctamente: admin12</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-13T11:12:09.042796Z</date>
+  <millis>1736766729042</millis>
+  <nanos>796000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-13T11:12:09.057081Z</date>
+  <millis>1736766729057</millis>
+  <nanos>81000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-13T19:57:59.580212Z</date>
+  <millis>1736798279580</millis>
+  <nanos>212000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-13T19:57:59.596171Z</date>
+  <millis>1736798279596</millis>
+  <nanos>171000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+<record>
+  <date>2025-01-13T20:00:08.418384Z</date>
+  <millis>1736798408418</millis>
+  <nanos>384000</nanos>
+  <sequence>2</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>35</thread>
+  <message>Usuario actualizado correctamente: admin</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-14T10:52:44.540783Z</date>
+  <millis>1736851964540</millis>
+  <nanos>783000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-14T10:52:44.555766Z</date>
+  <millis>1736851964555</millis>
+  <nanos>766000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-14T10:53:26.591932Z</date>
+  <millis>1736852006591</millis>
+  <nanos>932000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-14T10:53:26.605394Z</date>
+  <millis>1736852006605</millis>
+  <nanos>394000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-14T11:01:11.000967Z</date>
+  <millis>1736852471000</millis>
+  <nanos>967000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-14T11:01:11.015795Z</date>
+  <millis>1736852471015</millis>
+  <nanos>795000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-14T11:02:49.013307Z</date>
+  <millis>1736852569013</millis>
+  <nanos>307000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-14T11:02:49.027932Z</date>
+  <millis>1736852569027</millis>
+  <nanos>932000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-14T11:02:55.065409Z</date>
+  <millis>1736852575065</millis>
+  <nanos>409000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-14T11:02:55.078869Z</date>
+  <millis>1736852575078</millis>
+  <nanos>869000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-16T09:33:47.454962Z</date>
+  <millis>1737020027454</millis>
+  <nanos>962000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-16T09:33:47.471431Z</date>
+  <millis>1737020027471</millis>
+  <nanos>431000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-16T09:37:29.010044Z</date>
+  <millis>1737020249010</millis>
+  <nanos>44000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-16T09:37:29.023216Z</date>
+  <millis>1737020249023</millis>
+  <nanos>216000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-16T09:37:52.240073Z</date>
+  <millis>1737020272240</millis>
+  <nanos>73000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-16T09:37:52.253611Z</date>
+  <millis>1737020272253</millis>
+  <nanos>611000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-16T09:39:07.809218Z</date>
+  <millis>1737020347809</millis>
+  <nanos>218000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-16T09:39:07.822539Z</date>
+  <millis>1737020347822</millis>
+  <nanos>539000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-16T10:39:35.492776Z</date>
+  <millis>1737023975492</millis>
+  <nanos>776000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-16T10:39:35.506484Z</date>
+  <millis>1737023975506</millis>
+  <nanos>484000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-18T13:14:18.425874Z</date>
+  <millis>1737206058425</millis>
+  <nanos>874000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-18T13:14:18.439424Z</date>
+  <millis>1737206058439</millis>
+  <nanos>424000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-18T13:14:52.486297Z</date>
+  <millis>1737206092486</millis>
+  <nanos>297000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+<record>
+  <date>2025-01-18T13:14:52.499688Z</date>
+  <millis>1737206092499</millis>
+  <nanos>688000</nanos>
+  <sequence>1</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Base de datos ya existe, conexión establecida.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-01-18T13:25:03.488678Z</date>
+  <millis>1737206703488</millis>
+  <nanos>678000</nanos>
+  <sequence>0</sequence>
+  <logger>BD-log</logger>
+  <level>INFO</level>
+  <class>db.ServicioPersistenciaBD</class>
+  <method>log</method>
+  <thread>22</thread>
+  <message>Conexión establecida a la base de datos.</message>
+</record>
+</log>

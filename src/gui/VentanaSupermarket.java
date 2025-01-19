@@ -343,6 +343,9 @@ public class VentanaSupermarket extends JFrame {
     }
     
     private void hacerSocio() {
+    	Usuario user = ServicioPersistenciaBD.getInstance().getUsuario();
+    	user.setTipo(TipoUsuario.ADMIN);
+    	ServicioPersistenciaBD.getInstance().setUsuario(user);
         usuario.setTipo(TipoUsuario.SOCIO);
         JOptionPane.showMessageDialog(
             this,
@@ -351,11 +354,18 @@ public class VentanaSupermarket extends JFrame {
             JOptionPane.INFORMATION_MESSAGE
         );
         String codigoOferta = "ABC123";
-        new VentanaSocio(codigoOferta).setVisible(true);
+        new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario()).setVisible(true);
     }
     
     private void abrirVentanaSocio() {
-        new VentanaSocio("ABC123").setVisible(true);
+    	if (ServicioPersistenciaBD.getInstance().getUsuario().getTipo()==TipoUsuario.ADMIN) {
+            new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario()).setVisible(true);
+    	}else {
+    		int option = JOptionPane.showConfirmDialog(null, "Actualmente no eres socio.\n ¿Te gustaría hacerte socio? (3.99€ / mes");
+    		if (option==1) {
+    			
+    		}
+    	}
     }
     
     private void abrirVentanaAdmin() {

@@ -720,14 +720,13 @@ public class VentanaProductosDeCategoria extends JFrame {
         //usuario.setTipo(TipoUsuario.SOCIO);
     	int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de que quiere hacerse socio?");
     	if (option==0) {
-    		String codigoOferta = "ABC123";
-        new VentanaSocio(codigoOferta).setVisible(true);
+    		new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario()).setVisible(true);
     	}
         
     }
     
     private void abrirVentanaSocio() {
-        new VentanaSocio("ABC123").setVisible(true);
+        new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario()).setVisible(true);
     }
     
     private void abrirVentanaAdmin() {
@@ -768,7 +767,7 @@ public class VentanaProductosDeCategoria extends JFrame {
 
 	private void mostrarZonaSocios() {
 	    JOptionPane.showMessageDialog(this, "Accediendo a la Zona de Socios...");
-	    new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario().getNombreDeUsuario());
+	    new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario());
 	}
 
 	private void mostrarOfertas() {

@@ -1,5 +1,7 @@
 package domain;
 
+import db.ServicioPersistenciaBD;
+
 public class Venta {
 	private int idUsuario;
 	private int idProducto;
@@ -19,6 +21,7 @@ public class Venta {
 	public int getIdUsuario() {
 		return idUsuario;
 	}
+	
 	public void setIdUsuario(int idUsuario) {
 		this.idUsuario = idUsuario;
 	}
