@@ -11,7 +11,7 @@ public class CarritoCompras {
     private static CarritoCompras instance;
     private HashMap<Producto, Integer> productos = new HashMap<>();
 
-    private CarritoCompras() {}
+    public CarritoCompras() {}
 
     public static CarritoCompras getInstance() {
         if (instance == null) {
@@ -71,5 +71,20 @@ public class CarritoCompras {
         double subtotal = item.getKey().getPrecio() * item.getValue(); 
         return subtotal + calcularTotal(items, index + 1); 
     }
+    
+    //recursividad para contra cantidad total de productos
+    public int contarProductos(List<Map.Entry<Producto, Integer>> items, int index) {
+        if (index >= items.size()) {
+            return 0; 
+        }
+        int cantidad = items.get(index).getValue(); 
+        return cantidad + contarProductos(items, index + 1); 
+    }
+
+    //metodo pa facilitar el acceso
+    public int contarProductosTotales() {
+        return contarProductos(new ArrayList<>(productos.entrySet()), 0);
+    }
+
 
 }
