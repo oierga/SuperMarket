@@ -8,6 +8,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class VentanaSocio extends JFrame {
@@ -102,7 +103,7 @@ public class VentanaSocio extends JFrame {
 
         gbc.gridx = 1;
         gbc.gridy = 4;
-        panelCentral.add(btnGenerarCupon, gbc);
+        panelCentral.add(btnGenerarCupon, gbc);	
         mainPanel.add(panelCentral, BorderLayout.CENTER);
 
         // Sección inferior: Botones
@@ -132,7 +133,30 @@ public class VentanaSocio extends JFrame {
         mainPanel.add(panelBotones, BorderLayout.SOUTH);
 
         add(mainPanel);
+        configurarTeclasAccesoRapidoGuardar(btnGuardar);
+        configurarTeclasAccesoRapidoCerrar(btnCancelar);
     }
+    private void configurarTeclasAccesoRapidoGuardar(JButton btnGuardar) {
+    	btnGuardar.setMnemonic(KeyEvent.VK_G);
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control G"), "guardar");
+        getRootPane().getActionMap().put("guardar", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnGuardar.doClick();
+            }
+        });
+    }
+    private void configurarTeclasAccesoRapidoCerrar(JButton btnCancelar) {
+        btnCancelar.setMnemonic(KeyEvent.VK_D);
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control D"), "cerrar");
+        getRootPane().getActionMap().put("cerrar", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnCancelar.doClick();
+            }
+        });
+    }
+        
     private void configurarCampoTexto(JTextField textField) {
         textField.setFont(FUENTE_NORMAL);
         textField.setBorder(BorderFactory.createCompoundBorder(
