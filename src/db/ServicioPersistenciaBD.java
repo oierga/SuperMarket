@@ -118,6 +118,13 @@ public class ServicioPersistenciaBD {
                 "cantidad INTEGER, " +
                 "FOREIGN KEY(idUsuario) REFERENCES usuario(idUsuario), " +
                 "FOREIGN KEY(idProducto) REFERENCES producto(id))");
+        
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS clientes (" +
+        	    "idCliente INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        	    "nombre TEXT NOT NULL, " +
+        	    "tipoUsuario INTEGER NOT NULL CHECK(tipoUsuario IN (0, 1, 2)) -- 0: Usuario, 1: Socio, 2: Admin" +
+        	");");
+
 
         log(Level.INFO, "Tablas creadas correctamente", null);
     }
@@ -137,6 +144,15 @@ public class ServicioPersistenciaBD {
             statement.executeUpdate("INSERT INTO producto (nombre, precio, categoria, rutaImagen) VALUES ('Manzana', 0.5, 1, 'images/manzana.png'),('Pan', 1.0, 2, 'images/pan.png'), ('Leche', 1.2, 3, 'images/leche.png')");
 
             log(Level.INFO, "Productos insertados correctamente", null);
+            
+            statement.executeUpdate("INSERT INTO clientes (nombre, tipoUsuario) VALUES " +
+            	    "('Usuario Básico', 0), " +
+            	    "('Socio', 1), " +
+            	    "('Administrador', 2);");
+
+            	log(Level.INFO, "Clientes insertados correctamente", null);
+
+            	
             return true;
 
         } catch (SQLException e) {
@@ -168,6 +184,27 @@ public class ServicioPersistenciaBD {
         }
         return usuarios;
     }
+    
+    //metodo carga de clientes, es decir, usuarios
+    public List<Map<String, Object>> cargarClientes() {
+        List<Map<String, Object>> clientes = new ArrayList<>();
+        String sql = "SELECT * FROM clientes";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Map<String, Object> cliente = new HashMap<>();
+                cliente.put("idCliente", rs.getInt("idCliente"));
+                cliente.put("nombre", rs.getString("nombre"));
+                cliente.put("tipoUsuario", rs.getInt("tipoUsuario"));
+                clientes.add(cliente);
+            }
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al cargar los clientes", e);
+        }
+        return clientes;
+    }
+
     public void conectar() {
         try {
             String dbUrl = "jdbc:sqlite:data/supermarket.db";
@@ -302,6 +339,44 @@ public class ServicioPersistenciaBD {
             log(Level.SEVERE, "Error al guardar usuario: " + usuario.getNombreDeUsuario(), e);
         }
     }
+    
+    //metodo pa guardar cliente
+    public void guardarCliente(String nombre, int tipoUsuario) {
+        String sql = "INSERT INTO clientes (nombre, tipoUsuario) VALUES (?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            stmt.setInt(2, tipoUsuario);
+            stmt.executeUpdate();
+            log(Level.INFO, "Cliente guardado correctamente: " + nombre, null);
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al guardar cliente: " + nombre, e);
+        }
+    }
+    
+    public int guardarClienteYObtenerId(String nombre, int tipoUsuario) {
+        String sql = "INSERT INTO clientes (nombre, tipoUsuario) VALUES (?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, nombre);
+            stmt.setInt(2, tipoUsuario);
+            stmt.executeUpdate();
+
+            //obtiene el id generado
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int idCliente = generatedKeys.getInt(1);
+                    log(Level.INFO, "Cliente guardado con ID: " + idCliente, null);
+                    return idCliente;
+                }
+            }
+        } catch (SQLException e) {
+            lastError = e;
+            log(Level.SEVERE, "Error al guardar cliente: " + nombre, e);
+        }
+        return -1; //en caso de error
+    }
+
+
 
     // Método para registrar eventos en el log
     private void log(Level level, String msg, Throwable excepcion) {
