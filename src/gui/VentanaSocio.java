@@ -118,9 +118,14 @@ public class VentanaSocio extends JFrame {
 
         JButton btnGuardar = createStyledButton("Guardar");
         btnGuardar.addActionListener(e -> {
-            socio.setNombreDeUsuario(campoNombre.getText().trim());
-            JOptionPane.showMessageDialog(this, "Cambios guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            String nuevoNombre = campoNombre.getText().trim();
+            if (!nuevoNombre.isEmpty() && !nuevoNombre.equals(socio.getNombreDeUsuario())) {
+                socio.setNombreDeUsuario(nuevoNombre);
+                JOptionPane.showMessageDialog(this, "Cambios guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor ingrese un nombre válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         JButton btnCancelar = createStyledButton("Cancelar");
