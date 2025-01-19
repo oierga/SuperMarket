@@ -220,7 +220,7 @@ public class ServicioPersistenciaBD {
                 // Si se encontró un usuario, las credenciales son válidas
                 System.out.print("Usuario verificado");
 
-            	instance.setUsuario(new Usuario(rs.getInt(1),usuario,contra,1));
+            	instance.setUsuario(new Usuario(usuario,contra,true,TipoUsuario.SOCIO));
                 return true;
             }else {
 

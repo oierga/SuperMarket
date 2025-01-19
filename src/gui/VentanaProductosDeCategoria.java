@@ -766,8 +766,9 @@ public class VentanaProductosDeCategoria extends JFrame {
    }
 
 	private void mostrarZonaSocios() {
-	    JOptionPane.showMessageDialog(this, "Accediendo a la Zona de Socios...");
-	    new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario());
+		if (ServicioPersistenciaBD.getInstance().getUsuario().getTipo()==TipoUsuario.SOCIO) {
+	    new VentanaSocio(ServicioPersistenciaBD.getInstance().getUsuario()).setVisible(true);
+	}
 	}
 
 	private void mostrarOfertas() {
