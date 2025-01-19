@@ -1,7 +1,5 @@
 package domain;
 
-import db.ServicioPersistenciaBD;
-
 public class Venta {
 	private int idUsuario;
 	private int idProducto;

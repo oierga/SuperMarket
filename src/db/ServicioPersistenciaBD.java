@@ -1,6 +1,7 @@
 package db;
 
 import domain.Producto;
+
 import domain.TipoUsuario;
 import domain.Categoria;
 import domain.Usuario;
@@ -17,12 +18,11 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
-
 public class ServicioPersistenciaBD {
     private static final String DB_PATH = "data/supermarket.db";  // Ruta del archivo de la base de datos
     private static final String JDBC_URL = "jdbc:sqlite:" + DB_PATH;
-    private static Exception lastError = null;
+    @SuppressWarnings("unused")
+	private static Exception lastError = null;
     private static ServicioPersistenciaBD instance; 
     private Connection connection;
     private Logger logger = null;
